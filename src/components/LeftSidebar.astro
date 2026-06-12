@@ -707,7 +707,7 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
       // 宣告本轮大功告成，拉响下一个 15s 之后的警报
       schedule(() => {
         isAvatarAnimating = false;
-        avatarTimeout = window.setTimeout(triggerAvatarChange, 15000);
+        avatarTimeout = window.setTimeout(triggerAvatarChange, 5000);
       }, timelineCursor);
     }
 
