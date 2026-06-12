@@ -126,7 +126,6 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
       </div>
     </div>
 
-    <!-- Matrix Effect Script -->
     <script>
       let matrixInterval: number | undefined, avatarInterval: number | undefined, matrixTimeout: number | undefined;
       let animationFrameId: number | undefined;
@@ -136,192 +135,142 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
         const matrixTexts = matrixCard?.querySelectorAll('.matrix-text') || [];
         const matrixChars = '0123456789ABCDEFG';
         let isAnimating = false;
-        let changeCount = 0; // 跟踪奇数次/偶数次变化的计数器
+        let changeCount = 0; 
 
-        // 清理旧的定时器
         if (matrixInterval) clearInterval(matrixInterval);
         if (avatarInterval) clearInterval(avatarInterval);
         if (matrixTimeout) clearTimeout(matrixTimeout);
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
-        // 问候语列表，与emoji对应
-        const greetings = [
-          '传奇主唱井芹仁菜',
-          '磁场转动九十九万匹！',
-          '全款拿下疯狂星期四',
-          '咕咕嘎嘎！咕嘎？',
-          '感觉不如……原神',
-          '知识学爆'
+        // emoji绑定问候语
+        const emojiPool = [
+          { file: 'cool',  text: '传奇主唱井芹仁菜' },       // 😎
+          { file: 'cat',   text: '磁场转动九十九万匹！' },   // 😼
+          { file: 'yummy', text: '全款拿下疯狂星期四' },   // 😋
+          { file: 'cry',   text: '咕咕嘎嘎！咕嘎？' },       // 😭
+          { file: 'nerd',  text: '感觉不如……原神' },       // 🤓
+          { file: 'laugh', text: '知识学爆' }               // 🤣
         ];
 
-        // 头像切换效果
+        let activeEmojis = [...emojiPool];
+
         const avatarContainer = document.querySelector('.avatar-container') as HTMLElement;
         const avatarImage = document.querySelector('.avatar-image') as HTMLImageElement;
-        const emojis = ['😎', '😼', '😋', '😭', '🤓', '🤣'];
-        let currentEmojiIndex = 0;
         let isAvatarAnimating = false;
 
-        // ============ 鼠标跟随效果 ============
+        // 鼠标跟随效果
         const mouseWrapper = document.querySelector('.avatar-mouse-wrapper') as HTMLElement;
         let mouseX = 0, mouseY = 0;
         let currentX = 0, currentY = 0;
-        const lerpFactor = 0.04; // 进一步降低插值因子以获得更平滑的效果
-        const maxMoveDistance = 6; // 减小移动距离避免抖动
+        const lerpFactor = 0.04; 
+        const maxMoveDistance = 6; 
         let isHovering = false;
 
-        // 为头像和emoji容器添加鼠标跟踪
         if (mouseWrapper) {
-          mouseWrapper.addEventListener('mouseenter', () => {
-            isHovering = true;
-          });
-
+          mouseWrapper.addEventListener('mouseenter', () => { isHovering = true; });
           mouseWrapper.addEventListener('mousemove', (e: Event) => {
             if (!isHovering) return;
-
             const mouseEvent = e as MouseEvent;
             const rect = mouseWrapper.getBoundingClientRect();
-
-            // 计算鼠标相对于元素中心的偏移
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-
-            // 简单的归一化偏移量 (-1 到 1)
             const normalizedX = (mouseEvent.clientX - centerX) / (rect.width / 2);
             const normalizedY = (mouseEvent.clientY - centerY) / (rect.height / 2);
-
-            // 限制范围并应用移动距离
             mouseX = Math.max(-1, Math.min(1, normalizedX)) * maxMoveDistance;
             mouseY = Math.max(-1, Math.min(1, normalizedY)) * maxMoveDistance;
           });
-
           mouseWrapper.addEventListener('mouseleave', () => {
             isHovering = false;
-            mouseX = 0;
-            mouseY = 0;
+            mouseX = 0; mouseY = 0;
           });
         }
 
-        // 平滑动画循环
         function animateMouseFollow() {
-          // 检查 mouseWrapper 是否存在
           if (!mouseWrapper) return;
-
-          // 线性插值实现平滑跟随
           currentX += (mouseX - currentX) * lerpFactor;
           currentY += (mouseY - currentY) * lerpFactor;
-
-          // 应用变换
           mouseWrapper.style.transform = `translate(${currentX}px, ${currentY}px)`;
-
           animationFrameId = requestAnimationFrame(animateMouseFollow);
         }
 
-        // 只有当 mouseWrapper 存在时才启动动画
-        if (mouseWrapper) {
-          animateMouseFollow();
-        }
-        // ============ 鼠标跟随效果结束 ============
+        if (mouseWrapper) { animateMouseFollow(); }
+        // 鼠标跟随效果结束
 
-        // 初始化时不修改问候语，保持默认的"醉后不知天在水"显示
-        // 第一次动画时再显示第一个问候语
-
-        // Matrix文本对：原始文本和变换文本
         const matrixTextPairs = [
           { name: '波罗歌', desc: '万维网中潮汛来' },
           { name: '波罗阁', desc: '今日方知我是我' }
         ];
         let currentTextPairIndex = 0;
 
-        // Matrix效果函数
         function triggerMatrixEffect() {
           if (isAnimating || matrixTexts.length === 0) return;
           isAnimating = true;
           changeCount++;
           
-          // 切换到下一组文本
           currentTextPairIndex = (currentTextPairIndex + 1) % matrixTextPairs.length;
           const newTextPair = matrixTextPairs[currentTextPairIndex];
           
-          // 为每个文本元素添加动画效果
           matrixTexts.forEach((element, index) => {
-            // 根据索引决定显示哪个文本（0=名字，1=描述）
             const targetText = index === 0 ? newTextPair.name : newTextPair.desc;
             const chars = targetText.split('');
             const isEvenIndex = index % 2 === 0;
             const isEvenChange = changeCount % 2 === 0;
-            // 根据索引和变化次数共同决定动画方向
             const shouldReverse = isEvenChange ? isEvenIndex : !isEvenIndex;
             let revealIndex = shouldReverse ? chars.length : 0;
             
-            // 初始字符打乱
             element.textContent = chars.map(() => matrixChars[Math.floor(Math.random() * matrixChars.length)]).join('');
             
-            // 逐个字符动画显示
             const scrambleInterval = setInterval(() => {
               element.textContent = element.textContent.split('').map((_, i) => {
                 if (shouldReverse) {
-                  // 从右到左动画
                   return i >= revealIndex ? targetText[i] : matrixChars[Math.floor(Math.random() * matrixChars.length)];
                 } else {
-                  // 从左到右动画
                   return i < revealIndex ? targetText[i] : matrixChars[Math.floor(Math.random() * matrixChars.length)];
                 }
               }).join('');
               
-              // 根据动画方向更新显示索引
               if (shouldReverse) {
                 revealIndex--;
                 if (revealIndex < 0) {
                   clearInterval(scrambleInterval);
                   element.textContent = targetText;
-                  // 更新 data-text 以便下次动画使用
                   (element as HTMLElement).dataset.text = targetText;
-                  if (index === matrixTexts.length - 1) {
-                    isAnimating = false;
-                  }
+                  if (index === matrixTexts.length - 1) isAnimating = false;
                 }
               } else {
                 revealIndex++;
                 if (revealIndex > chars.length) {
                   clearInterval(scrambleInterval);
                   element.textContent = targetText;
-                  // 更新 data-text 以便下次动画使用
                   (element as HTMLElement).dataset.text = targetText;
-                  if (index === matrixTexts.length - 1) {
-                    isAnimating = false;
-                  }
+                  if (index === matrixTexts.length - 1) isAnimating = false;
                 }
               }
             }, 50);
           });
         }
         
-        // 为卡片和文本容器添加事件监听器
         if (matrixCard) matrixCard.addEventListener('mouseenter', triggerMatrixEffect);
         const textContainer = matrixCard?.querySelector('.text-container');
-        if (textContainer) {
-          textContainer.addEventListener('mouseenter', triggerMatrixEffect);
-        }
+        if (textContainer) textContainer.addEventListener('mouseenter', triggerMatrixEffect);
 
-        // 每3秒自动触发一次Matrix效果
         matrixInterval = setInterval(triggerMatrixEffect, 10000) as unknown as number;
         
-        // 头像切换效果
         function triggerAvatarChange() {
           if (!avatarContainer || !avatarImage || isAvatarAnimating) return;
           isAvatarAnimating = true;
 
-          // 获取问候语元素和背景容器
+          // 乱序洗牌
+          activeEmojis.sort(() => Math.random() - 0.5);
+
           const greetingText = document.querySelector('.greeting-text') as HTMLElement;
           const greetingContainer = greetingText?.parentElement as HTMLElement;
           
-          // 开始头像到emoji的动画 - 使用与emoji相同的动画逻辑
           avatarImage.style.transform = 'perspective(1000px) rotateY(25deg) rotateZ(5deg) scale(0.9)';
           avatarImage.style.opacity = '0';
           avatarImage.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
           avatarImage.style.filter = 'blur(4px) brightness(1.1)';
 
-          // 同时开始问候语过渡动画
           if (greetingText && greetingContainer) {
             greetingText.style.transform = 'scale(0.9) translateZ(0)';
             greetingText.style.opacity = '0';
@@ -338,27 +287,24 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
             avatarImage.style.display = 'none';
           }, 450);
 
-          // 连续显示3个emoji
           let emojiIndex = 0;
           const showNextEmoji = () => {
             if (emojiIndex >= 3) {
-              // 显示完3个emoji后，回到头像 - 使用与emoji相同的动画逻辑
               avatarImage.style.display = 'block';
               avatarImage.style.transform = 'perspective(1000px) rotateY(-25deg) rotateZ(-5deg) scale(0.9)';
               avatarImage.style.opacity = '0';
               avatarImage.style.filter = 'blur(4px) brightness(1.1)';
               
-              // 同时恢复问候语为默认值
-               if (greetingText && greetingContainer) {
-                 greetingText.textContent = '醉后不知天在水';
-                 greetingText.style.transform = 'scale(0.9) translateZ(0)';
-                 greetingText.style.opacity = '0';
-                 greetingText.style.filter = 'blur(2px) brightness(1.1)';
+              if (greetingText && greetingContainer) {
+                greetingText.textContent = '醉后不知天在水';
+                greetingText.style.transform = 'scale(0.9) translateZ(0)';
+                greetingText.style.opacity = '0';
+                greetingText.style.filter = 'blur(2px) brightness(1.1)';
 
-                 greetingContainer.style.transform = 'scale(0.9) translateZ(0)';
-                 greetingContainer.style.opacity = '0';
-                 greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
-               }
+                greetingContainer.style.transform = 'scale(0.9) translateZ(0)';
+                greetingContainer.style.opacity = '0';
+                greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
+              }
               
               setTimeout(() => {
                 avatarImage.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(5deg) scale(1.2)';
@@ -366,58 +312,52 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
                 avatarImage.style.filter = 'blur(0px) brightness(1)';
                 avatarImage.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                 
-                // 同时显示问候语
-                 if (greetingText && greetingContainer) {
-                   greetingText.style.transform = 'scale(1.2) translateZ(0)';
-                   greetingText.style.opacity = '1';
-                   greetingText.style.filter = 'blur(0px) brightness(1)';
-                   greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                if (greetingText && greetingContainer) {
+                  greetingText.style.transform = 'scale(1.2) translateZ(0)';
+                  greetingText.style.opacity = '1';
+                  greetingText.style.filter = 'blur(0px) brightness(1)';
+                  greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
 
-                   greetingContainer.style.transform = 'scale(1.2) translateZ(0)';
-                   greetingContainer.style.opacity = '1';
-                   greetingContainer.style.filter = 'blur(0px) brightness(1)';
-                   greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                 }
+                  greetingContainer.style.transform = 'scale(1.2) translateZ(0)';
+                  greetingContainer.style.opacity = '1';
+                  greetingContainer.style.filter = 'blur(0px) brightness(1)';
+                  greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                }
                 
                 setTimeout(() => {
                   avatarImage.style.transform = 'perspective(1000px) rotateY(5deg) rotateZ(-3deg) scale(0.95)';
                   avatarImage.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
                   
-                  // 同时调整问候语
-                   if (greetingText && greetingContainer) {
-                     greetingText.style.transform = 'scale(0.95) translateZ(0)';
-                     greetingText.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                  if (greetingText && greetingContainer) {
+                    greetingText.style.transform = 'scale(0.95) translateZ(0)';
+                    greetingText.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
 
-                     greetingContainer.style.transform = 'scale(0.95) translateZ(0)';
-                     greetingContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                   }
+                    greetingContainer.style.transform = 'scale(0.95) translateZ(0)';
+                    greetingContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                  }
                   
                   setTimeout(() => {
                     avatarImage.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(1deg) scale(1)';
                     avatarImage.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
                     
-                    // 同时调整问候语
-                     if (greetingText && greetingContainer) {
-                       greetingText.style.transform = 'scale(1) translateZ(0)';
-                       greetingText.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                    if (greetingText && greetingContainer) {
+                      greetingText.style.transform = 'scale(1) translateZ(0)';
+                      greetingText.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
 
-                       greetingContainer.style.transform = 'scale(1) translateZ(0)';
-                       greetingContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                     }
+                      greetingContainer.style.transform = 'scale(1) translateZ(0)';
+                      greetingContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                    }
                     
-                    // 添加一个持续的轻微旋转动画
                     setTimeout(() => {
                       avatarImage.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(0deg) scale(1)';
                       avatarImage.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
                       
-                      // 同时调整问候语
-                       if (greetingText && greetingContainer) {
-                         greetingText.style.transform = 'scale(1)';
-                         greetingText.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                         
-                         greetingContainer.style.transform = 'scale(1)';
-                         greetingContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                       }
+                      if (greetingText && greetingContainer) {
+                        greetingText.style.transform = 'scale(1)';
+                        greetingText.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                        greetingContainer.style.transform = 'scale(1)';
+                        greetingContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                      }
                       
                       isAvatarAnimating = false;
                     }, 200);
@@ -427,140 +367,111 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
               return;
             }
 
-            // 创建并显示当前emoji - 使用3D透视效果
-            const emoji = document.createElement('div') as HTMLElement;
-            emoji.textContent = emojis[(currentEmojiIndex + emojiIndex) % emojis.length];
-            emoji.className = 'absolute inset-0 flex items-center justify-center text-[115px] transform-gpu';
-            emoji.style.transform = 'perspective(1000px) rotateY(-25deg) scale(0.7)';
-            emoji.style.opacity = '0';
+            const emoji = document.createElement('img') as HTMLImageElement;
+            const currentItem = activeEmojis[emojiIndex]; 
+            
+            emoji.src = `/img/emoji/${currentItem.file}.webp`;
+            emoji.alt = 'fluent-3d-emoji';
+            
+            emoji.style.position = 'absolute';
+            emoji.style.top = '50%';
+            emoji.style.left = '50%';
+            emoji.style.width = '135px';
+            emoji.style.height = '135px';
+            emoji.style.minWidth = '135px';
+            emoji.style.minHeight = '135px';
+            emoji.style.objectFit = 'contain';
+            emoji.style.zIndex = '9999'; 
+            emoji.style.userSelect = 'none';
+            emoji.style.cursor = 'pointer';
+            emoji.className = 'transform-gpu';
+
+            emoji.style.opacity = '1';
+            emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(-25deg) scale(0.7)';
             emoji.style.filter = 'blur(4px) brightness(1.1)';
             emoji.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            emoji.style.userSelect = 'none'; // 防止文本选择
-            emoji.style.cursor = 'pointer'; // 设置指针样式
-            // 将emoji添加到鼠标跟随wrapper中，这样也会跟随鼠标移动
+            
             mouseWrapper?.appendChild(emoji);
 
-            // 同时更新问候语
-             const greetingIndex = (currentEmojiIndex + emojiIndex) % greetings.length;
-             if (greetingText && greetingContainer) {
-               greetingText.textContent = greetings[greetingIndex];
-               greetingText.style.transform = 'scale(0.7) translateZ(0)';
-               greetingText.style.opacity = '0';
-               greetingText.style.filter = 'blur(2px) brightness(1.1)';
-               greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            if (greetingText && greetingContainer) {
+              greetingText.textContent = currentItem.text;
+              greetingText.style.transform = 'scale(0.7) translateZ(0)';
+              greetingText.style.opacity = '0';
+              greetingText.style.filter = 'blur(2px) brightness(1.1)';
+              greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
 
-               greetingContainer.style.transform = 'scale(0.7) translateZ(0)';
-               greetingContainer.style.opacity = '0';
-               greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
-               greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-             }
+              greetingContainer.style.transform = 'scale(0.7) translateZ(0)';
+              greetingContainer.style.opacity = '0';
+              greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
+              greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            }
 
-            // 显示emoji动画 - 使用3D透视效果和轻微旋转
             setTimeout(() => {
-              emoji.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(5deg) scale(1.2)';
-              emoji.style.opacity = '1';
+              emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateZ(5deg) scale(1.2)';
               emoji.style.filter = 'blur(0px) brightness(1)';
-              emoji.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
               
-              // 同时显示问候语
-               if (greetingText && greetingContainer) {
-                 greetingText.style.transform = 'scale(1.2) translateZ(0)';
-                 greetingText.style.opacity = '1';
-                 greetingText.style.filter = 'blur(0px) brightness(1)';
-                 greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+              if (greetingText && greetingContainer) {
+                greetingText.style.transform = 'scale(1.2) translateZ(0)';
+                greetingText.style.opacity = '1';
+                greetingText.style.filter = 'blur(0px) brightness(1)';
 
-                 greetingContainer.style.transform = 'scale(1.2) translateZ(0)';
-                 greetingContainer.style.opacity = '1';
-                 greetingContainer.style.filter = 'blur(0px) brightness(1)';
-                 greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-               }
+                greetingContainer.style.transform = 'scale(1.2) translateZ(0)';
+                greetingContainer.style.opacity = '1';
+                greetingContainer.style.filter = 'blur(0px) brightness(1)';
+              }
               
               setTimeout(() => {
-                emoji.style.transform = 'perspective(1000px) rotateY(5deg) rotateZ(-3deg) scale(0.95)';
-                emoji.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                
-                // 同时调整问候语
-                 if (greetingText && greetingContainer) {
-                   greetingText.style.transform = 'scale(0.95) translateZ(0)';
-                   greetingText.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-
-                   greetingContainer.style.transform = 'scale(0.95) translateZ(0)';
-                   greetingContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                 }
+                emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(5deg) rotateZ(-3deg) scale(0.95)';
+                if (greetingText && greetingContainer) {
+                  greetingText.style.transform = 'scale(0.95) translateZ(0)';
+                  greetingContainer.style.transform = 'scale(0.95) translateZ(0)';
+                }
                 
                 setTimeout(() => {
-                  emoji.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(1deg) scale(1)';
-                  emoji.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                  
-                  // 同时调整问候语
-                   if (greetingText && greetingContainer) {
-                     greetingText.style.transform = 'scale(1) translateZ(0)';
-                     greetingText.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-
-                     greetingContainer.style.transform = 'scale(1) translateZ(0)';
-                     greetingContainer.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                   }
-
-                  // 添加一个持续的轻微旋转动画
+                  emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateZ(1deg) scale(1)';
+                  if (greetingText && greetingContainer) {
+                    greetingText.style.transform = 'scale(1) translateZ(0)';
+                    greetingContainer.style.transform = 'scale(1) translateZ(0)';
+                  }
                   setTimeout(() => {
-                    emoji.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(0deg) scale(1)';
-                    emoji.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-
-                    // 问候语保持显示状态
+                    emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateZ(0deg) scale(1)';
                   }, 200);
                 }, 200);
               }, 300);
             }, 50);
 
-            // 隐藏当前emoji并显示下一个 - 参照头像消失动画并添加轻微旋转
             setTimeout(() => {
-              emoji.style.transform = 'perspective(1000px) rotateY(25deg) rotateZ(5deg) scale(0.9)';
+              emoji.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(25deg) rotateZ(5deg) scale(0.9)';
               emoji.style.opacity = '0';
               emoji.style.filter = 'blur(4px) brightness(1.1)';
-              emoji.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
 
-              // 同时隐藏问候语
-               if (greetingText && greetingContainer) {
-                 greetingText.style.transform = 'scale(0.9) translateZ(0)';
-                 greetingText.style.opacity = '0';
-                 greetingText.style.filter = 'blur(2px) brightness(1.1)';
-                 greetingText.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+              if (greetingText && greetingContainer) {
+                greetingText.style.transform = 'scale(0.9) translateZ(0)';
+                greetingText.style.opacity = '0';
+                greetingText.style.filter = 'blur(2px) brightness(1.1)';
 
-                 greetingContainer.style.transform = 'scale(0.9) translateZ(0)';
-                 greetingContainer.style.opacity = '0';
-                 greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
-                 greetingContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-               }
+                greetingContainer.style.transform = 'scale(0.9) translateZ(0)';
+                greetingContainer.style.opacity = '0';
+                greetingContainer.style.filter = 'blur(2px) brightness(1.1)';
+              }
               
               setTimeout(() => {
                 emoji.remove();
                 emojiIndex++;
-                // 增加延迟，让消失动画有更自然的停顿感
-                setTimeout(() => {
-                  showNextEmoji();
-                }, 400);
+                setTimeout(() => { showNextEmoji(); }, 400);
               }, 550);
-            }, 3000); // 每个emoji显示3秒
+            }, 3000); 
           };
 
-          // 开始显示第一个emoji
-          setTimeout(() => {
-            showNextEmoji();
-          }, 600); // 恢复原来的头像消失后的等待时间
-
-          // 更新emoji索引，下次从头开始
-          currentEmojiIndex = (currentEmojiIndex + 3) % emojis.length;
+          setTimeout(() => { showNextEmoji(); }, 600);
         }
 
-        // 每8秒触发一次头像切换（第一次3秒后触发）
         matrixTimeout = setTimeout(() => {
           triggerAvatarChange();
-          avatarInterval = setInterval(triggerAvatarChange, 8000) as unknown as number;
+          avatarInterval = setInterval(triggerAvatarChange, 15000) as unknown as number;
         }, 3000) as unknown as number;
-        
       }
 
-      // 清理函数
       function cleanup() {
         if (matrixInterval) clearInterval(matrixInterval);
         if (avatarInterval) clearInterval(avatarInterval);
@@ -568,10 +479,7 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
       }
 
-      // 初始化
       initMatrixEffects();
-      
-      // 适配 ClientRouter
       document.addEventListener('astro:page-load', initMatrixEffects);
       document.addEventListener('astro:before-preparation', cleanup);
     </script>
