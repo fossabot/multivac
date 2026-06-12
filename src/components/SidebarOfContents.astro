@@ -49,7 +49,7 @@ const dfAbout = '/img/df-about.webp';
     aria-label="分享"
   >
     <!-- 分享面板 - hover时直接显示 -->
-    <div id="share-panel" class="absolute right-12 w-[320px] p-4 rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark shadow-2xl opacity-0 scale-95 pointer-events-none group-hover/bar:opacity-100 group-hover/bar:scale-100 group-hover/bar:pointer-events-auto transition-all duration-300 origin-right z-10 transform-gpu will-change-transform">
+    <div id="share-panel" class="absolute right-12 w-[300px] p-4 rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark shadow-2xl opacity-0 scale-95 pointer-events-none group-hover/bar:opacity-100 group-hover/bar:scale-100 group-hover/bar:pointer-events-auto transition-all duration-300 origin-right z-10 transform-gpu will-change-transform">
       <div class="flex flex-col gap-3">
         <!-- 海报预览区域 -->
         <div id="poster-preview" class="w-full rounded-lg overflow-hidden border border-border-light dark:border-border-dark bg-bg-light dark:bg-bg-dark relative" style="aspect-ratio: 3/4;">
@@ -57,13 +57,27 @@ const dfAbout = '/img/df-about.webp';
         </div>
 
         <!-- 操作按钮 -->
-        <div class="flex flex-col gap-2">
-          <button id="copy-link-btn" class="w-full px-3 py-2 bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark text-text-light dark:text-text-dark rounded-lg hover:bg-primary-light/10 dark:hover:bg-primary-dark/10 transition-all duration-300 text-sm font-medium">
-            复制链接
+        <div class="relative w-full h-11 p-1 flex items-center bg-neutral-100/60 dark:bg-neutral-900/40 backdrop-blur-md rounded-xl border border-border-light dark:border-border-dark select-none overflow-hidden">
+          
+          <button id="copy-link-btn" class="group/btn relative z-10 flex-[1.25] hover:flex-[1.8] h-full flex items-center justify-center gap-2 px-3 text-text-light/60 dark:text-text-dark/50 hover:text-text-light dark:hover:text-text-dark text-xs font-medium bg-white/50 dark:bg-white/[0.02] hover:bg-white dark:hover:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md active:scale-[0.97] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
+            <svg class="w-3.5 h-3.5 opacity-40 group-hover/btn:opacity-90 group-hover/btn:translate-x-[1px] group-hover/btn:-translate-y-[1px] transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span class="tracking-wide">复制链接</span>
           </button>
-          <button id="download-poster-btn" class="w-full px-3 py-2 bg-primary-light dark:bg-primary-dark text-white rounded-lg hover:opacity-80 transition-all duration-300 text-sm font-medium">
-            下载海报
+
+          <div class="w-1 h-full pointer-events-none"></div>
+
+          <button id="download-poster-btn" class="group/btn relative z-10 flex-[1] hover:flex-[1.8] h-full flex items-center justify-center gap-2 px-3 text-text-light/70 dark:text-text-dark/60 hover:text-white dark:hover:text-neutral-900 text-xs font-semibold bg-transparent hover:bg-neutral-900 dark:hover:bg-neutral-100 rounded-lg active:scale-[0.97] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
+            <span class="tracking-wide">下载海报</span>
+            <svg class="w-3.5 h-3.5 opacity-40 group-hover/btn:opacity-90 group-hover/btn:translate-y-[1px] transition-all duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
           </button>
+
         </div>
       </div>
       <!-- 小三角形指示器 - 指向右侧按钮 -->
@@ -98,36 +112,50 @@ const dfAbout = '/img/df-about.webp';
   >
     <!-- 打赏面板 - hover时直接显示 -->
     <div id="reward-large-panel" class="absolute right-12 w-[300px] p-4 rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark shadow-2xl opacity-0 scale-95 pointer-events-none group-hover/bar:opacity-100 group-hover/bar:scale-100 group-hover/bar:pointer-events-auto transition-all duration-300 origin-right z-10 transform-gpu will-change-transform">
-      <div class="flex flex-col items-center gap-3">
-        <h3 class="text-base font-semibold text-text-light dark:text-text-dark">感谢打赏</h3>
-        <!-- 两个二维码左右排列 -->
-        <div class="flex gap-3 items-start">
-          <!-- 微信赞赏码 -->
-          <div class="flex flex-col items-center gap-2">
-            <div class="w-32 h-32 rounded-lg overflow-hidden bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark">
-              <img
-                src="/img/wechatGood.webp"
-                alt="微信赞赏码"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <span class="text-xs text-text-light/70 dark:text-text-dark/70">微信</span>
-          </div>
-          <!-- 支付宝赞赏码 -->
-          <div class="flex flex-col items-center gap-2">
-            <div class="w-32 h-32 rounded-lg overflow-hidden bg-bg-light dark:bg-bg-dark border border-border-light dark:border-border-dark">
-              <img
-                src="/img/alipayGood.webp"
-                alt="支付宝赞赏码"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <span class="text-xs text-text-light/70 dark:text-text-dark/70">支付宝</span>
+      <div class="flex flex-col items-center gap-4">
+        
+        <div class="w-full flex items-center justify-between px-1">
+          <h3 class=" text-text-light/70 dark:text-text-dark/70 text-base font-semibold">随缘投喂</h3>
+          <div class="flex items-center justify-center">
+            <svg class="w-4 h-4 text-neutral-400 dark:text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+              <line x1="6" y1="1" x2="6" y2="4"></line>
+              <line x1="10" y1="1" x2="10" y2="4"></line>
+              <line x1="14" y1="1" x2="14" y2="4"></line>
+            </svg>
           </div>
         </div>
-        <p class="text-sm text-text-light/70 dark:text-text-dark/70 text-center">扫码支持作者</p>
+
+        <div class="relative w-full h-9 p-0.5 flex items-center bg-neutral-100/80 dark:bg-neutral-900/60 backdrop-blur-md rounded-lg border border-neutral-200/40 dark:border-neutral-800/40 select-none overflow-hidden">
+          <button id="tab-wechat" class="reward-tab flex-1 h-full flex items-center justify-center gap-1.5 text-xs font-medium rounded-md transition-all duration-300 z-10 text-text-light dark:text-text-dark bg-white dark:bg-neutral-800 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>微信</span>
+          </button>
+          <button id="tab-alipay" class="reward-tab flex-1 h-full flex items-center justify-center gap-1.5 text-xs font-medium rounded-md transition-all duration-300 z-10 text-text-light/50 dark:text-text-dark/40 hover:text-text-light dark:hover:text-text-dark">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500/40"></span>
+            <span>支付宝</span>
+          </button>
+        </div>
+
+        <div class="group/qr relative w-36 h-36 p-2 rounded-xl bg-neutral-50 dark:bg-neutral-950 border border-neutral-200/40 dark:border-neutral-800/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:hover:shadow-neutral-950/50">
+          
+          <div id="qr-wechat" class="reward-qr absolute inset-2 transition-all duration-500 opacity-100 scale-100 transform-gpu">
+            <img src="/img/wechatGood.webp" alt="微信赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
+          </div>
+          
+          <div id="qr-alipay" class="reward-qr absolute inset-2 transition-all duration-500 opacity-0 scale-95 pointer-events-none transform-gpu">
+            <img src="/img/alipayGood.webp" alt="支付宝赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
+          </div>
+          
+        </div>
+
+        <p class="text-sm dark:text-text-dark/70 text-text-light/70 text-center">
+          喜欢的话，扫码支持一下作者吧 (•̀ᴗ•́)و 
+        </p>
+        
       </div>
-      <!-- 小三角形指示器 - 指向右侧按钮 -->
+
       <div class="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-border-light dark:border-l-border-dark"></div>
       <div class="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-card-light dark:border-l-card-dark"></div>
     </div>
@@ -159,49 +187,54 @@ const dfAbout = '/img/df-about.webp';
   >
     <!-- 订阅面板 - hover时直接显示 -->
     <div id="subscribe-panel" class="absolute right-12 w-[300px] p-5 rounded-xl bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark shadow-2xl opacity-0 scale-95 pointer-events-none group-hover/bar:opacity-100 group-hover/bar:scale-100 group-hover/bar:pointer-events-auto transition-all duration-300 origin-right z-10 transform-gpu will-change-transform">
-      <div class="flex flex-col gap-4">
-        <!-- 标题区域 -->
+      <div class="flex flex-col gap-5">
         <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-[#f26522]/20 to-[#f26522]/5 flex items-center justify-center">
+          <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-[#f26522]/20 to-[#f26522]/5 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5 text-[#f26522]" fill="currentColor" viewBox="0 0 24 24">
               <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-8.18v4.831c10.555.062 19.121 8.614 19.184 19.17h4.817c-.063-13.215-10.782-23.93-24.001-24.001z"></path>
             </svg>
           </div>
-          <div class="flex-1">
-            <h3 class="text-sm font-bold text-text-light dark:text-text-dark">RSS 订阅</h3>
-            <p class="text-[11px] text-text-light/70 dark:text-text-dark/70">获取最新文章推送</p>
+          <div class="flex flex-col">
+            <h3 class="text-sm font-semibold text-text-light/90 dark:text-text-dark/90 leading-tight">RSS 订阅</h3>
+            <p class="text-[11px] text-text-light/50 dark:text-text-dark/40 mt-0.5">获取最新文章推送</p>
           </div>
         </div>
 
-        <!-- RSS链接显示区域 -->
-        <div class="relative group/link">
-          <div class="px-3 py-2.5 bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark rounded-lg transition-all duration-200 group-hover/link:border-[#f26522]/30">
-            <code class="text-[10px] font-mono text-text-light/70 dark:text-text-dark/70 select-all break-all leading-relaxed">https://log.1k.ink/rss.xml</code>
-          </div>
-          <!-- 装饰性渐变边框效果 -->
-          <div class="absolute inset-0 rounded-lg bg-gradient-to-r from-[#f26522]/0 via-[#f26522]/5 to-[#f26522]/0 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-        </div>
-
-        <!-- 复制按钮 -->
         <button
           id="rss-copy-btn"
           data-rss-url="https://log.1k.ink/rss.xml"
-          class="w-full px-3 py-2.5 bg-primary-light dark:bg-primary-dark text-white dark:text-black rounded-lg hover:opacity-90 active:scale-[0.98] transition-all duration-200 text-xs font-semibold shadow-sm hover:shadow-md flex items-center justify-center gap-2 group/btn"
+          class="w-full relative group/btn flex flex-col gap-2 p-3.5 bg-background-light/20 dark:bg-background-dark/10 hover:bg-background-light/60 dark:hover:bg-background-dark/30 border border-dashed border-border-light dark:border-border-dark/10 hover:border-[#f26522]/50 dark:hover:border-[#f26522]/50 rounded-xl transition-all duration-300 text-left active:scale-[0.98]"
         >
-          <svg class="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110 transform-gpu will-change-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          <span id="rss-copy-text">复制链接</span>
+          <div class="flex items-center justify-between w-full">
+            <span class="text-[10px] px-1.5 py-0.5 -ml-1.5 rounded-md font-medium text-text-light/40 dark:text-text-dark/40 group-hover/btn:text-[#f26522]/80 group-hover/btn:bg-[#f26522]/5 transition-all duration-300">
+              订阅地址
+            </span>
+            
+            <div class="flex items-center gap-1 text-[11px] font-medium text-[#f26522] opacity-0 group-hover/btn:opacity-100 translate-x-1 group-hover/btn:translate-x-0 transition-all duration-300">
+              <span id="rss-copy-text" class="text-[10px]">点击复制</span>
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <code class="text-[11px] text-text-light/70 dark:text-text-dark/70 group-hover/btn:text-text-light dark:group-hover/btn:text-text-dark break-all leading-normal selection:bg-transparent transition-colors duration-200">
+            https://log.1k.ink/rss.xml
+          </code>
         </button>
 
-        <!-- 支持的阅读器提示 -->
-        <div class="pt-2 border-t border-border-light/50 dark:border-border-dark/50">
-          <p class="text-[10px] text-text-light/70 dark:text-text-dark/70 text-center leading-relaxed">
+        <div class="flex items-center justify-center gap-2 px-1">
+          <div class="flex -space-x-1 opacity-40 group-hover/bar:opacity-60 transition-opacity duration-300">
+            <div class="w-3.5 h-3.5 rounded-full bg-text-light/10 dark:bg-text-dark/10 border border-card-light dark:border-card-dark flex items-center justify-center text-[7px] font-bold text-text-light dark:text-text-dark">F</div>
+            <div class="w-3.5 h-3.5 rounded-full bg-text-light/10 dark:bg-text-dark/10 border border-card-light dark:border-card-dark flex items-center justify-center text-[7px] font-bold text-text-light dark:text-text-dark">I</div>
+            <div class="w-3.5 h-3.5 rounded-full bg-text-light/10 dark:bg-text-dark/10 border border-card-light dark:border-card-dark flex items-center justify-center text-[7px] font-bold text-text-light dark:text-text-dark">R</div>
+          </div>
+          <p class="text-[10px] text-text-light/40 dark:text-text-dark/40 tracking-wide">
             支持 Feedly、Inoreader、Reeder 等
           </p>
         </div>
       </div>
-      <!-- 小三角形指示器 - 指向右侧按钮 -->
+
       <div class="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-border-light dark:border-l-border-dark"></div>
       <div class="absolute right-[-5px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[5px] border-l-card-light dark:border-l-card-dark"></div>
     </div>
@@ -289,6 +322,27 @@ const dfAbout = '/img/df-about.webp';
     </div>
   </div>
 </div>
+
+<style>
+  /* JS 管理的面板激活状态 */
+  #share-button.panel-active #share-panel,
+  #reward-button.panel-active #reward-large-panel,
+  #subscribe-button.panel-active #subscribe-panel {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: scale(1) !important;
+  }
+
+  /* 当有面板激活时，强制隐藏其他面板（即使容器被 hover） */
+  #sidebar-of-contents.has-active-panel #share-button:not(.panel-active) #share-panel,
+  #sidebar-of-contents.has-active-panel #reward-button:not(.panel-active) #reward-large-panel,
+  #sidebar-of-contents.has-active-panel #subscribe-button:not(.panel-active) #subscribe-panel {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: scale(0.95) !important;
+    transition-delay: 0s !important;
+  }
+</style>
 
 <script>
   import QRCode from 'qrcode';
@@ -805,6 +859,75 @@ const dfAbout = '/img/df-about.webp';
 
     // 自动生成海报
     generatePoster();
+
+    // 面板互斥：同一时间只允许一个面板打开
+    const panelContainerIds = ['share-button', 'reward-button', 'subscribe-button'];
+    const panelContainers = panelContainerIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+
+    let activePanelId: string | null = null;
+    let panelDeactivateTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    panelContainers.forEach(container => {
+      container.addEventListener('mouseenter', () => {
+        clearTimeout(panelDeactivateTimeout);
+
+        // 关闭之前激活的面板
+        if (activePanelId && activePanelId !== container.id) {
+          document.getElementById(activePanelId)?.classList.remove('panel-active');
+        }
+
+        // 激活当前面板
+        activePanelId = container.id;
+        container.classList.add('panel-active');
+        sidebarContainer.classList.add('has-active-panel');
+      });
+
+      container.addEventListener('mouseleave', () => {
+        panelDeactivateTimeout = setTimeout(() => {
+          container.classList.remove('panel-active');
+          if (activePanelId === container.id) {
+            activePanelId = null;
+            sidebarContainer.classList.remove('has-active-panel');
+          }
+        }, 50);
+      });
+    });
+
+    // 赞赏面板 Tab 切换
+    const tabs = document.querySelectorAll('.reward-tab') as NodeListOf<HTMLButtonElement>;
+    const qrs = document.querySelectorAll('.reward-qr') as NodeListOf<HTMLDivElement>;
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', (e: Event) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const targetId = target.id;
+
+        // 1. 重置所有 Tab 样式
+        tabs.forEach(t => {
+          t.classList.remove('bg-white', 'dark:bg-neutral-800', 'shadow-sm', 'text-text-light', 'dark:text-text-dark');
+          t.classList.add('text-text-light/50', 'dark:text-text-dark/40');
+        });
+
+        // 2. 高亮当前选中 Tab
+        target.classList.add('bg-white', 'dark:bg-neutral-800', 'shadow-sm', 'text-text-light', 'dark:text-text-dark');
+        target.classList.remove('text-text-light/50', 'dark:text-text-dark/40');
+
+        // 3. 切换二维码显示逻辑
+        const targetQrId = targetId === 'tab-wechat' ? 'qr-wechat' : 'qr-alipay';
+
+        qrs.forEach(qr => {
+          if (qr.id === targetQrId) {
+            qr.classList.replace('opacity-0', 'opacity-100');
+            qr.classList.replace('scale-95', 'scale-100');
+            qr.style.pointerEvents = 'auto';
+          } else {
+            qr.classList.replace('opacity-100', 'opacity-0');
+            qr.classList.replace('scale-100', 'scale-95');
+            qr.style.pointerEvents = 'none';
+          }
+        });
+      });
+    });
   }
 
   // 页面加载时初始化
