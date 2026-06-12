@@ -41,17 +41,17 @@ const readingTime = calculateReadingTime(post.body || '');
 
           {/* 标签群 */}
           {tags && tags.length > 0 && (
-            <>
+            <div class="hidden md:flex items-center gap-2">
               <span class="text-[9px] opacity-30 font-light">/</span>
               <div class="flex items-center gap-1.5 opacity-85">
                 {tags.slice(0, 3).map((tag: string, index: number) => (
-                  <div class={`flex items-center gap-1.5 whitespace-nowrap ${index === 2 ? 'hidden md:flex' : 'flex'}`}>
+                  <div class="flex items-center gap-1.5 whitespace-nowrap">
                     {index > 0 && <span class="text-[9px] opacity-30 font-light">/</span>}
                     <span>{tag}</span>
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           )}
           
           {/* 阅读时长 */}
