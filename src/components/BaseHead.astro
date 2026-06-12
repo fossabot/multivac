@@ -28,6 +28,8 @@ const toISOWithTimezone = (date: Date) => {
     const d = String(date.getDate()).padStart(2, '0');
     return `${y}-${m}-${d}T00:00:00+08:00`;
 };
+
+const emojiFiles = ['cool', 'cat', 'yummy', 'cry', 'nerd', 'laugh'];
 ---
 
 <!-- Global Metadata -->
@@ -49,6 +51,10 @@ const toISOWithTimezone = (date: Date) => {
 
 <!-- Avatar preload -->
 <link rel="preload" href="/img/avatar.webp" as="image" />
+
+{emojiFiles.map(file => (
+  <link rel="preload" href={`/img/emoji/${file}.webp`} as="image" type="image/webp" />
+))}
 
 <!-- Preconnect to third-party origins for faster loading -->
 <link rel="preconnect" href="https://registry.npmmirror.com" />
