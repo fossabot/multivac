@@ -82,7 +82,7 @@ const watchingJson = JSON.stringify(watchingItems.map(m => ({
           </div>
           <div class="flex-1 min-w-0 relative h-5 overflow-hidden flex justify-center">
             {recentMoments.map((moment, i) => (
-              <span class="moments-item absolute inset-x-0 top-0 h-full flex items-center justify-center text-center text-sm text-zinc-700 dark:text-zinc-300 tracking-wide transition-all duration-500 font-medium" data-index={i}>
+              <span class="moments-item absolute inset-x-0 top-0 h-full flex items-center justify-center text-center text-sm text-zinc-700 dark:text-zinc-300 tracking-wide transition-all duration-500 font-medium" data-index={i} style={i === 0 ? 'opacity:1;transform:translateY(0)' : 'opacity:0;transform:translateY(16px)'}>
                 <span class="truncate max-w-full">{moment.content}</span>
               </span>
             ))}
