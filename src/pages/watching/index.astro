@@ -69,8 +69,6 @@ function formatDate(date: Date): string {
 }
 ---
 
-<script type="application/json" id="watching-data" is:inline>{JSON.stringify(watchingList)}</script>
-
 <script>
   interface Rating {
     source: 'douban' | 'bangumi';
@@ -100,10 +98,11 @@ function formatDate(date: Date): string {
   }
 
   function getWatchingData(): WatchingItem[] {
-    const dataEl = document.getElementById('watching-data');
-    if (!dataEl?.textContent) return [];
+    const bridge = document.getElementById('watching-bridge');
+    if (!bridge?.dataset.list) return [];
     try {
-      return JSON.parse(dataEl.textContent);
+      const raw = bridge.dataset.list;
+      return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw), c => c.charCodeAt(0))));
     } catch {
       return [];
     }
@@ -304,6 +303,7 @@ function formatDate(date: Date): string {
 </script>
 
 <MainLayout title={pageTitle} description={pageDescription}>
+  <div id="watching-bridge" data-list={Buffer.from(JSON.stringify(watchingList)).toString('base64')} hidden aria-hidden="true"></div>
   <section class="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="grid grid-cols-1 md:grid-cols-[272px_1fr] gap-6">
       <div class="hidden md:block">

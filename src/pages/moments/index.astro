@@ -48,13 +48,6 @@ try {
 
 ---
 
-<script type="application/json" id="moments-data" is:inline>{JSON.stringify(moments.map(m => ({
-  id: m.id,
-  content: m.content,
-  date: new Date(m.date).toISOString(),
-  images: m.images || [],
-})))}</script>
-
 <script>
   interface MomentItem {
     id: number;
@@ -71,10 +64,11 @@ try {
   }
 
   function getMomentsData(): MomentItem[] {
-    const dataEl = document.getElementById('moments-data');
-    if (!dataEl?.textContent) return [];
+    const bridge = document.getElementById('moments-bridge');
+    if (!bridge?.dataset.list) return [];
     try {
-      return JSON.parse(dataEl.textContent);
+      const raw = bridge.dataset.list;
+      return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(raw), c => c.charCodeAt(0))));
     } catch {
       return [];
     }
@@ -261,6 +255,12 @@ try {
 </script>
 
 <MainLayout title={pageTitle} description={pageDescription}>
+	<div id="moments-bridge" data-list={Buffer.from(JSON.stringify(moments.map(m => ({
+		id: m.id,
+		content: m.content,
+		date: new Date(m.date).toISOString(),
+		images: m.images || [],
+	})))).toString('base64')} hidden aria-hidden="true"></div>
 	<section class="max-w-[1340px] mx-auto px-4 sm:px-6 lg:px-8 py-16">
 		<div class="grid grid-cols-1 md:grid-cols-[272px_1fr] gap-6">
 			<div class="hidden md:block">
