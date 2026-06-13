@@ -1,200 +1,224 @@
 # Multivac
 
-> 一款基于 Astro 和 Tailwind CSS 构建的个人博客，支持深色模式、动态说说、友链管理等功能。
+> 基于 Astro 5 + Tailwind CSS 的个人博客框架，支持深色模式、文章加密、动态说说、友链管理、塔罗牌、观影记录等功能。
 
-![Astro](https://img.shields.io/badge/Astro-5.16.7-BC52EE?logo=astro&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.19-06B6D4?logo=tailwind-css&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-5.18+-BC52EE?logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwind-css&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## ✨ 特性
+---
 
-- 🚀 **极致性能** - 基于 Astro 5.x 构建，默认零 JS 发送
-- 🎨 **精美设计** - 现代化 UI，深色模式支持，丝滑的过渡动画
-- 📝 **多种内容格式** - 支持 Markdown、MDX 和 YAML
-- 🔐 **文章加密** - 支持密码保护特定文章
-- 💬 **动态说说** - 类似朋友圈的动态分享功能
-- 🔗 **友链管理** - 支持分组的友情链接管理
-- 🔍 **全文搜索** - 快速搜索文章内容
-- 📑 **目录导航** - 自动生成的文章目录
-- 💭 **评论系统** - 集成 Twikoo 评论
-- 📱 **响应式设计** - 完美适配各种设备
-- 🌙 **深色模式** - 优雅的明暗主题切换
-- 🖼️ **图片灯箱** - Fancybox 图片查看器
-- 📡 **RSS 订阅** - 自动生成 RSS 订阅源
-- 🗺️ **Sitemap** - 自动生成站点地图
+## 特性
 
-## 🛠️ 技术栈
+### 核心能力
 
-- **框架**: [Astro 5.16.7](https://astro.build) - 现代化静态站点生成器
-- **样式**: [Tailwind CSS 3.4.19](https://tailwindcss.com) - 实用优先的 CSS 框架
-- **语言**: [TypeScript 5.9.3](https://www.typescriptlang.org) - 类型安全的 JavaScript
-- **内容**: MDX - 支持在 Markdown 嵌入 JavaScript 和 JSX 语法
-- **评论**: [Twikoo](https://twikoo.js.org) - 简洁的评论系统
-- **灯箱**: [@fancyapps/ui](https://fancyapps.com) - 图片查看器
+- **零 JS 默认输出** — Astro 5 静态生成，按需水合，极致加载性能
+- **深色模式** — 跟随系统 / 手动切换，View Transitions API 圆形扩散过渡动画，路由切换无闪烁
+- **响应式三栏布局** — 大屏三栏（左栏 + 内容 + 右栏），中屏两栏，小屏单栏，自适应折叠
+- **资源压缩** — astro-compress 压缩 HTML/CSS/JS/SVG
+- **预取策略** — viewport 内链接自动预取（`prefetchAll` + `defaultStrategy: viewport`）
+- **RSS & Sitemap** — 自动生成订阅源和站点地图
 
-## 📦 项目结构
+### 博客
+
+- **Markdown / MDX / YAML** — Content Collections 统一管理，Schema 强校验
+- **文章加密** — AES-256-GCM + PBKDF2 (600k iterations)，构建时加密、客户端解密，服务端不暴露明文
+- **自动目录** — 标题自动生成 TOC，滚动高亮当前位置，侧栏 + 浮动双模式
+- **阅读时间** — 中英文混合统计，自动计算字数与预计阅读时长
+- **文章元数据卡片** — 作者、发布/更新日期、CC 协议、永久链接
+- **相关推荐** — 文章底部随机推荐其他文章
+- **全文搜索** — 客户端 JSON 索引，`Ctrl+K` / 点击触发即时搜索
+- **分类 & 标签** — 自动聚合，独立页面，支持按分类/标签筛选
+- **归档** — 按时间线展示全部文章
+- **分页** — 首页文章列表分页，动态/观影页也支持分页
+
+### 社交 & 互动
+
+- **动态说说** — 类朋友圈短内容发布，支持多图 + Fancybox 6 灯箱浏览
+- **友链管理** — 分组展示，自定义申请说明，卡片悬停动效
+- **Twikoo 评论** — 文章页 & 观影页评论区，懒加载 + 路由切换自动重挂载
+- **首页动态滚动条** — 实时展示最新动态 & 年进度
+
+### 特色页面
+
+- **观影记录** — 影视/动漫追踪，豆瓣 & Bangumi 评分/链接，卡片式展示
+- **今晚看什么** — 观影详情页，随机推荐下一部，沉浸式单条展示
+- **赛博塔罗** — 22 张大阿卡那随机抽牌，正逆位解读，粒子动画，`rerun_random_seed()` 重抽
+- **时间进度** — 年/季/月/周/日进度可视化，中式命名（岁律/时节/月令/七曜/朝暮），水墨风格
+
+### 侧栏组件
+
+- **个人卡片** — Matrix 文字乱码重组动画 + 头像 Emoji 切换 + 鼠标视差
+- **音乐播放器** — APlayer 集成，网易云歌单直连，播放进度/上下首控制
+- **分类导航** — 自动统计各分类文章数
+- **一言** — Hitokoto 随机语录
+- **最近在看** — 观影记录摘要，点击跳转详情
+- **公告** — 自定义公告内容
+- **标签云** — 标签使用频率排序
+- **随机文章** — 右侧栏随机推荐
+
+### 动效 & 体验
+
+- **欢迎动画** — 首次访问时头像 + 站名 + 签名 + 时段问候语渐入动画
+- **导航栏** — 固定顶部，滚动时毛玻璃效果，菜单面板，页面标题显示
+- **主题切换** — View Transitions API 圆形 clip-path 扩散动画
+- **页面过渡** — ClientRouter (View Transitions) 无刷新路由切换
+- **背景光晕** — 三个模糊光球缓慢浮动，营造氛围感
+- **卡片悬停** — 上浮 + 阴影增强 + 边框显现
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| 框架 | [Astro 5](https://astro.build) — 静态站点生成，Content Collections |
+| 样式 | [Tailwind CSS 3](https://tailwindcss.com) + @tailwindcss/typography + PostCSS Nesting |
+| 语言 | TypeScript 5.9 |
+| 内容 | Markdown / MDX / YAML |
+| 加密 | Web Crypto API (AES-256-GCM + PBKDF2, 600k iterations) |
+| 评论 | [Twikoo](https://twikoo.js.org) — 懒加载，路由切换自动重挂载 |
+| 灯箱 | [@fancyapps/ui](https://fancyapps.com) (Fancybox 6) |
+| 音乐 | [APlayer](https://aplayer.js.org) — 网易云歌单 |
+| 图标 | astro-icon (SVG sprite) |
+| 字体 | Inter Variable (西文) + Plus Jakarta Sans (Logo) + 系统中文回退 |
+| 压缩 | astro-compress (HTML/CSS/JS/SVG) |
+| 部署 | Vercel (SSG + Web Analytics) / Cloudflare Pages / 通用静态托管 |
+
+## 项目结构
 
 ```
 site/
-├── post/                    # 内容目录
-│   ├── example/            # 示例文章
-│   ├── friends/            # 友链数据
-│   └── moments/            # 动态数据
+├── post/                          # 内容目录（.gitignore 忽略私有文章）
+│   └── example/                   # 示例文章（仅 Dev 可见，Build 自动剔除）
+├── public/
+│   ├── fonts/                     # Inter Variable, Plus Jakarta Sans (woff2)
+│   ├── img/                       # 头像、封面、emoji、站点图标
+│   │   └── emoji/                 # 3D Emoji (cat, cool, cry, laugh, nerd, yummy)
+│   ├── libs/                      # APlayer CSS/JS, Twikoo 基础样式
+│   ├── _headers                   # Cloudflare Pages 缓存头
+│   └── favicon.svg
 ├── src/
-│   ├── components/         # Astro 组件
-│   │   ├── BlogCard.astro
-│   │   ├── Header.astro
-│   │   ├── LeftSidebar.astro
-│   │   ├── RightSidebar.astro
-│   │   ├── ThemeToggle.astro
-│   │   ├── PasswordProtect.astro
-│   │   ├── Twikoo.astro
-│   │   └── ...
-│   ├── layouts/            # 页面布局
-│   │   ├── MainLayout.astro
-│   │   └── BlogPost.astro
-│   ├── pages/              # 路由页面
-│   │   ├── index.astro     # 首页（文章列表）
-│   │   ├── page/[page].astro # 分页
-│   │   ├── p/[...slug].astro # 文章详情
-│   │   ├── moments.astro   # 动态页
-│   │   ├── friends.astro   # 友链页
-│   │   ├── about.astro     # 关于页
-│   │   └── archives/       # 归档页
-│   ├── styles/             # 全局样式
-│   ├── scripts/            # 客户端脚本
-│   ├── utils/              # 工具函数
-│   ├── consts.ts           # 站点常量
-│   └── content.config.ts   # 内容集合配置
-├── public/                 # 静态资源
-├── astro.config.mjs        # Astro 配置
-├── tailwind.config.js      # Tailwind 配置
+│   ├── components/
+│   │   ├── LeftSidebar.astro      # 个人卡片 + 音乐 + 分类 + 一言 + 最近在看
+│   │   ├── RightSidebar.astro     # 公告 + 标签云 + 随机文章 + 站点统计
+│   │   ├── BlogCard.astro         # 文章卡片（封面 + 标题 + 摘要 + 元信息）
+│   │   ├── ArticleMetaCard.astro  # 文章元数据卡片（作者/日期/协议/链接）
+│   │   ├── RecentPosts.astro      # 文章底部相关推荐
+│   │   ├── PasswordProtect.astro  # 文章加密输入组件（密码显隐切换）
+│   │   ├── ThemeToggle.astro      # 深色模式切换（圆形扩散动画）
+│   │   ├── SearchModal.astro      # 全文搜索弹窗（Ctrl+K）
+│   │   ├── Twikoo.astro           # 评论区（懒加载 + 路由重挂载）
+│   │   ├── MomentsTicker.astro    # 首页动态滚动条（动态 + 年进度）
+│   │   ├── WelcomeAnimation.astro # 首次访问欢迎动画
+│   │   ├── TableOfContents.astro  # 浮动 TOC（移动端）
+│   │   ├── SidebarOfContents.astro# 侧栏 TOC（桌面端）
+│   │   ├── Header.astro           # 顶部导航（毛玻璃 + 菜单面板 + 页面标题）
+│   │   ├── HeaderLink.astro       # 导航链接
+│   │   ├── Footer.astro           # 页脚（技术栈图标 + CC 协议）
+│   │   ├── Pagination.astro       # 分页组件
+│   │   ├── FormattedDate.astro    # 日期格式化
+│   │   ├── ArchiveItem.astro      # 归档列表项
+│   │   └── BaseHead.astro         # HTML Head（SEO + OG + 结构化数据）
+│   ├── layouts/
+│   │   ├── MainLayout.astro       # 全局布局（Header + Footer + 背景光晕）
+│   │   └── BlogPost.astro         # 文章详情布局（TOC + 元数据 + 评论 + 推荐）
+│   ├── pages/
+│   │   ├── index.astro            # 首页（文章列表 + 动态滚动条 + 三栏）
+│   │   ├── p/[...slug].astro      # 文章详情（加密/普通）
+│   │   ├── page/[page].astro      # 文章分页
+│   │   ├── moments/index.astro    # 动态说说（Fancybox 灯箱）
+│   │   ├── friends/index.astro    # 友链（分组 + 申请说明）
+│   │   ├── watching/index.astro   # 观影记录（卡片网格 + 评分）
+│   │   ├── tonight/index.astro    # 今晚看什么（随机推荐 + 详情）
+│   │   ├── tarot/index.astro      # 赛博塔罗牌
+│   │   ├── progress/index.astro   # 时间进度（水墨风格）
+│   │   ├── about/index.astro      # 关于页
+│   │   ├── archives/index.astro   # 归档页
+│   │   ├── categories/
+│   │   │   ├── index.astro        # 分类列表
+│   │   │   └── [slug].astro       # 分类详情
+│   │   ├── tags/
+│   │   │   ├── index.astro        # 标签列表
+│   │   │   └── [slug].astro       # 标签详情
+│   │   ├── rss.xml.js             # RSS 订阅源
+│   │   ├── search-data.json.ts    # 搜索索引 API
+│   │   └── robots.txt.ts          # Robots.txt
+│   ├── scripts/
+│   │   └── crypto.ts              # AES-256-GCM 加密/解密（PBKDF2 派生密钥）
+│   ├── styles/
+│   │   ├── global.css             # 全局样式 + 背景光晕 + 滚动条
+│   │   ├── markdown.css           # Markdown 排版样式
+│   │   └── twikoo.css             # Twikoo 评论自定义样式
+│   ├── utils/
+│   │   ├── readingTime.ts         # 阅读时间计算（中英文混合计数）
+│   │   └── progressCalc.ts        # 时间进度计算（年/季/月/周/日）
+│   ├── icons/                     # 60+ SVG 图标源文件
+│   ├── consts.ts                  # 站点标题 & 描述
+│   └── content.config.ts          # Content Collections Schema 定义
+├── astro.config.mjs               # Astro 配置（集成/压缩/适配器/预取）
+├── tailwind.config.js             # 主题色/字体/字号体系/暗色模式
+├── postcss.config.js              # PostCSS (autoprefixer + nesting)
+├── tsconfig.json                  # TypeScript 配置
+├── vercel.json                    # Vercel 缓存策略
 └── package.json
 ```
 
-## 🚀 快速开始
+## 快速开始
 
 ### 环境要求
 
-- Node.js >= 18.0.0
-- npm 或 pnpm
+- Node.js >= 18
+- npm / pnpm
 
-### 安装
+### 安装与开发
 
 ```bash
-# 克隆项目
-git clone https://github.com/your-username/site.git
-cd site
-
-# 安装依赖
+git clone git@github.com:LogLInk1K/multivac.git
+cd multivac
 npm install
-
-# 启动开发服务器
-npm run dev
+npm run dev        # http://localhost:4321
 ```
-
-访问 `http://localhost:4321` 查看效果。
 
 ### 构建
 
 ```bash
-# 构建生产版本
-npm run build
-
-# 预览构建结果
-npm run preview
+npm run build      # 输出到 dist/
+npm run preview    # 本地预览构建结果
 ```
 
-## 📌 特性说明
+## 内容管理
 
-为了实现“开源分享”与“个人部署”的解耦，本项目内置了以下机制：
+所有内容存放在 `post/` 目录。`.gitignore` 已配置忽略 `post/*`（仅保留 `post/example/`），私有文章不会被推送到仓库。
 
-- **双重内容过滤**：`post/example/` 目录下的文章仅在开发环境（Dev）可见，生产构建（Build）时会自动剔除，确保演示数据不污染正式站点。
-- **隐私保护**：`.gitignore` 已预设忽略规则。可以直接在 `post/` 下写作，无需担心私人内容被误推送到公开仓库。
-- **零配置发布**：只需将 Markdown 存入 `post/` 目录，构建系统会自动处理一切。
+### 文章
 
-## ⚙️ 配置说明
+在 `post/` 下创建 `.md` 或 `.mdx` 文件：
 
-### 站点基本信息
-
-编辑 `src/consts.ts` 修改站点标题和描述：
-
-```typescript
-export const SITE_TITLE = '你的博客标题';
-export const SITE_DESCRIPTION = '你的博客描述';
-```
-
-### 站点 URL
-
-编辑 `astro.config.mjs` 修改站点 URL：
-
-```javascript
-export default defineConfig({
-  site: 'https://your-domain.com',
-  // ...
-});
-```
-
-### 评论系统
-
-编辑 `src/components/Twikoo.astro` 配置 Twikoo 评论：
-
-```astro
-const envId = 'https://your-twikoo-endpoint.com';
-```
-
-### 主题颜色
-
-编辑 `tailwind.config.js` 自定义主题颜色：
-
-```javascript
-colors: {
-  primary: {
-    light: '#425aef',  // 浅色主题主色
-    dark: '#ffc848',   // 深色主题主色
-  },
-  // ...
-}
-```
-
-## 📝 内容管理
-
-### 添加文章
-
-在 `post/` 目录下创建 Markdown/MDX 文件：
-
-```markdown
+```yaml
 ---
 title: "文章标题"
-description: "文章简介（至少10个字符）"
+description: "简介，至少 10 字符"
 pubDate: 2026-01-20
-updatedDate: 2026-01-20  # 可选
-heroImage: ./cover.jpg   # 可选
+updatedDate: 2026-01-20    # 可选
+heroImage: ./cover.jpg     # 可选
 tags: ["标签1", "标签2"]
 category: "分类"
-draft: false             # 是否为草稿
+draft: false
 author: "作者名"
+password: "secret"         # 可选，加密文章
+passwordHint: "提示信息"    # 可选
 ---
-
-# 正文内容
-
-使用 Markdown 语法撰写...
 ```
 
 #### 文章加密
 
-添加密码保护：
+加密文章使用 AES-256-GCM，密钥通过 PBKDF2 (600k iterations, SHA-256) 从密码派生：
 
-```markdown
----
-title: "加密文章"
-password: "your-password"
-passwordHint: "提示信息"
----
-```
+1. 构建时：`crypto.ts` 的 `encryptContent()` 用密码加密正文，输出 `base64(salt[16] + iv[12] + ciphertext)`
+2. 客户端：`PasswordProtect.astro` 收集密码，调用 `decryptContent()` 解密，渲染原文
+3. 服务端不存储明文密码，加密载荷嵌入 HTML
 
-### 添加动态
+### 动态说说
 
 编辑 `post/moments/index.yml`：
 
@@ -207,27 +231,26 @@ moments:
     date: 2026/01/20
     images:
       - https://example.com/image.jpg
-  - content: "分享多个图片"
+  - content: "多图动态"
     date: 2026/01/19
     images:
       - https://example.com/img1.jpg
       - https://example.com/img2.jpg
-      - https://example.com/img3.jpg
 ---
 ```
 
-### 添加友链
+### 友链
 
 编辑 `post/friends/index.yml`：
 
 ```yaml
 ---
 title: 友情链接
-description: 相逢意气为君饮，系马高楼垂柳边。
+description: 相逢意气为君饮
 sections:
   - title: 申请友链
     content: |-
-      欢迎交换友链！请确保您的网站符合以下要求：
+      欢迎交换友链！请确保您的网站：
       - 内容积极向上
       - 网站可以正常访问
 friendGroups:
@@ -241,102 +264,178 @@ friendGroups:
 ---
 ```
 
-### 个人信息
+### 观影记录
 
-编辑 `src/components/LeftSidebar.astro` 修改左侧边栏信息：
+编辑 `post/watching/index.yml`：
+
+```yaml
+---
+title: 最近在看
+description: 影视动漫追踪
+pubDate: 2026-01-01
+watching:
+  - title: "虫师"
+    year: 2005
+    cover: "/img/df-cover.webp"
+    comment: "远山如雾"
+    type: "动画"
+    country: "日本"
+    ratings:
+      - source: douban
+        score: 9.4
+    links:
+      - source: douban
+        url: "https://movie.douban.com/subject/1800597/"
+---
+```
+
+支持 `douban` 和 `bangumi` 两种评分来源，观影页卡片网格展示，点击进入详情页。
+
+## 配置
+
+### 站点信息
+
+`src/consts.ts`：
+
+```typescript
+export const SITE_TITLE = '你的博客标题';
+export const SITE_DESCRIPTION = '你的博客描述';
+```
+
+### 站点 URL & 构建选项
+
+`astro.config.mjs`：
+
+```javascript
+export default defineConfig({
+  site: 'https://your-domain.com',
+  trailingSlash: 'never',
+  output: 'static',
+  // Vercel 环境自动启用适配器 + Web Analytics
+  adapter: isVercel ? vercel({ webAnalytics: { enabled: true } }) : undefined,
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+});
+```
+
+### 主题色 & 字体
+
+`tailwind.config.js`：
+
+```javascript
+colors: {
+  primary:    { light: '#425aef', dark: '#ffc848' },   // 主色
+  background: { light: '#f7f9fe', dark: '#000000' },   // 背景
+  text:       { light: '#1F2937', dark: '#FFFFFF' },    // 文本
+  card:       { light: 'rgba(255,255,255,0.55)', dark: 'rgba(255,255,255,0.04)' },
+  border:     { light: 'rgba(0,0,0,0.06)', dark: 'rgba(255,255,255,0.08)' },
+  hover:      { light: '#F1F5F9', dark: '#2A2A2A' },
+  // ...更多
+},
+fontFamily: {
+  sans: ['Inter Variable', 'PingFang SC', 'Microsoft YaHei', ...],
+},
+```
+
+### 评论系统
+
+`src/components/Twikoo.astro` 中修改 `envId`：
 
 ```astro
-<!-- 头像 -->
-<img src="https://your-avatar-url" alt="博主头像" />
-
-<!-- 博主信息 -->
-<h2>你的昵称</h2>
-<p>个性签名</p>
-
-<!-- 社交链接 -->
-<a href="https://github.com/your-username">GitHub</a>
-<a href="https://space.bilibili.com/your-id">Bilibili</a>
+const envId = 'https://your-twikoo-endpoint.com';
 ```
 
-## 🎨 主要功能详解
+### 个人信息 & 社交链接
 
-### 深色模式
+`src/components/LeftSidebar.astro` 中修改：
+- 头像图片路径
+- 昵称 & 个性签名
+- GitHub / Bilibili 等社交链接
 
-- 支持自动跟随系统主题
-- 手动切换主题（带圆形扩散动画）
-- 使用 View Transitions API 实现平滑过渡
+### 音乐播放器
 
-### 响应式布局
+`src/components/LeftSidebar.astro` 中修改网易云歌单 ID 和封面。
 
-- **大屏幕**: 三栏布局（左侧栏 + 主内容 + 右侧栏）
-- **中屏幕**: 两栏布局（左侧栏 + 主内容）
-- **小屏幕**: 单栏布局（主内容）
+### 导航菜单
 
-### 文章目录
+`src/components/Header.astro` 中修改导航链接（默认：文稿、友链、漫游、关于）。
 
-- 自动从标题生成目录
-- 支持点击滚动定位
-- 高亮当前阅读位置
+## 隐私与内容过滤
 
-### Matrix 特效
+| 环境 | `post/example/` | `post/` 其他文章 |
+|------|-----------------|-----------------|
+| `npm run dev` | 可见 | 不可见（被 .gitignore 忽略） |
+| `npm run build` | 自动剔除 | 不可见 |
 
-左侧个人信息卡片支持炫酷的 Matrix 动画效果：
-- 文字乱码重组动画
-- 头像 Emoji 切换效果
-- 鼠标跟随视差效果
+- `content.config.ts` 中 `isProd` 判断：生产构建排除 `example/**/*`
+- `.gitignore` 忽略 `post/*`（仅保留 `!post/example/`），私有内容不进入版本控制
+- Content Collections Schema 强制校验 frontmatter 字段类型与约束
 
-### 图片灯箱
+## 部署
 
-- 点击图片放大查看
-- 支持多图画廊模式
-- 键盘快捷键支持
+### Vercel（推荐）
 
-### 友链分组
-
-- 支持多个友链分组
-- 每个分组可设置独立描述
-- 卡片式展示，悬停动效
-
-## 📦 部署
-
-### Vercel
+项目已内置 Vercel 适配器，自动检测 `VERCEL=1` 环境变量启用 Web Analytics。
 
 ```bash
-# 安装 Vercel CLI
 npm i -g vercel
-# 部署
 vercel
 ```
+
+`vercel.json` 已配置缓存策略：页面 1h，`/_astro/` 静态资源 1 年 immutable。
 
 ### Cloudflare Pages
 
 ```bash
-# 使用 Wrangler CLI
-npm install -g wrangler
-wrangler pages deploy dist
+npm run build
+npx wrangler pages deploy dist
 ```
 
-## ⚖️ 许可与说明
+`public/_headers` 已配置 Cloudflare 缓存头。
 
-本项目采用 **[MIT](LICENSE)** 协议开源。
+### 通用静态托管
 
-此仓库仅作为个人博客存档，按“现状”提供。欢迎 Fork 随意折腾，但我可能无法回答你的 Issue。
+```bash
+npm run build
+# 将 dist/ 目录上传至任意静态托管服务
+```
 
-## 📮 联系方式
+## 页面一览
 
-- 主页: [https://1k.ink](https://1k.ink)
-- 博客: [https://log.1k.ink](https://log.1k.ink)
+| 路由 | 功能 |
+|------|------|
+| `/` | 首页 — 文章列表 + 动态滚动条 + 三栏布局 |
+| `/p/[slug]` | 文章详情 — 正文/加密/评论/TOC/元数据/推荐 |
+| `/page/[n]` | 文章分页 |
+| `/moments` | 动态说说 — 多图灯箱 + 分页 |
+| `/friends` | 友链 — 分组展示 + 申请说明 |
+| `/watching` | 观影记录 — 卡片网格 + 评分 + 分页 |
+| `/tonight` | 今晚看什么 — 随机推荐 + 沉浸详情 |
+| `/tarot` | 赛博塔罗 — 22 张大阿卡那 + 正逆位 + 粒子 |
+| `/progress` | 时间进度 — 岁律/时节/月令/七曜/朝暮 |
+| `/about` | 关于页 |
+| `/archives` | 归档 — 时间线展示 |
+| `/categories` | 分类列表 |
+| `/categories/[slug]` | 分类详情 |
+| `/tags` | 标签列表 |
+| `/tags/[slug]` | 标签详情 |
+| `/rss.xml` | RSS 订阅源 |
+| `/search-data.json` | 搜索索引 API |
+
+## 许可
+
+[MIT](LICENSE)
+
+此仓库按"现状"提供，欢迎 Fork，不保证回复 Issue。
+
+## 联系
+
+- 主页: [1k.ink](https://1k.ink)
+- 博客: [log.1k.ink](https://log.1k.ink)
 - GitHub: [@LogLInk1K](https://github.com/LogLInk1K)
 
-## ⭐ 鸣谢
-
-本博客参考以下诸位博主的设计，特此鸣谢：
+## 鸣谢
 
 - [张洪Heo](https://blog.zhheo.com)
 - [安和鱼](https://blog.anheyu.com)
 - [安子璠](https://www.anzifan.com)
 - [Hsinyau](https://hsinyau.com)
-
----
-
-Made with 🧊 by [波罗歌](https://log.1k.ink)
