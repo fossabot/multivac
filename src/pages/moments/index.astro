@@ -186,7 +186,19 @@ import { Icon } from 'astro-icon/components';
           </div>
           ${imagesHtml}
           <div class="flex items-center gap-2 text-sm text-text-light/70 dark:text-text-dark/70">
-            <Icon name="clock" class="w-4 h-4" />
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              class="w-4 h-4 text-zinc-400 dark:text-zinc-500 flex-shrink-0"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
             ${dateStr}
           </div>
         </article>
