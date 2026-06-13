@@ -16,6 +16,7 @@ const postsByCategory = posts.reduce((acc, post) => {
 }, {} as Record<string, CollectionEntry<'post'>[]>);
 
 const categories = Object.keys(postsByCategory).sort((a, b) => postsByCategory[b].length - postsByCategory[a].length);
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainLayout title="全部分类" description="查看博客的所有分类">
@@ -31,9 +32,7 @@ const categories = Object.keys(postsByCategory).sort((a, b) => postsByCategory[b
               class="group relative inline-flex items-center gap-3 px-6 py-4 rounded-2xl bg-card-light dark:bg-card-dark hover:shadow-lg hover:-translate-y-1 transition-all duration-300 will-change-transform"
             >
               <div class="flex items-center gap-3">
-                <svg class="w-5 h-5 text-primary-light dark:text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-                </svg>
+                <Icon name="folder" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
                 <span class="text-base font-medium text-text-light dark:text-text-dark group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors">{category}</span>
               </div>
               <span class="px-3 py-1 bg-badge-light dark:bg-badge-dark text-text-light/70 dark:text-text-dark/70 text-sm font-medium rounded-full">

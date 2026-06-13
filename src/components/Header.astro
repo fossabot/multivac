@@ -2,6 +2,7 @@
 import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import SearchModal from './SearchModal.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <header 
@@ -26,22 +27,10 @@ import SearchModal from './SearchModal.astro';
                 class="group relative text-text-light dark:text-text-dark transition-all duration-300 focus:outline-none border-none bg-transparent mr-4"
                 aria-label="菜单"
             >
-                <svg
-                    class="w-6 h-6 transition-all duration-300 group-hover:scale-90 group-active:scale-95"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path d="M3 3h8v10H3V3zm0 12h8v6H3v-6zM14 3h7v6h-7V3zm0 8h7v10h-7V11z"/>
-                </svg>
+                <Icon name="grid" class="w-6 h-6 transition-all duration-300 group-hover:scale-90 group-active:scale-95" />
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 scale-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 group-active:scale-95">
                     <div class="bg-primary-light dark:bg-primary-dark rounded-full px-1 py-1 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20">
-                        <svg
-                            class="w-6 h-6 text-white dark:text-black transition-all duration-300 group-hover:scale-90 group-active:scale-95"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path d="M3 3h8v10H3V3zm0 12h8v6H3v-6zM14 3h7v6h-7V3zm0 8h7v10h-7V11z"/>
-                        </svg>
+                        <Icon name="grid" class="w-6 h-6 text-white dark:text-black transition-all duration-300 group-hover:scale-90 group-active:scale-95" />
                     </div>
                 </div>
             </button>
@@ -50,11 +39,7 @@ import SearchModal from './SearchModal.astro';
                     <span class="inline-block transition-all duration-300 group-hover:opacity-0 group-hover:scale-90 group-active:scale-95">LOG</span>
                     <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center opacity-0 scale-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 group-active:scale-95">
                         <div class="bg-primary-light dark:bg-primary-dark rounded-full px-4 py-1 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20">
-                                <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                                    <path d="M3 11l9-7 9 7"/>
-                                    <path d="M5 13v8h14v-8"/>
-                                    <rect x="11" y="14" width="2" height="3" fill="currentColor" stroke="none"/>
-                                </svg>
+                                <Icon name="home" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                         </div>
                     </div>
                 </a>
@@ -77,33 +62,11 @@ import SearchModal from './SearchModal.astro';
                 class="group relative text-text-light dark:text-text-dark transition-all duration-300 focus:outline-none mr-2"
                 aria-label="搜索"
             >
-                <svg 
-                    class="w-6 h-6 transition-all duration-300 group-hover:scale-90 group-active:scale-95" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    stroke-width="2"
-                    stroke-linecap="square"
-                    stroke-linejoin="miter"
-                    viewBox="0 0 24 24"
-                >
-                    <circle cx="10" cy="10" r="6"/>
-                    <path d="M14.5 14.5l5.5 5.5"/>
-                </svg>
+                <Icon name="search" class="w-6 h-6 transition-all duration-300 group-hover:scale-90 group-active:scale-95" />
 
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 scale-90 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 group-active:scale-95">
                     <div class="bg-primary-light dark:bg-primary-dark rounded-full px-1 py-1 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20">
-                        <svg 
-                            class="w-6 h-6 text-white dark:text-black" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            stroke-width="2"
-                            stroke-linecap="square"
-                            stroke-linejoin="miter"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle cx="10" cy="10" r="6"/>
-                            <path d="M14.5 14.5l5.5 5.5"/>
-                        </svg>
+                        <Icon name="search" class="w-6 h-6 text-white dark:text-black" />
                     </div>
                 </div>
             </button>
@@ -122,9 +85,7 @@ import SearchModal from './SearchModal.astro';
                     class="hidden px-2 text-sm font-sans whitespace-nowrap"
                 >
                     <span class="md:hidden flex items-center justify-center">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                        </svg>
+                        <Icon name="chevron-up" class="w-4 h-4" />
                     </span>
                     <span class="hidden md:inline">返回顶部</span>
                 </span>
@@ -134,128 +95,88 @@ import SearchModal from './SearchModal.astro';
         <div id="menu-panel" class="absolute top-0 w-[320px] p-2 rounded-xl bg-white/80 dark:bg-black/70 backdrop-blur-sm border border-white/20 dark:border-white/10 shadow-2xl opacity-0 scale-95 pointer-events-none transition-all duration-300 origin-top z-20" style="margin-top: 5.5rem;">
             <div class="grid grid-cols-2 gap-2">
                 <a href="http://1k.ink/" target="_blank" rel="noopener noreferrer" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                            <path d="M3 11l9-7 9 7"/>
-                            <path d="M5 13v8h14v-8"/>
-                            <rect x="11" y="14" width="2" height="3" fill="currentColor" stroke="none"/>
-                        </svg>
+                    <Icon name="home" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                         <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">主页</span>
                         
                         <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                             <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                             <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                                <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                                    <path d="M3 11l9-7 9 7"/>
-                                    <path d="M5 13v8h14v-8"/>
-                                    <rect x="11" y="14" width="2" height="3" fill="currentColor" stroke="none"/>
-                                </svg>
+                                <Icon name="home" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                                 <span class="text-base font-medium text-white dark:text-black transition-all duration-300">主页</span>
                             </div>
                         </div>
                 </a>
 
                 <a href="/" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <rect x="4" y="4" width="16" height="16"/>
-                        <path d="M2 12h10l4-4h6"/>
-                    </svg>
+                    <Icon name="blog" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                     <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">博客</span>
                     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                         <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                         <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <rect x="4" y="4" width="16" height="16"/>
-                                <path d="M2 12h10l4-4h6"/>
-                            </svg>
+                            <Icon name="blog" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                             <span class="text-base font-medium text-white dark:text-black transition-all duration-300">博客</span>
                         </div>
                     </div>
                 </a>
 
                 <a href="/archives" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                            <path d="M4 3h11l5 5v13H4Z"/>
-                            <path d="M15 3v5h5 M8 9h8 M8 13h8 M8 17h5"/>
-                        </svg>
+                    <Icon name="archive" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                         <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">文稿</span>
                         
                         <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                             <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                             <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                                <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                                    <path d="M4 3h11l5 5v13H4Z"/>
-                                    <path d="M15 3v5h5 M8 9h8 M8 13h8 M8 17h5"/>
-                                </svg>
+                                <Icon name="archive" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                                 <span class="text-base font-medium text-white dark:text-black transition-all duration-300">文稿</span>
                             </div>
                         </div>
                 </a>
 
                 <a href="/friends" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M2 18l7-14 7 14H2Z M11 18l5.5-9.5 5.5 9.5h-11Z" />
-                    </svg>
+                    <Icon name="friends" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                     <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">友链</span>
                     
                     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                         <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                         <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M2 18l7-14 7 14H2Z M11 18l5.5-9.5 5.5 9.5h-11Z" />
-                            </svg>
+                            <Icon name="friends" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                             <span class="text-base font-medium text-white dark:text-black transition-all duration-300">友链</span>
                         </div>
                     </div>
                 </a>
 
                 <a href="/moments" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="9"/>
-                        <path d="M12 7l4.5 8.5h-9z" fill="currentColor"/>
-                    </svg>
+                    <Icon name="moments" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                     <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">动态</span>
                     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                         <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                         <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="9"/>
-                                <path d="M12 7l4.5 8.5h-9z" fill="currentColor"/>
-                            </svg>
+                            <Icon name="moments" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                             <span class="text-base font-medium text-white dark:text-black transition-all duration-300">动态</span>
                         </div>
                     </div>
                 </a>
 
 <a href="/watching" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0 scale-[0.88] origin-center" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" viewBox="0 0 24 24">
-        <path d="M12 2v4 M12 18v4 M2 12h4 M18 12h4"/>
-        <path d="M6 6l2.5 2.5 M15.5 15.5l2.5 2.5 M18 6l-2.5 2.5 M8.5 15.5L6 18"/>
-    </svg>
+    <Icon name="watching" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0 scale-[0.88] origin-center" />
     <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">漫游</span>
     
     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
         <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
         <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-            <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0 scale-[0.88] origin-center" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" viewBox="0 0 24 24">
-                <path d="M12 2v4 M12 18v4 M2 12h4 M18 12h4"/>
-                <path d="M6 6l2.5 2.5 M15.5 15.5l2.5 2.5 M18 6l-2.5 2.5 M8.5 15.5L6 18"/>
-            </svg>
+            <Icon name="watching" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0 scale-[0.88] origin-center" />
             <span class="text-base font-medium text-white dark:text-black transition-all duration-300">漫游</span>
         </div>
     </div>
 </a>
 
                 <a href="/about" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <svg class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" viewBox="0 0 24 24">
-                        <path d="M12 3l9 16H3zM9 19V9"/>
-                    </svg>
+                    <Icon name="about" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
                     <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">关于</span>
                     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
                         <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
                         <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <svg class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" viewBox="0 0 24 24">
-                                <path d="M12 3l9 16H3zM9 19V9"/>
-                            </svg>
+                            <Icon name="about" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
                             <span class="text-base font-medium text-white dark:text-black transition-all duration-300">关于</span>
                         </div>
                     </div>

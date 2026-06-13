@@ -19,6 +19,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "astro": "^5.18.0",
     "astro-compress": "^2.3.9",
+    "astro-icon": "^1.1.5",
     "marked": "^17.0.1",
     "qrcode": "^1.5.4",
     "typescript": "^5.9.3"

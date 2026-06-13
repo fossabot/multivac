@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainLayout title="忽已晚" description="回归日常的时间感知组件">
@@ -25,9 +26,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="chinese-item-card transition-all duration-300" data-id="year">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3.5">
-              <svg class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm3 5H5v6h6V5z" />
-              </svg>
+              <Icon name="square-dot" class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" />
               <div class="flex items-baseline gap-2.5">
                 <span class="text-base font-serif tracking-widest font-medium text-stone-700 dark:text-stone-300 card-title">岁律</span>
                 <span class="text-xs font-mono text-stone-400 dark:text-stone-500 uppercase card-subtitle"></span>
@@ -51,9 +50,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="chinese-item-card transition-all duration-300" data-id="quarter">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3.5">
-              <svg class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 1.5a2.5 2.5 0 0 0-2.5 2.5c0 1.5 2.5 3.5 2.5 3.5s2.5-2 2.5-3.5A2.5 2.5 0 0 0 8 1.5zm0 13a2.5 2.5 0 0 1-2.5-2.5c0-1.5 2.5-3.5 2.5-3.5s2.5 2 2.5 3.5A2.5 2.5 0 0 1 8 14.5zM1.5 8a2.5 2.5 0 0 1 2.5-2.5c1.5 0 3.5 2.5 3.5 2.5s-2 2.5-3.5 2.5A2.5 2.5 0 0 1 1.5 8zm13 0a2.5 2.5 0 0 0-2.5-2.5c-1.5 0-3.5 2.5-3.5 2.5s2 2.5 3.5 2.5A2.5 2.5 0 0 0 14.5 8z" />
-              </svg>
+              <Icon name="progress-quarter" class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" />
               <div class="flex items-baseline gap-2.5">
                 <span class="text-base font-serif tracking-widest font-medium text-stone-700 dark:text-stone-300 card-title">时节</span>
                 <span class="text-xs font-mono text-stone-400 dark:text-stone-500 uppercase card-subtitle"></span>
@@ -77,9 +74,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="chinese-item-card transition-all duration-300" data-id="month">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3.5">
-              <svg class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M14.53 10.53a7 7 0 0 1-9.06-9.06 7 7 0 1 0 9.06 9.06z" />
-              </svg>
+              <Icon name="progress-month" class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" />
               <div class="flex items-baseline gap-2.5">
                 <span class="text-base font-serif tracking-widest font-medium text-stone-700 dark:text-stone-300 card-title">月令</span>
                 <span class="text-xs font-mono text-stone-400 dark:text-stone-500 uppercase card-subtitle"></span>
@@ -103,9 +98,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="chinese-item-card transition-all duration-300" data-id="week">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3.5">
-              <svg class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm0 1.5A6.5 6.5 0 1 1 8 14.5a3.25 3.25 0 0 1 0-6.5 3.25 3.25 0 0 0 0-6.5zM8 3.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z" />
-              </svg>
+              <Icon name="progress-week" class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" />
               <div class="flex items-baseline gap-2.5">
                 <span class="text-base font-serif tracking-widest font-medium text-stone-700 dark:text-stone-300 card-title">七曜</span>
                 <span class="text-xs font-mono text-stone-400 dark:text-stone-500 uppercase card-subtitle"></span>
@@ -129,9 +122,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
         <div class="chinese-item-card transition-all duration-300" data-id="day">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3.5">
-              <svg class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M4 6a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm11 9H1l5.5-8 3 4.5L12 9l3 6z" />
-              </svg>
+              <Icon name="progress-day" class="w-4 h-4 text-red-700/60 dark:text-amber-600/50" />
               <div class="flex items-baseline gap-2.5">
                 <span class="text-base font-serif tracking-widest font-medium text-stone-700 dark:text-stone-300 card-title">朝暮</span>
                 <span class="text-xs font-mono text-stone-400 dark:text-stone-500 uppercase card-subtitle"></span>

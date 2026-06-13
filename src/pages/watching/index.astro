@@ -67,6 +67,7 @@ try {
 function formatDate(date: Date): string {
   return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 }
+import { Icon } from 'astro-icon/components';
 ---
 
 <script>
@@ -230,9 +231,7 @@ function formatDate(date: Date): string {
               </div>
               <div class="relative pl-3 pr-2 py-2 rounded-lg bg-white/10 backdrop-blur-sm border-white/70">
                 <p class="text-white text-sm line-clamp-5 leading-relaxed font-medium">
-                  <svg class="w-4 h-4 text-white/50 inline-block mr-1 align-text-bottom" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path>
-                  </svg>
+                  <svg class="w-4 h-4 text-white/50 inline-block mr-1 align-text-bottom" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path></svg>
                   ${item.comment}
                 </p>
               </div>
@@ -250,9 +249,7 @@ function formatDate(date: Date): string {
         <nav class="flex items-center gap-1 md:gap-2" aria-label="分页导航">
           ${currentPage > 1 ? `
             <button onclick="window.goToPage(${currentPage - 1})" class="group flex items-center justify-center w-10 h-10 md:w-auto md:px-4 rounded-full border border-border-light dark:border-border-dark text-text-light dark:text-text-dark hover:bg-primary-light/5 hover:border-primary-light dark:hover:border-primary-dark transition-all duration-300" title="上一页">
-              <svg class="w-5 h-5 md:-ml-1 md:mr-1 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
+              <svg class="w-5 h-5 md:-ml-1 md:mr-1 group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg>
               <span class="hidden md:inline font-medium text-sm">上一页</span>
             </button>
           ` : ''}
@@ -277,9 +274,7 @@ function formatDate(date: Date): string {
           ${currentPage < totalPages ? `
             <button onclick="window.goToPage(${currentPage + 1})" class="group flex items-center justify-center w-10 h-10 md:w-auto md:px-4 rounded-full border border-border-light dark:border-border-dark text-text-light dark:text-text-dark hover:bg-primary-light/5 hover:border-primary-light dark:hover:border-primary-dark transition-all duration-300" title="下一页">
               <span class="hidden md:inline font-medium text-sm">下一页</span>
-              <svg class="w-5 h-5 md:-mr-1 md:ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
+              <svg class="w-5 h-5 md:-mr-1 md:ml-1 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M9 5l7 7-7 7"></path></svg>
             </button>
           ` : ''}
         </nav>
@@ -324,16 +319,12 @@ function formatDate(date: Date): string {
           <div class="flex flex-col gap-1 mt-4 text-sm text-text-light/70 dark:text-text-dark/70">
             {pubDate && (
               <span class="flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
+                <Icon name="calendar" class="w-4 h-4" />
                 始于 {formatDate(pubDate)}
               </span>
             )}
             <span id="watching-count" class="flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
-              </svg>
+              <Icon name="film" class="w-4 h-4" />
               <span id="watching-count-text">共 {watchingList.length} 部作品</span>
             </span>
           </div>
@@ -344,9 +335,7 @@ function formatDate(date: Date): string {
 
         {watchingList.length === 0 && (
           <div class="p-12 bg-card-light dark:bg-card-dark rounded-3xl shadow-sm text-center">
-            <svg class="w-16 h-16 mx-auto mb-4 text-text-light/70 dark:text-text-dark/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path>
-            </svg>
+            <Icon name="film" class="w-16 h-16 mx-auto mb-4 text-text-light/70 dark:text-text-dark/70" />
             <p class="text-text-light/70 dark:text-text-dark/70">
               暂无记录
             </p>
@@ -360,9 +349,7 @@ function formatDate(date: Date): string {
             <div class="flex items-center gap-3">
               <div class="h-px w-12 sm:w-32 bg-gradient-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
               <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 flex-shrink-0">
-                <svg class="w-5 h-5 text-primary-light dark:text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                </svg>
+                <Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
                 <span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
               </div>
               <div class="h-px w-12 sm:w-32 bg-gradient-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>

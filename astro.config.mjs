@@ -4,10 +4,14 @@ import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel';
 import compress from 'astro-compress'; // 引入压缩插件
+import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
+
 
 // 只有在 Vercel 环境下才加载适配器，本地和 Cloudflare (SSG) 保持 undefined
 const isVercel = process.env.VERCEL === '1' || process.env.DEPLOY_PLATFORM === 'vercel';
+
+
 
 export default defineConfig({
   site: 'https://log.1k.ink',
@@ -15,6 +19,7 @@ export default defineConfig({
   
   // compress 对生成的静态资源进行压缩
   integrations: [
+    icon(),
     mdx(), 
     sitemap(), 
     tailwind(), 

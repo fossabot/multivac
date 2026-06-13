@@ -34,6 +34,7 @@ const displayImage = heroImage || defaultCover;
 const content = Astro.slots.has('default') ? await Astro.slots.render('default') : '';
 const wordCount = calculateWordCount(content);
 const readingTime = calculateReadingTime(content);
+import { Icon } from 'astro-icon/components';
 ---
 
 <html lang="zh-CN">
@@ -74,10 +75,9 @@ const readingTime = calculateReadingTime(content);
 				<div data-encrypted-payload style="display:none" aria-hidden="true">{encryptedPayload}</div>
 			)}
 			<div class="max-w-[1340px] mx-auto">
-				<!-- 大屏幕布局 -->
-				<div class="hidden xl:grid grid-cols-[272px_1fr_272px] gap-8">
-					<div></div>
-					<article id="article-content-desktop" class="article-content max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+				<div class="xl:grid xl:grid-cols-[272px_1fr_272px] xl:gap-8">
+					<div class="hidden xl:block"></div>
+					<article id="article-content" class="article-content max-w-2xl xl:max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 						<div class={heroImageWidth ? "mt-12 mb-6 mx-auto overflow-hidden rounded-full shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-110 cursor-pointer" : "mb-6 overflow-hidden rounded-3xl shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105 cursor-pointer"} style={heroImageWidth ? `width: ${heroImageWidth}px; aspect-ratio: 1/1;` : 'aspect-ratio: 2/1;'}>
 							<div
 								class="w-full h-full bg-cover bg-center"
@@ -89,55 +89,45 @@ const readingTime = calculateReadingTime(content);
 							<h1 data-article-title class="text-4xl font-bold text-text-light dark:text-text-dark mb-4">{title}</h1>
 							{showDate && (
 								<div class="flex flex-wrap items-center justify-center gap-3 mb-4">
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
+									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
 										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 											文章字数统计
 										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-										</svg>
+										<Icon name="doc" class="w-4 h-4" />
 										<span>{(wordCount / 1000).toFixed(1)}K 字</span>
 									</div>
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
+									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
 										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 											预计阅读时间
 										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-										</svg>
+										<Icon name="clock" class="w-4 h-4" />
 										<span>{readingTime} 分钟</span>
 									</div>
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
+									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
 										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 											文章发布日期
 										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-										</svg>
-										<span><FormattedDate date={pubDate} /></span>
+										<Icon name="calendar" class="w-4 h-4" />
+										<span class="xl:hidden">发布于 </span><FormattedDate date={pubDate} />
 									</div>
 									{updatedDate && (
-										<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
+										<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
 											<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 												文章更新日期
 											</div>
-											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-											</svg>
-											<span><FormattedDate date={updatedDate} /></span>
+											<Icon name="refresh" class="w-4 h-4" />
+											<span class="xl:hidden">更新于 </span><FormattedDate date={updatedDate} />
 										</div>
 									)}
 									{category && (
-										<a 
+										<a
 											href={`/categories/${category}`}
-											class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark hover:bg-white dark:hover:bg-badge-dark/90 transition-colors"
+											class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark hover:bg-gray-200/80 xl:hover:bg-white dark:hover:bg-gray-700/80 xl:dark:hover:bg-badge-dark/90 transition-colors"
 										>
 											<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 												查看 {category} 分类下的所有文章
 											</div>
-											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-											</svg>
+											<Icon name="folder" class="w-4 h-4" />
 											<span>{category}</span>
 										</a>
 									)}
@@ -156,7 +146,7 @@ const readingTime = calculateReadingTime(content);
 												{tags.map((tag) => (
 													<a
 														href={`/tags/${tag}`}
-														class="group relative px-2 py-1 text-xs font-medium bg-gray-100/80 dark:bg-white/10 text-gray-500 dark:text-gray-400 rounded-full hover:bg-gray-200/80 dark:hover:bg-white/20 transition-colors"
+														class="group relative px-2 py-1 text-xs font-medium bg-gray-100/80 dark:bg-white/80 xl:dark:bg-white/10 text-gray-500 dark:text-gray-400 rounded-full hover:bg-gray-200/80 dark:hover:bg-gray-700/80 xl:dark:hover:bg-white/20 transition-colors"
 													>
 														<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
 															查看 {tag} 标签下的所有文章
@@ -168,29 +158,25 @@ const readingTime = calculateReadingTime(content);
 										)}
 									</div>
 									<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 dark:bg-white/10 flex-shrink-0 mr-2">
-										<svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-										</svg>
+										<Icon name="check" class="w-4 h-4 text-gray-400 dark:text-gray-500" />
 										<span class="text-xs font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">文章结束</span>
 									</div>
 								</div>
 
-								<ArticleMetaCard 
-									title={title} 
-									url={Astro.url?.href || ''} 
-									pubDate={pubDate} 
-									updatedDate={updatedDate} 
+								<ArticleMetaCard
+									title={title}
+									url={Astro.url?.href || ''}
+									pubDate={pubDate}
+									updatedDate={updatedDate}
 								/>
-								
+
 								<RecentPosts currentPostId={id || ''} />
 								{/* 评论区分隔区域 */}
 								<div id="comments-section" class="mt-16 mb-8 flex flex-col items-center gap-4">
 									<div class="flex items-center gap-3">
 										<div class="h-px w-12 sm:w-32 bg-gradient-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
-										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 dark:bg-badge-dark/60 flex-shrink-0">
-											<svg class="w-5 h-5 text-primary-light dark:text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-											</svg>
+										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/40 dark:bg-badge-dark/60 flex-shrink-0">
+											<Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
 											<span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
 										</div>
 										<div class="h-px w-12 sm:w-32 bg-gradient-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>
@@ -200,133 +186,7 @@ const readingTime = calculateReadingTime(content);
 							</>
 						)}
 					</article>
-					<div></div>
-				</div>
-				<!-- 中等屏幕和小屏幕布局 -->
-				<div class="xl:hidden">
-					<article id="article-content-mobile" class="article-content max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-						<div class={heroImageWidth ? "mt-12 mb-6 mx-auto overflow-hidden rounded-full shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-110 cursor-pointer" : "mb-6 overflow-hidden rounded-3xl shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105 cursor-pointer"} style={heroImageWidth ? `width: ${heroImageWidth}px; aspect-ratio: 1/1;` : 'aspect-ratio: 2/1;'}>
-							<div
-								class="w-full h-full bg-cover bg-center"
-								style={`background-image: url('${displayImage}');`}
-								aria-label="文章封面"
-							></div>
-						</div>
-						<div class="text-center -mb-4">
-							<h1 data-article-title class="text-4xl font-bold text-text-light dark:text-text-dark mb-4">{title}</h1>
-							{showDate && (
-								<div class="flex flex-wrap items-center justify-center gap-3 mb-4">
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
-										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-											文章字数统计
-										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-										</svg>
-										<span>{(wordCount / 1000).toFixed(1)}K 字</span>
-									</div>
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
-										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-											预计阅读时间
-										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-										</svg>
-										<span>{readingTime} 分钟</span>
-									</div>
-									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
-										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-											文章发布日期
-										</div>
-										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-										</svg>
-										<span>发布于 <FormattedDate date={pubDate} /></span>
-									</div>
-									{updatedDate && (
-										<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
-											<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-												文章更新日期
-											</div>
-											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-											</svg>
-											<span>更新于 <FormattedDate date={updatedDate} /></span>
-										</div>
-									)}
-									{category && (
-										<a 
-											href={`/categories/${category}`}
-											class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors"
-										>
-											<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-												查看分类 {category} 下的所有文章
-											</div>
-											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-											</svg>
-											<span>{category}</span>
-										</a>
-									)}
-								</div>
-							)}
-						</div>
-						<div data-encrypted-body class="prose prose-lg max-w-none text-text-light dark:prose-invert dark:text-text-dark prose-headings:font-bold prose-a:text-primary-light dark:prose-a:text-primary-dark prose-blockquote:border-l-primary-light dark:prose-blockquote:border-l-primary-dark">
-							<slot />
-						</div>
-						{showComments && (
-							<>
-								<div class="my-4 flex items-center justify-between">
-									<div class="flex items-center gap-2 flex-1">
-										{tags && tags.length > 0 && (
-											<div class="flex items-center gap-2 flex-wrap ml-2">
-												{tags.map((tag) => (
-													<a 
-														href={`/tags/${tag}`}
-														class="group relative px-2 py-1 text-xs font-medium bg-gray-100/80 dark:bg-white/80 text-gray-500 dark:text-gray-400 rounded-full hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors"
-													>
-														<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl shadow-2xl opacity-0 invisible scale-95 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 transition-all duration-300 pointer-events-none z-10 origin-bottom">
-															查看标签 {tag} 下的所有文章
-														</div>
-														# {tag}
-													</a>
-												))}
-											</div>
-										)}
-									</div>
-									<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 dark:bg-white/10 flex-shrink-0 mr-2">
-										<svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-										</svg>
-										<span class="text-xs font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">文章结束</span>
-									</div>
-								</div>
-								
-								<ArticleMetaCard 
-									title={title} 
-									url={Astro.url?.href || ''} 
-									pubDate={pubDate} 
-									updatedDate={updatedDate} 
-								/>
-								
-								<RecentPosts currentPostId={id || ''} />
-								{/* 评论区分隔区域 */}
-								<div id="comments-section" class="mt-16 mb-8 flex flex-col items-center gap-4">
-									<div class="flex items-center gap-3">
-										<div class="h-px w-12 sm:w-32 bg-gradient-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
-										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 flex-shrink-0">
-											<svg class="w-5 h-5 text-primary-light dark:text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-											</svg>
-											<span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
-										</div>
-										<div class="h-px w-12 sm:w-32 bg-gradient-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>
-									</div>
-								</div>
-								<Twikoo />
-							</>
-						)}
-					</article>
+					<div class="hidden xl:block"></div>
 				</div>
 			</div>
 		</main>
@@ -432,15 +292,11 @@ const readingTime = calculateReadingTime(content);
 					header.className = 'code-header';
 					header.innerHTML = `
 						<div class="code-title">
-							<svg class="toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-							</svg>
+							<svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 9l-7 7-7-7"></path></svg>
 							<span>${lang}</span>
 						</div>
 						<button class="copy-btn" title="Copy">
-							<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-							</svg>
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
 						</button>
 					`;
 					
@@ -454,18 +310,10 @@ const readingTime = calculateReadingTime(content);
 							navigator.clipboard.writeText(code.textContent || '').then(() => {
 								const btn = header.querySelector('.copy-btn');
 								if (btn) {
-									btn.innerHTML = `
-										<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-										</svg>
-									`;
+									btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg>`;
 									pre.classList.add('copied');
 									setTimeout(() => {
-										btn.innerHTML = `
-											<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-											</svg>
-										`;
+										btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
 										pre.classList.remove('copied');
 									}, 2000);
 								}

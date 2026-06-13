@@ -46,6 +46,7 @@ try {
 	console.log('Using default moments data');
 }
 
+import { Icon } from 'astro-icon/components';
 ---
 
 <script>
@@ -185,9 +186,7 @@ try {
           </div>
           ${imagesHtml}
           <div class="flex items-center gap-2 text-sm text-text-light/70 dark:text-text-dark/70">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+            <Icon name="clock" class="w-4 h-4" />
             ${dateStr}
           </div>
         </article>
@@ -202,9 +201,7 @@ try {
         <nav class="flex items-center gap-1 md:gap-2" aria-label="分页导航">
           ${currentPage > 1 ? `
             <button onclick="window.momentsGoToPage(${currentPage - 1})" class="group flex items-center justify-center w-10 h-10 md:w-auto md:px-4 rounded-full border border-border-light dark:border-border-dark text-text-light dark:text-text-dark hover:bg-primary-light/5 hover:border-primary-light dark:hover:border-primary-dark transition-all duration-300" title="上一页">
-              <svg class="w-5 h-5 md:-ml-1 md:mr-1 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
+              <Icon name="chevron-left-arrow" class="w-5 h-5 md:-ml-1 md:mr-1 group-hover:-translate-x-0.5 transition-transform" />
               <span class="hidden md:inline font-medium text-sm">上一页</span>
             </button>
           ` : ''}
@@ -229,9 +226,7 @@ try {
           ${currentPage < totalPages ? `
             <button onclick="window.momentsGoToPage(${currentPage + 1})" class="group flex items-center justify-center w-10 h-10 md:w-auto md:px-4 rounded-full border border-border-light dark:border-border-dark text-text-light dark:text-text-dark hover:bg-primary-light/5 hover:border-primary-light dark:hover:border-primary-dark transition-all duration-300" title="下一页">
               <span class="hidden md:inline font-medium text-sm">下一页</span>
-              <svg class="w-5 h-5 md:-mr-1 md:ml-1 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
+              <Icon name="chevron-right" class="w-5 h-5 md:-mr-1 md:ml-1 group-hover:translate-x-0.5 transition-transform" />
             </button>
           ` : ''}
         </nav>
@@ -280,9 +275,7 @@ try {
 					</p>
 					<div class="flex flex-col gap-1 mt-4 text-sm text-text-light/70 dark:text-text-dark/70">
 						<span id="moments-count" class="flex items-center gap-2">
-							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-							</svg>
+							<Icon name="comment" class="w-4 h-4" />
 							<span id="moments-count-text">共 {moments.length} 条动态</span>
 						</span>
 					</div>
@@ -293,9 +286,7 @@ try {
 
 				{moments.length === 0 && (
 					<div class="p-12 bg-card-light dark:bg-card-dark rounded-3xl shadow-sm text-center">
-						<svg class="w-16 h-16 mx-auto mb-4 text-text-light/70 dark:text-text-dark/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-						</svg>
+						<Icon name="comment" class="w-16 h-16 mx-auto mb-4 text-text-light/70 dark:text-text-dark/70" />
 						<p class="text-text-light/70 dark:text-text-dark/70">
 							还没有发布任何动态
 						</p>

@@ -91,6 +91,7 @@ try {
 	// 文件不存在，使用默认数据
 	console.log('Using default friends data');
 }
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainLayout title={pageTitle} description={pageDescription}>
@@ -147,9 +148,7 @@ try {
 												{friend.description}
 											</p>
 										</div>
-										<svg class="w-5 h-5 text-text-light/70 dark:text-text-dark/70 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-										</svg>
+										<Icon name="external-link" class="w-5 h-5 text-text-light/70 dark:text-text-dark/70 group-hover:text-primary-light dark:group-hover:text-primary-dark transition-colors flex-shrink-0" />
 									</a>
 								))}
 							</div>
@@ -182,9 +181,7 @@ try {
 							<div class="flex items-center gap-3">
 								<div class="h-px w-12 sm:w-32 bg-gradient-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
 								<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light dark:bg-badge-dark/60 flex-shrink-0">
-									<svg class="w-5 h-5 text-primary-light dark:text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-									</svg>
+									<Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
 									<span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
 								</div>
 								<div class="h-px w-12 sm:w-32 bg-gradient-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>
