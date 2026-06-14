@@ -93,9 +93,7 @@ const { title, description, image } = Astro.props;
           }
 
           function runWelcomeAnimation() {
-            const hasVisited = sessionStorage.getItem('hasVisited');
-
-            if (hasVisited) return;
+            if (sessionStorage.getItem('hasVisited')) return;
 
             sessionStorage.setItem('hasVisited', 'true');
 
@@ -147,7 +145,15 @@ const { title, description, image } = Astro.props;
             }, 2500);
           }
 
-          document.addEventListener('astro:page-load', runWelcomeAnimation);
+          // 仅首次加载执行，路由切换后不再重复注册
+          if (!sessionStorage.getItem('hasVisited')) {
+            runWelcomeAnimation();
+          }
+          document.addEventListener('astro:page-load', () => {
+            if (!sessionStorage.getItem('hasVisited')) {
+              runWelcomeAnimation();
+            }
+          }, { once: true });
         </script>
     </body>
 </html>

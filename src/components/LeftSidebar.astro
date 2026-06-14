@@ -338,7 +338,7 @@ import { Icon } from 'astro-icon/components';
           <!-- 左侧封面 -->
           <a href={`/tonight?idx=${idx}`} class="w-16 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-hover-light dark:bg-hover-dark cursor-pointer block relative shadow-sm">
             <img
-              src={item.cover}
+              src={item.cover.replace(/\/view\/photo\/[lms]\//, '/view/photo/thumb/')}
               alt={item.title}
               class="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-500 ease-out"
               loading="lazy"
@@ -725,6 +725,7 @@ import { Icon } from 'astro-icon/components';
 <script>
   let matrixInterval: number | undefined;
   let animationFrameId: number | undefined;
+  let matrixListenersBound = false;
 
   function initSecondaryEffects() {
     const matrixCard = document.querySelector('.matrix-card');
@@ -826,9 +827,13 @@ import { Icon } from 'astro-icon/components';
       });
     }
     
-    if (matrixCard) matrixCard.addEventListener('mouseenter', triggerMatrixEffect);
-    const textContainer = matrixCard?.querySelector('.text-container');
-    if (textContainer) textContainer.addEventListener('mouseenter', triggerMatrixEffect);
+    // 避免路由切换后重复绑定事件监听器
+    if (!matrixListenersBound && matrixCard) {
+      matrixCard.addEventListener('mouseenter', triggerMatrixEffect);
+      const textContainer = matrixCard.querySelector('.text-container');
+      if (textContainer) textContainer.addEventListener('mouseenter', triggerMatrixEffect);
+      matrixListenersBound = true;
+    }
 
     matrixInterval = setInterval(triggerMatrixEffect, 10000) as unknown as number;
   }
@@ -836,6 +841,7 @@ import { Icon } from 'astro-icon/components';
   function cleanupSecondary() {
     if (matrixInterval) clearInterval(matrixInterval);
     if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    matrixListenersBound = false;
   }
 
   initSecondaryEffects();
@@ -906,12 +912,14 @@ import { Icon } from 'astro-icon/components';
     const cached = getCachedHitokoto();
     if (cached) {
       updateHitokotoUI(cached);
+      // 缓存有效期内不重复请求
+      return;
     }
 
     const defaultText = '醉后不知天在水，满船清梦压星河。';
     document.querySelectorAll('.hitokoto-text').forEach(el => {
       if (!el.textContent || el.textContent === '加载中...') {
-        el.textContent = cached ? cached.hitokoto : defaultText;
+        el.textContent = defaultText;
       }
     });
 
@@ -934,7 +942,10 @@ import { Icon } from 'astro-icon/components';
     initPlaylistCover();
   });
 
-  setInterval(fetchHitokoto, 300000);
+  // 避免路由切换后累积多个定时器
+  if (!(window as any).__hitokotoInterval) {
+    (window as any).__hitokotoInterval = setInterval(fetchHitokoto, 300000);
+  }
 </script>
 
 <script>

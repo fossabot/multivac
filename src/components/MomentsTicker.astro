@@ -131,7 +131,7 @@ import { Icon } from 'astro-icon/components';
         <Icon name="chevron-right" class="hidden sm:block w-3.5 h-3.5 text-zinc-300 dark:text-zinc-700 group-hover:text-zinc-500 ml-auto transition-transform duration-300 group-hover:translate-x-0.5" />
       </a>
 
-{/* 4. 随机电影推荐卡片 */}
+      {/* 4. 随机电影推荐卡片 */}
       {/* 核心改动：把 sm:justify-start 改为 sm:justify-between，确保两端对齐 */}
       <a id="movie-recommend-link" href="/tonight" class="group flex flex-col sm:flex-row items-center justify-center sm:justify-between h-14 px-4 rounded-3xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/30 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 col-span-1">
         
@@ -241,7 +241,7 @@ import { Icon } from 'astro-icon/components';
             movieMetaEl.textContent = parts.join(' · ');
           }
           if (movieCoverEl && movie && movie.cover) {
-            movieCoverEl.src = movie.cover;
+            movieCoverEl.src = movie.cover.replace(/\/view\/photo\/[lms]\//, '/view/photo/thumb/');
             movieCoverEl.alt = movie.title;
           }
           if (movieLink) movieLink.href = `/tonight?idx=${idx}`;

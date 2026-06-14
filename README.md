@@ -17,7 +17,7 @@
 - **深色模式** — 跟随系统 / 手动切换，View Transitions API 圆形扩散过渡动画，路由切换无闪烁
 - **响应式三栏布局** — 大屏三栏（左栏 + 内容 + 右栏），中屏两栏，小屏单栏，自适应折叠
 - **资源压缩** — astro-compress 压缩 HTML/CSS/JS/SVG
-- **预取策略** — viewport 内链接自动预取（`prefetchAll` + `defaultStrategy: viewport`）
+- **预取策略** — 视口内链接自动预取（`defaultStrategy: viewport`），避免全量预取抢占带宽
 - **RSS & Sitemap** — 自动生成订阅源和站点地图
 
 ### 博客
@@ -313,7 +313,7 @@ export default defineConfig({
   output: 'static',
   // Vercel 环境自动启用适配器 + Web Analytics
   adapter: isVercel ? vercel({ webAnalytics: { enabled: true } }) : undefined,
-  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  prefetch: { prefetchAll: false, defaultStrategy: 'viewport' },
 });
 ```
 
@@ -434,6 +434,8 @@ npm run build
 - GitHub: [@LogLInk1K](https://github.com/LogLInk1K)
 
 ## 鸣谢
+
+本博客参考以下诸位博主的设计，特此鸣谢：
 
 - [张洪Heo](https://blog.zhheo.com)
 - [安和鱼](https://blog.anheyu.com)
