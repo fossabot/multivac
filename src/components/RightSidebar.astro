@@ -49,8 +49,7 @@ const postSummaries: PostSummary[] = posts.map(post => ({
   category: post.data.category,
 }));
 
-// 初始显示的 3 篇文章
-const initialRandomPosts = [...posts].sort(() => Math.random() - 0.5).slice(0, 3);
+// 初始显示由客户端 JS 随机选取，构建时不再预选
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -140,41 +139,6 @@ import { Icon } from 'astro-icon/components';
     </div>
 
     <ul class="js-posts-list-container">
-      {initialRandomPosts.map((post, index) => {
-        const originalFileName = post.id.toLowerCase();
-        const displayImage = post.data.heroImage || defaultCover;
-        const serialNumber = String(index + 1).padStart(2, '0');
-        
-        return (
-          <li class="group/item">
-            <a href={`/p/${originalFileName}`} class="block relative py-5 transition-all duration-300">
-              <div class="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-16 rounded-xl overflow-hidden pointer-events-none opacity-[0.04] dark:opacity-[0.08] scale-100 group-hover/item:opacity-[0.22] dark:group-hover/item:opacity-[0.25] group-hover/item:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-0">
-                <img src={displayImage} alt="" class="w-full h-full object-cover grayscale-[30%] group-hover/item:grayscale-0 transition-all duration-500" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 duration-500"></div>
-              </div>
-
-              <div class="flex items-start gap-4 relative z-10 w-full">
-                <span class="font-mono text-xl font-light text-text-light/15 dark:text-text-dark/15 group-hover/item:text-neutral-400 dark:group-hover/item:text-neutral-500 transition-colors duration-300 pt-0.5 shrink-0">
-                  {serialNumber}
-                </span>
-                
-                <div class="flex-1 min-w-0 w-full">
-                  <div class="flex items-center gap-2 text-[10px] tracking-wider text-text-light/35 dark:text-text-dark/25 mb-1">
-                    {post.data.category && (
-                      <span class="uppercase"># {post.data.category}</span>
-                    )}
-                    <FormattedDate date={post.data.pubDate} />
-                  </div>
-                  
-                  <p class="text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 group-hover/item:text-neutral-700 dark:group-hover/item:text-neutral-100 duration-300 line-clamp-1 group-hover/item:translate-x-1 transition-transform leading-snug">
-                    {post.data.title}
-                  </p>
-                </div>
-              </div>
-            </a>
-          </li>
-        );
-      })}
     </ul>
   </div>
 
@@ -319,6 +283,72 @@ import { Icon } from 'astro-icon/components';
     });
   }
 
+  function renderRandomPosts(listContainer: HTMLElement, rawData: string) {
+    try {
+      const allPosts: PostData[] = JSON.parse(rawData);
+      const shuffled = [...allPosts];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      const selected = shuffled.slice(0, 3);
+
+      listContainer.innerHTML = selected.map((post, index) => {
+        const date = new Date(post.pubDate).toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        });
+
+        const serialNumber = String(index + 1).padStart(2, '0');
+        const displayImage = post.heroImage || '/img/df-cover.webp';
+        const categoryHtml = post.category ? `<span class="text-text-light/35 dark:text-text-dark/25"># ${post.category}</span>` : '';
+
+        return `
+          <li class="group/item">
+            <a href="/p/${post.originalFileName}" class="block relative py-5 transition-all duration-300">
+              <div class="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-16 rounded-xl overflow-hidden pointer-events-none opacity-[0.04] dark:opacity-[0.08] scale-100 group-hover/item:opacity-[0.22] dark:group-hover/item:opacity-[0.25] group-hover/item:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-0">
+                <div class="w-full h-full bg-center bg-cover grayscale-[30%] group-hover/item:grayscale-0 transition-all duration-500" style="background-image:url(${displayImage})"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 duration-500"></div>
+              </div>
+              <div class="flex items-start gap-4 relative z-10 w-full">
+                <span class="font-mono text-xl font-light text-text-light/15 dark:text-text-dark/15 group-hover/item:text-neutral-400 dark:group-hover/item:text-neutral-500 transition-colors duration-300 pt-0.5 shrink-0">
+                  ${serialNumber}
+                </span>
+                <div class="flex-1 min-w-0 w-full">
+                  <div class="flex items-center gap-2 text-[10px] tracking-wider text-text-light/35 dark:text-text-dark/25 mb-1">
+                    ${categoryHtml}
+                    ${date}
+                  </div>
+                  <p class="text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 group-hover/item:text-neutral-700 dark:group-hover/item:text-neutral-100 duration-300 line-clamp-1 group-hover/item:translate-x-1 transition-transform leading-snug">
+                    ${post.title}
+                  </p>
+                </div>
+              </div>
+            </a>
+          </li>
+        `;
+      }).join('');
+
+      listContainer.style.opacity = '1';
+    } catch (e) {
+      console.error('[RandomPosts] Render error:', e);
+      listContainer.style.opacity = '1';
+    }
+  }
+
+  // 页面加载时客户端随机渲染
+  function initRandomPosts() {
+    document.querySelectorAll('.js-posts-list-container').forEach(listContainer => {
+      const card = listContainer.closest('div')?.parentElement;
+      const btn = card?.querySelector('.js-refresh-trigger') as HTMLElement | null;
+      if (!btn) return;
+      const rawData = btn.getAttribute('data-posts');
+      if (!rawData) return;
+      renderRandomPosts(listContainer as HTMLElement, rawData);
+    });
+  }
+
   function refresh(btn: HTMLElement) {
     spinRefreshIcon(btn);
     const cardContainer = btn.closest('div')?.parentElement;
@@ -330,57 +360,7 @@ import { Icon } from 'astro-icon/components';
     listContainer.style.opacity = '0';
 
     setTimeout(() => {
-      try {
-        const allPosts: PostData[] = JSON.parse(rawData);
-        const shuffled = [...allPosts];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        const selected = shuffled.slice(0, 3);
-
-        listContainer.innerHTML = selected.map((post, index) => {
-          const date = new Date(post.pubDate).toLocaleDateString('zh-CN', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          });
-
-          const serialNumber = String(index + 1).padStart(2, '0');
-          const displayImage = post.heroImage || '/img/df-cover.webp';
-          const categoryHtml = post.category ? `<span class="text-text-light/35 dark:text-text-dark/25"># ${post.category}</span>` : '';
-
-          return `
-            <li class="group/item">
-              <a href="/p/${post.originalFileName}" class="block relative py-5 transition-all duration-300">
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-16 rounded-xl overflow-hidden pointer-events-none opacity-[0.04] dark:opacity-[0.08] scale-100 group-hover/item:opacity-[0.22] dark:group-hover/item:opacity-[0.25] group-hover/item:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-0">
-                  <img src="${displayImage}" alt="" class="w-full h-full object-cover grayscale-[30%] group-hover/item:grayscale-0 transition-all duration-500" />
-                  <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 duration-500"></div>
-                </div>
-                <div class="flex items-start gap-4 relative z-10 w-full">
-                  <span class="font-mono text-xl font-light text-text-light/15 dark:text-text-dark/15 group-hover/item:text-neutral-400 dark:group-hover/item:text-neutral-500 transition-colors duration-300 pt-0.5 shrink-0">
-                    ${serialNumber}
-                  </span>
-                  <div class="flex-1 min-w-0 w-full">
-                    <div class="flex items-center gap-2 text-[10px] tracking-wider text-text-light/35 dark:text-text-dark/25 mb-1">
-                      ${categoryHtml}
-                      ${date}
-                    </div>
-                    <p class="text-sm font-medium tracking-tight text-neutral-500 dark:text-neutral-400 group-hover/item:text-neutral-700 dark:group-hover/item:text-neutral-100 duration-300 line-clamp-1 group-hover/item:translate-x-1 transition-transform leading-snug">
-                      ${post.title}
-                    </p>
-                  </div>
-                </div>
-              </a>
-            </li>
-          `;
-        }).join('');
-
-        listContainer.style.opacity = '1';
-      } catch (e) {
-        console.error('[RandomPosts] Refresh error:', e);
-        listContainer.style.opacity = '1';
-      }
+      renderRandomPosts(listContainer, rawData);
     }, 200);
   }
 
@@ -390,6 +370,7 @@ import { Icon } from 'astro-icon/components';
   };
 
   document.addEventListener('click', onGlobalClick);
+  document.addEventListener('astro:page-load', initRandomPosts);
   document.addEventListener('astro:after-swap', () => {
     document.removeEventListener('click', onGlobalClick);
     document.addEventListener('click', onGlobalClick);
