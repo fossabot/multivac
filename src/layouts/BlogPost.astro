@@ -157,7 +157,7 @@ import { Icon } from 'astro-icon/components';
 											</div>
 										)}
 									</div>
-									<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 dark:bg-white/10 flex-shrink-0 mr-2">
+									<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100/80 dark:bg-white/10 shrink-0 mr-2">
 										<Icon name="check" class="w-4 h-4 text-gray-400 dark:text-gray-500" />
 										<span class="text-xs font-medium text-gray-400 dark:text-gray-500 whitespace-nowrap">文章结束</span>
 									</div>
@@ -174,12 +174,12 @@ import { Icon } from 'astro-icon/components';
 								{/* 评论区分隔区域 */}
 								<div id="comments-section" class="mt-16 mb-8 flex flex-col items-center gap-4">
 									<div class="flex items-center gap-3">
-										<div class="h-px w-12 sm:w-32 bg-gradient-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
-										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/40 dark:bg-badge-dark/60 flex-shrink-0">
+										<div class="h-px w-12 sm:w-32 bg-linear-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
+										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/40 dark:bg-badge-dark/60 shrink-0">
 											<Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
 											<span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
 										</div>
-										<div class="h-px w-12 sm:w-32 bg-gradient-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>
+										<div class="h-px w-12 sm:w-32 bg-linear-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>
 									</div>
 								</div>
 								<Twikoo />

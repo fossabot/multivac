@@ -21,7 +21,7 @@ const readingTime = calculateReadingTime(post.body || '');
   {/* 中大屏幕：水平布局 */}
   <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
     {/* 可选的封面图片 */}
-    <a href={`/p/${originalFileName}`} class="md:w-40 w-full h-[140px] bg-hero-light dark:bg-hero-dark rounded-3xl overflow-hidden flex-shrink-0 mx-auto md:mx-2 block">
+    <a href={`/p/${originalFileName}`} class="md:w-40 w-full h-[140px] bg-hero-light dark:bg-hero-dark rounded-3xl overflow-hidden shrink-0 mx-auto md:mx-2 block">
       <div
         class="w-full h-full bg-cover bg-center"
         style={`background-image: url('${displayImage}');`}

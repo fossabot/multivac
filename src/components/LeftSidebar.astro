@@ -93,7 +93,7 @@ import { Icon } from 'astro-icon/components';
             class="w-[115px] h-[115px] rounded-full object-cover ring-4 ring-white/50 dark:ring-black/50 shadow-lg avatar-image transform-gpu cursor-pointer"
           />
 
-          <div class="static-emojis-pool absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[9999]">
+          <div class="static-emojis-pool absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-9999">
             <img src="/img/emoji/cool.webp"  class="static-emoji" data-file="cool"  alt="fluent-3d-emoji" />
             <img src="/img/emoji/cat.webp"   class="static-emoji" data-file="cat"   alt="fluent-3d-emoji" />
             <img src="/img/emoji/yummy.webp" class="static-emoji" data-file="yummy" alt="fluent-3d-emoji" />
@@ -155,7 +155,7 @@ import { Icon } from 'astro-icon/components';
     <div class="music-card-content relative z-10 flex flex-col gap-5 pt-2">
       <div class="flex items-center gap-5">
         
-        <div class="relative w-20 h-20 flex-shrink-0">
+        <div class="relative w-20 h-20 shrink-0">
           <div class="vinyl-record flex items-center justify-center shadow-lg group-hover/music:scale-105 transition-transform duration-500">
             <img
               src="/img/df-cover.webp"
@@ -179,7 +179,7 @@ import { Icon } from 'astro-icon/components';
           </p>
           
         <div class="flex items-center gap-2 mt-1 leading-none">
-            <span class="flex h-1.5 w-1.5 relative flex-shrink-0">
+            <span class="flex h-1.5 w-1.5 relative shrink-0">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-light dark:bg-primary-dark opacity-75"></span>
               <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary-light dark:bg-primary-dark"></span>
             </span>
@@ -205,7 +205,7 @@ import { Icon } from 'astro-icon/components';
               class="h-full bg-primary-light dark:bg-primary-dark rounded-full transition-all duration-100 relative" 
               style="width: 0%"
             >
-              <div class="absolute inset-0 bg-gradient-to-r from-black/10 via-transparent to-white/40 dark:from-black/20 dark:to-white/20 rounded-full"></div>
+              <div class="absolute inset-0 bg-linear-to-r from-black/10 via-transparent to-white/40 dark:from-black/20 dark:to-white/20 rounded-full"></div>
               
               <div class="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-white dark:bg-zinc-100 rounded-full shadow-[0_1px_3px_rgba(0,0,0,0.3)] scale-0 group-hover/progress:scale-100 transition-transform duration-200 ease-out z-10"></div>
             </div>
@@ -251,7 +251,7 @@ import { Icon } from 'astro-icon/components';
       <a 
         href="/categories" 
         title="全部分类"
-        class="grid grid-cols-2 gap-0.5 transform translate-y-[-1px] p-1.5 -m-1.5 rounded-lg hover:bg-black/[0.03] dark:hover:bg-white/[0.05] transition-all duration-500 ease-out group/icon cursor-pointer hover:rotate-90"
+        class="grid grid-cols-2 gap-0.5 transform -translate-y-px p-1.5 -m-1.5 rounded-lg hover:bg-black/3 dark:hover:bg-white/5 transition-all duration-500 ease-out group/icon cursor-pointer hover:rotate-90"
       >
         <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-yellow-500/80 shadow-[0_0_8px_rgba(99,102,241,0.6)] transition-all duration-500 group-hover/card:scale-110 group-hover/card:shadow-[0_0_12px_rgba(99,102,241,0.9)]"></span>
         
@@ -307,7 +307,7 @@ import { Icon } from 'astro-icon/components';
           加载中...
         </p>
         
-        <div class="flex items-center justify-between border-t border-black/[0.06] dark:border-white/[0.06] pt-3 mt-4">
+        <div class="flex items-center justify-between border-t border-black/6 dark:border-white/6 pt-3 mt-4">
           <span class="text-[10px] font-bold tracking-widest text-text-light/40 dark:text-text-dark/40 uppercase ">HITO</span>
           <p class="hitokoto-from text-xs text-text-light/60 dark:text-text-dark/60 font-light tracking-wide min-h-[1em]"></p>
         </div>
@@ -336,7 +336,7 @@ import { Icon } from 'astro-icon/components';
         <div class="flex gap-3 group/item items-center">
           
           <!-- 左侧封面 -->
-          <a href={`/tonight?idx=${idx}`} class="w-16 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-hover-light dark:bg-hover-dark cursor-pointer block relative shadow-sm">
+          <a href={`/tonight?idx=${idx}`} class="w-16 h-20 shrink-0 rounded-xl overflow-hidden bg-hover-light dark:bg-hover-dark cursor-pointer block relative shadow-sm">
             <img
               src={item.cover.replace(/\/view\/photo\/[lms]\//, '/view/photo/thumb/')}
               alt={item.title}
@@ -354,7 +354,7 @@ import { Icon } from 'astro-icon/components';
                 <a href={`/tonight?idx=${idx}`}>{item.title}</a>
               </h4>
               {item.ratings && item.ratings.length > 0 && (
-                <div class="flex items-center gap-0.5 flex-shrink-0 ml-2">
+                <div class="flex items-center gap-0.5 shrink-0 ml-2">
                   <img src={ratingIcons[item.ratings[0].source]} alt="评分" class="w-3.5 h-3.5" />
                   <span class="text-xs font-black text-yellow-600 dark:text-yellow-400 ">{item.ratings[0].score.toFixed(1)}</span>
                 </div>
@@ -376,7 +376,7 @@ import { Icon } from 'astro-icon/components';
 
             <a 
               href={`/tonight?idx=${idx}`}
-              class="text-xs text-text-light/60 dark:text-text-dark/60 text-left break-all leading-normal tracking-wide transition-colors duration-300 group-hover/item:text-text-light/90 dark:group-hover/item:text-text-dark/90 !p-0 !m-0 [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden" 
+              class="text-xs text-text-light/60 dark:text-text-dark/60 text-left break-all leading-normal tracking-wide transition-colors duration-300 group-hover/item:text-text-light/90 dark:group-hover/item:text-text-dark/90 p-0! m-0! [display:-webkit-box] [-webkit-line-clamp:2] [-webkit-box-orient:vertical] overflow-hidden" 
             >
               {item.comment}
             </a>

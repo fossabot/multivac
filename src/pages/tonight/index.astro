@@ -77,14 +77,14 @@ import { Icon } from 'astro-icon/components';
             }}
           ></div>
           {/* 细腻环境遮罩 */}
-          <div class="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-zinc-50/90 via-zinc-50/40 to-transparent dark:from-zinc-950/90 dark:via-zinc-950/40"></div>
+          <div class="absolute inset-0 bg-linear-to-b md:bg-linear-to-r from-zinc-50/90 via-zinc-50/40 to-transparent dark:from-zinc-950/90 dark:via-zinc-950/40"></div>
 
           {/* 核心内容区 */}
           <div class="relative flex flex-col md:flex-row items-center gap-8 lg:gap-12 p-6 md:p-10 lg:p-14 w-full z-10">
             
             {/* 左侧海报：现代悬浮杂志质感 */}
-            <div class="flex-shrink-0 w-44 md:w-56 lg:w-64 relative" id="tonight-poster-wrap">
-              <div class="aspect-[3/4] rounded-2xl overflow-hidden shadow-[0_16px_40px_-10px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.7)] border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-100 dark:bg-zinc-900 transition-all duration-500">
+            <div class="shrink-0 w-44 md:w-56 lg:w-64 relative" id="tonight-poster-wrap">
+              <div class="aspect-3/4 rounded-2xl overflow-hidden shadow-[0_16px_40px_-10px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.7)] border border-zinc-200/50 dark:border-zinc-800/50 bg-zinc-100 dark:bg-zinc-900 transition-all duration-500">
                 <img 
                   id="tonight-poster" 
                   src={initialItem?.cover || ''} 
@@ -166,9 +166,9 @@ import { Icon } from 'astro-icon/components';
               {initialPicks.map(ri => {
                 const m = watchingList[ri];
                 return (
-                  <a href="javascript:void(0)" data-idx={ri} class="tonight-pick group block relative aspect-[3/4] rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 cursor-pointer border border-zinc-200/40 dark:border-zinc-800/40 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
-                    <img src={m.cover} alt={m.title} class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <a href="javascript:void(0)" data-idx={ri} class="tonight-pick group block relative aspect-3/4 rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-900 cursor-pointer border border-zinc-200/40 dark:border-zinc-800/40 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-md">
+                    <img src={m.cover} alt={m.title} class="w-full h-full object-cover grayscale-20 group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+                    <div class="absolute inset-0 bg-linear-to-t from-zinc-950/90 via-zinc-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-3 translate-y-2 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
                       <p class="text-white text-xs font-bold truncate tracking-wide">{m.title}</p>
                       <p class="text-zinc-300 text-[10px] mt-0.5 font-mono">{m.year}</p>

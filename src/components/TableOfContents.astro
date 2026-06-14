@@ -132,7 +132,7 @@
 
       const bar = document.createElement('span');
       const barWidth = item.level === 'h2' ? 'w-2.5' : 'w-4';
-      bar.className = `${barWidth} h-1 rounded-full bg-text-light/30 dark:bg-text-dark/30 mr-2 flex-shrink-0 transition-colors duration-300 group-hover/bar:bg-primary-light dark:group-hover/bar:bg-primary-dark`;
+      bar.className = `${barWidth} h-1 rounded-full bg-text-light/30 dark:bg-text-dark/30 mr-2 shrink-0 transition-colors duration-300 group-hover/bar:bg-primary-light dark:group-hover/bar:bg-primary-dark`;
 
       const a = document.createElement('a');
       a.href = `#${item.id}`;

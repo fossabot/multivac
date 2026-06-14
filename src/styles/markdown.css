@@ -46,7 +46,7 @@
 /* --- 引用块：换回你原本的高饱和度色调 --- */
 .prose blockquote {
   @apply relative pl-8 pr-8 py-8 my-10 
-         bg-primary-light/[0.04] dark:bg-primary-dark/[0.04]
+         bg-primary-light/4 dark:bg-primary-dark/4
          rounded-2xl shadow-sm border border-primary-light/10 dark:border-primary-dark/10;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .prose blockquote p {
-  @apply pl-4 pr-2 text-text-light/80 dark:text-text-dark/80 not-italic leading-7 relative z-10 text-left !important;
+  @apply pl-4 pr-2 text-text-light/80 dark:text-text-dark/80 not-italic leading-7 relative z-10 text-left;
   margin: 0 !important;
 }
 
@@ -74,7 +74,7 @@
 /* 行内代码：保持醒目但修正行高冲突 */
 .prose :not(pre) > code {
   @apply text-[0.9em] font-mono font-medium px-1.5 py-0.5 mx-0.5 rounded-md transition-colors;
-  @apply bg-[#425aef] dark:bg-[#ffc848] text-white dark:text-black; 
+  @apply bg-primary-light dark:bg-primary-dark text-white dark:text-black; 
 }
 
 /* 移除自动添加的引号 */
@@ -126,7 +126,7 @@
 }
 
 .prose pre .code-header .code-title .toggle-icon {
-  @apply w-5 h-5 transition-transform duration-200 flex-shrink-0;
+  @apply w-5 h-5 transition-transform duration-200 shrink-0;
 }
 
 .prose pre.collapsed .code-header .toggle-icon {
@@ -134,7 +134,7 @@
 }
 
 .prose pre .code-header .copy-btn {
-  @apply flex items-center justify-center p-1.5 text-slate-300 bg-slate-700/60 rounded-md hover:bg-slate-600/60 hover:text-white transition-all flex-shrink-0;
+  @apply flex items-center justify-center p-1.5 text-slate-300 bg-slate-700/60 rounded-md hover:bg-slate-600/60 hover:text-white transition-all shrink-0;
 }
 
 .prose pre .code-header .copy-btn svg {

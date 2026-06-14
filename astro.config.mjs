@@ -1,9 +1,9 @@
 // @ts-check
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
-import compress from 'astro-compress'; // 引入压缩插件
+import compress from 'astro-compress';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 
@@ -19,10 +19,9 @@ export default defineConfig({
   
   // compress 对生成的静态资源进行压缩
   integrations: [
-    icon(),
+    icon(), 
     mdx(), 
     sitemap(), 
-    tailwind(), 
     compress({
       CSS: true,
       HTML: true,
@@ -44,6 +43,7 @@ export default defineConfig({
   output: 'static',
 
   vite: {
+    plugins: [tailwindcss()],
     ssr: {
       external: ['node:fs', 'node:path'],
     },

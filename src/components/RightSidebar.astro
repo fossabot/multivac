@@ -97,7 +97,7 @@ import { Icon } from 'astro-icon/components';
         <span class="text-xs text-text-light/40 dark:text-text-dark/40 group-hover/btn:text-primary-light dark:group-hover/btn:text-primary-dark transform group-hover/btn:translate-x-1 transition-all duration-300 pl-0.5">&rarr;</span>
       </div>
 
-      <div class="flex-shrink-0 flex items-center transform group-hover/btn:scale-105 transition-transform duration-500 ease-out">
+      <div class="shrink-0 flex items-center transform group-hover/btn:scale-105 transition-transform duration-500 ease-out">
         <img
           src="/img/wormhole_4_tp.gif"
           alt="虫洞"
@@ -130,7 +130,7 @@ import { Icon } from 'astro-icon/components';
     
       <button
         type="button"
-        style="outline: none;" class="js-refresh-trigger group p-1.5 rounded-lg text-text-light/40 dark:text-text-dark/40 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-all duration-300 focus:outline-none active:scale-90 select-none"
+        style="outline: none;" class="js-refresh-trigger group p-1.5 rounded-lg text-text-light/40 dark:text-text-dark/40 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-black/4 dark:hover:bg-white/4 transition-all duration-300 focus:outline-none active:scale-90 select-none"
         data-posts={JSON.stringify(postSummaries)}
         aria-label="刷新推荐"
       >
@@ -156,7 +156,7 @@ import { Icon } from 'astro-icon/components';
   <!-- RSS订阅卡片 -->
   <div class="relative overflow-hidden p-6 bg-card-light dark:bg-card-dark rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border border-transparent hover:border-border-light dark:hover:border-border-dark group/rsscard select-none flex flex-col justify-between min-h-[180px]">
     <div class="relative">
-      <div class="absolute -right-2 -top-6 text-7xl font-black italic tracking-tighter text-text-light/[0.03] dark:text-text-dark/5 select-none pointer-events-none font-sans">
+      <div class="absolute -right-2 -top-6 text-7xl font-black italic tracking-tighter text-text-light/3 dark:text-text-dark/5 select-none pointer-events-none font-sans">
         订阅
       </div>
       <h2 class="text-xl font-extrabold tracking-tight text-neutral-800 dark:text-neutral-100 leading-tight">
@@ -219,7 +219,7 @@ import { Icon } from 'astro-icon/components';
 
   <!-- 博客统计卡片 -->
   <div class="relative overflow-hidden p-6 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark rounded-3xl shadow-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-300 border border-transparent hover:border-border-light dark:hover:border-border-dark select-none min-h-[230px] flex flex-col justify-between group/statcard">
-    <div class="absolute -right-6 -bottom-10 text-[140px] font-black italic tracking-tighter text-neutral-800/[0.03] dark:text-neutral-100/[0.02] select-none pointer-events-none transform origin-bottom-right transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/statcard:scale-110 group-hover/statcard:translate-x-2 group-hover/statcard:text-primary-light/[0.04] dark:group-hover/statcard:text-primary-dark/[0.03]">
+    <div class="absolute -right-6 -bottom-10 text-[140px] font-black italic tracking-tighter text-neutral-800/3 dark:text-neutral-100/2 select-none pointer-events-none transform origin-bottom-right transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/statcard:scale-110 group-hover/statcard:translate-x-2 group-hover/statcard:text-primary-light/4 dark:group-hover/statcard:text-primary-dark/3">
       字
     </div>
     <div class="relative z-10">
