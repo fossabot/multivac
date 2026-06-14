@@ -249,9 +249,9 @@ html.dark .bg-glow__orb--3 {
 }
 
 button, a {
-  transition: 
-    color 0.3s var(--ease-gentle), 
-    opacity 0.3s var(--ease-gentle);
+  transition-property: color, opacity, background-color, transform, scale, flex, box-shadow, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: var(--ease-gentle);
 }
 
 button:active {
