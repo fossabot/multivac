@@ -1,10 +1,10 @@
 # Multivac
 
-> 一款基于 Astro 和 Tailwind CSS 构建的纯静态个人博客，支持深色模式、动态说说、友链管理等功能
+> 一款基于 Astro v6 和 Tailwind CSS v4 构建的纯静态个人博客，支持深色模式、动态说说、友链管理等功能
 
-![Astro](https://img.shields.io/badge/Astro-6.4+-BC52EE?logo=astro&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.3-06B6D4?logo=tailwind-css&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-v6-BC52EE?logo=astro&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-v6-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
@@ -72,8 +72,8 @@
 | 层级 | 技术 |
 |------|------|
 | 框架 | [Astro 6](https://astro.build) — 静态站点生成，Content Collections |
-| 样式 | [Tailwind CSS 4](https://tailwindcss.com) + @tailwindcss/typography + @tailwindcss/vite |
-| 语言 | TypeScript 6 |
+| 样式 | [Tailwind CSS v4](https://tailwindcss.com) + @tailwindcss/typography + @tailwindcss/vite |
+| 语言 | TypeScript 6|
 | 内容 | Markdown / MDX / YAML |
 | 加密 | Web Crypto API (AES-256-GCM + PBKDF2, 600k iterations) |
 | 评论 | [Twikoo](https://twikoo.js.org) — 懒加载，路由切换自动重挂载 |
@@ -363,11 +363,11 @@ const envId = 'https://your-twikoo-endpoint.com';
 
 | 环境 | `post/example/` | `post/` 其他文章 |
 |------|-----------------|-----------------|
-| `npm run dev` | 可见 | 不可见（被 .gitignore 忽略） |
-| `npm run build` | 自动剔除 | 不可见 |
+| `npm run dev` | 可见 | 本地可见（被 .gitignore 忽略，不进入版本控制） |
+| `npm run build` | 自动剔除 | 本地可见（被 .gitignore 忽略，不进入版本控制） |
 
 - `content.config.ts` 中 `isProd` 判断：生产构建排除 `example/**/*`
-- `.gitignore` 忽略 `post/*`（仅保留 `!post/example/`），私有内容不进入版本控制
+- `.gitignore` 忽略 `post/*`（仅保留 `!post/example/`），私有内容不进入版本控制，但本地已有的文章在 dev 和 build 时均可见
 - Content Collections Schema 强制校验 frontmatter 字段类型与约束
 
 ## 部署
