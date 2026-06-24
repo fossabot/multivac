@@ -199,11 +199,11 @@ import { Icon } from 'astro-icon/components';
       const getLinkBySource = (item: WatchingItem, source: string): string | undefined => item.links?.find(link => link.source === source)?.url;
       
       const ratingsHtml = item.ratings && item.ratings.length > 0 ? `
-        <div class="absolute top-4 right-4 flex gap-1">
+        <div class="absolute top-4 right-4 flex gap-1 z-20">
           ${item.ratings.map((rating) => {
             const link = getLinkBySource(item, rating.source);
             return link ? `
-              <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-black/40 backdrop-blur-sm flex items-center gap-1 hover:bg-black/80 transition-colors cursor-pointer">
+              <a href="${link}" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-black/40 backdrop-blur-sm flex items-center gap-1 hover:bg-black/70 transition-colors cursor-pointer">
                 <img src="${ratingIcons[rating.source]}" alt="${ratingAlts[rating.source]}" class="w-4 h-4" />
                 <span class="text-white text-sm font-medium">${rating.score.toFixed(1)}</span>
               </a>
