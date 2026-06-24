@@ -60,6 +60,23 @@
 /* --- 暗色模式策略 --- */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* --- 全局语义化变量（仅用于真正需要变量切换的场景） --- */
+:root {
+  /* 毛玻璃 — glass-card / bg-card-light / bg-card-dark 共用 */
+  --glass-bg: var(--color-card-light);
+  --glass-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --glass-border-hover: var(--color-border-light);
+  /* 提示框 */
+  --tooltip-bg: rgba(255, 255, 255, 0.95);
+}
+
+html.dark {
+  --glass-bg: var(--color-card-dark);
+  --glass-shadow: 0 0 0 1px rgba(255, 255, 255, 0.03), 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --glass-border-hover: var(--color-border-dark);
+  --tooltip-bg: rgba(30, 30, 30, 0.95);
+}
+
 html, body {
   overflow-x: hidden; 
   touch-action: manipulate; 
@@ -107,12 +124,14 @@ html.dark .bg-glow::before {
   contain: layout style;
 }
 
+/* 亮色主题 - 蓝色光晕 */
 .bg-glow__orb--1 {
   width: 60vmax;
   height: 60vmax;
   top: -25%;
   left: -15%;
   filter: blur(50px);
+  background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.10) 0%, rgba(99,102,241,0.04) 40%, transparent 70%);
 }
 
 .bg-glow__orb--2 {
@@ -121,6 +140,7 @@ html.dark .bg-glow::before {
   bottom: -30%;
   right: -20%;
   filter: blur(55px);
+  background: radial-gradient(ellipse at 70% 60%, rgba(99,102,241,0.09) 0%, rgba(59,130,246,0.03) 40%, transparent 70%);
 }
 
 .bg-glow__orb--3 {
@@ -129,16 +149,6 @@ html.dark .bg-glow::before {
   top: 20%;
   left: 35%;
   filter: blur(60px);
-}
-
-/* 亮色主题 - 蓝色光晕 */
-.bg-glow__orb--1 {
-  background: radial-gradient(ellipse at 30% 40%, rgba(59,130,246,0.10) 0%, rgba(99,102,241,0.04) 40%, transparent 70%);
-}
-.bg-glow__orb--2 {
-  background: radial-gradient(ellipse at 70% 60%, rgba(99,102,241,0.09) 0%, rgba(59,130,246,0.03) 40%, transparent 70%);
-}
-.bg-glow__orb--3 {
   background: radial-gradient(ellipse at 50% 50%, rgba(14,165,233,0.08) 0%, rgba(59,130,246,0.03) 50%, transparent 70%);
 }
 
@@ -146,43 +156,33 @@ html.dark .bg-glow::before {
 html.dark .bg-glow__orb--1 {
   background: radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.14) 0%, rgba(94,106,210,0.05) 40%, transparent 70%);
 }
+
 html.dark .bg-glow__orb--2 {
   background: radial-gradient(ellipse at 70% 60%, rgba(168,85,247,0.12) 0%, rgba(113,112,255,0.04) 40%, transparent 70%);
 }
+
 html.dark .bg-glow__orb--3 {
   background: radial-gradient(ellipse at 50% 50%, rgba(192,132,252,0.10) 0%, rgba(139,92,246,0.04) 50%, transparent 70%);
 }
-
-
 
 /* --- 毛玻璃卡片 --- */
 .bg-card-light {
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--glass-shadow);
 }
 
 .dark .bg-card-dark {
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--glass-shadow);
 }
 
 /* --- 悬浮提示框（不透明） --- */
 .tooltip-solid {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-}
-
-.dark .tooltip-solid {
-  background: rgba(30, 30, 30, 0.95) !important;
+  background: var(--tooltip-bg) !important;
 }
 
 /* --- 字体定义 --- */
@@ -296,13 +296,10 @@ html.dark .bg-glow__orb--3 {
 
 /* 玻璃卡片：皮肤 + 毛玻璃 + 圆角 + 阴影 + 流体交互 + 边框高光 */
 @utility glass-card {
-  background-color: var(--color-card-light);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(16px) saturate(1.2);
   -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.03),
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--glass-shadow);
   border-radius: var(--radius-3xl);
   border: 1px solid transparent;
   transition-property: all;
@@ -311,22 +308,19 @@ html.dark .bg-glow__orb--3 {
   &:hover {
     translate: 0 -0.25rem;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    border-color: var(--color-border-light);
+    border-color: var(--glass-border-hover);
   }
 }
 
 /* 暗色皮肤覆盖（需与 glass-card 搭配） */
 @utility glass-card-dark {
   &:where(.dark, .dark *) {
-    background-color: var(--color-card-dark);
+    background-color: var(--glass-bg);
     backdrop-filter: blur(16px) saturate(1.2);
     -webkit-backdrop-filter: blur(16px) saturate(1.2);
-    box-shadow:
-      0 0 0 1px rgba(255, 255, 255, 0.03),
-      0 2px 4px rgba(0, 0, 0, 0.3),
-      0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--glass-shadow);
     &:hover {
-      border-color: var(--color-border-dark);
+      border-color: var(--glass-border-hover);
     }
   }
 }
@@ -465,52 +459,50 @@ button:active {
   }
 }
 
+/* --- 滚动条 --- */
 ::-webkit-scrollbar {
-    width: 12px;  /* 纵向滚动条宽度 */
+  width: 12px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #8181818f; /* 滚动条滑块颜色 */
-    border-radius: 12px;
-    border: 2px solid transparent; /* 创建间隙 */
-    background-clip: padding-box;
+  background-color: #8181818f;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-button {
-    display: none !important;
+  display: none !important;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: transparent;
-    border: none;
+  background-color: transparent;
+  border: none;
 }
 
-/* 鼠标悬停状态 - 浅色模式 */
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #999; /* 悬停时变深 */
+  background-color: #999;
 }
 
-/* 深色模式下的悬停状态 */
 html.dark ::-webkit-scrollbar-thumb:hover {
-    background-color: #666; /* 悬停时稍微亮一点，增加对比度 */
+  background-color: #666;
 }
 
 /* fancybox简单样式适配 */
-
 .fancybox__slide {
-    padding: 2rem !important;
+  padding: 2rem !important;
 }
 .fancybox__viewport.is-draggable img {
-    border-radius: 12px;
+  border-radius: 12px;
 }
 .f-carousel__toolbar__column.is-right .f-button:first-child {
-    border-radius: 12px 0 0 12px; /* 仅左侧首个按钮圆角 */
+  border-radius: 12px 0 0 12px;
 }
 .f-carousel__toolbar__column.is-right .f-button:last-child {
-    border-radius: 0 12px 12px 0; /* 仅右侧末尾按钮圆角 */
+  border-radius: 0 12px 12px 0;
 }
 
 /* 代码块折叠功能 */
 .prose pre {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }

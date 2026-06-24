@@ -1,9 +1,41 @@
-/* --- 修正版：保留原色 blockquote + 优化版代码系统 --- */
+/* --- Prose 语义化颜色变量 --- */
+/* 核心思路：颜色全部通过变量切换，零 @variant dark 块，零特异性问题 */
 
-/* 基础 Prose 容器 */
+:root {
+  --prose-text: var(--color-text-light);
+  --prose-text-muted: color-mix(in srgb, var(--color-text-light) 90%, transparent);
+  --prose-text-dim: color-mix(in srgb, var(--color-text-light) 80%, transparent);
+  --prose-text-faint: color-mix(in srgb, var(--color-text-light) 50%, transparent);
+  --prose-accent: var(--color-primary-light);
+  --prose-accent-muted: color-mix(in srgb, var(--color-primary-light) 60%, transparent);
+  --prose-accent-faint: color-mix(in srgb, var(--color-primary-light) 4%, transparent);
+  --prose-accent-border: color-mix(in srgb, var(--color-primary-light) 10%, transparent);
+  --prose-accent-border-20: color-mix(in srgb, var(--color-primary-light) 20%, transparent);
+  --prose-code-bg: var(--color-primary-light);
+  --prose-code-text: #ffffff;
+  --prose-media-border: rgba(0, 0, 0, 0.05);
+}
+
+html.dark {
+  --prose-text: var(--color-text-dark);
+  --prose-text-muted: color-mix(in srgb, var(--color-text-dark) 90%, transparent);
+  --prose-text-dim: color-mix(in srgb, var(--color-text-dark) 80%, transparent);
+  --prose-text-faint: color-mix(in srgb, var(--color-text-dark) 50%, transparent);
+  --prose-accent: var(--color-primary-dark);
+  --prose-accent-muted: color-mix(in srgb, var(--color-primary-dark) 60%, transparent);
+  --prose-accent-faint: color-mix(in srgb, var(--color-primary-dark) 4%, transparent);
+  --prose-accent-border: color-mix(in srgb, var(--color-primary-dark) 10%, transparent);
+  --prose-accent-border-20: color-mix(in srgb, var(--color-primary-dark) 20%, transparent);
+  --prose-code-bg: var(--color-primary-dark);
+  --prose-code-text: #000000;
+  --prose-media-border: rgba(255, 255, 255, 0.05);
+}
+
+/* --- 基础 Prose 容器 --- */
 .prose {
-  @apply text-text-light dark:text-text-dark antialiased leading-relaxed;
-  max-width: 65ch; 
+  color: var(--prose-text);
+  @apply antialiased leading-relaxed;
+  max-width: 65ch;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-word;
@@ -11,106 +43,106 @@
   scroll-behavior: smooth;
 }
 
-/* --- 标题系统（保留侧边装饰条） --- */
+/* --- 标题系统 --- */
 .prose h1 {
-  @apply text-4xl font-extrabold tracking-tight text-text-light dark:text-text-dark mb-8 mt-8 pb-4 border-b-2 border-primary-light/20 dark:border-primary-dark/20;
+  @apply text-4xl font-extrabold tracking-tight mb-8 mt-8 pb-4 border-b-2;
+  border-color: var(--prose-accent-border-20);
 }
 
 .prose h2 {
-  @apply text-3xl font-bold text-text-light dark:text-text-dark mb-8 mt-8 flex items-center scroll-mt-24;
+  @apply text-3xl font-bold mb-8 mt-8 flex items-center scroll-mt-24;
 }
 
 .prose h2::before {
   content: "";
-  @apply mr-3 w-1.5 h-6 bg-primary-light dark:bg-primary-dark rounded-full inline-block;
+  @apply mr-3 w-1.5 h-6 rounded-full inline-block;
+  background-color: var(--prose-accent);
 }
 
 .prose h3 {
-  @apply text-2xl font-bold text-text-light/90 dark:text-text-dark/90 mb-8 mt-8 flex items-center scroll-mt-24;
+  @apply text-2xl font-bold mb-8 mt-8 flex items-center scroll-mt-24;
+  color: var(--prose-text-muted);
 }
 
 .prose h3::before {
   content: "";
-  @apply mr-3 w-1.5 h-4 bg-primary-light/60 dark:bg-primary-dark/60 rounded-full inline-block;
+  @apply mr-3 w-1.5 h-4 rounded-full inline-block;
+  background-color: var(--prose-accent-muted);
 }
 
 /* --- 正文与链接 --- */
 .prose p {
-  @apply mb-5 leading-8 text-text-light/90 dark:text-text-dark/90 text-[1.05rem];
+  @apply mb-5 leading-8 text-[1.05rem];
+  color: var(--prose-text-muted);
 }
 
 .prose a {
-  @apply text-primary-light dark:text-primary-dark font-semibold no-underline border-b border-primary-light/30 hover:border-primary-light transition-all duration-300;
+  @apply font-semibold no-underline transition-all duration-300;
+  color: var(--prose-accent);
+  border-bottom: 1px solid var(--prose-accent-border);
 }
 
-/* --- 引用块：换回你原本的高饱和度色调 --- */
+.prose a:hover {
+  border-color: var(--prose-accent);
+}
+
+/* --- 引用块 --- */
 .prose blockquote {
-  @apply relative pl-8 pr-8 py-8 my-10 
-         bg-primary-light/4 dark:bg-primary-dark/4
-         rounded-2xl shadow-sm border border-primary-light/10 dark:border-primary-dark/10;
+  @apply relative pl-8 pr-8 py-8 my-10 rounded-2xl shadow-sm;
+  background-color: var(--prose-accent-faint);
+  border: 1px solid var(--prose-accent-border);
 }
 
-/* 还原：左上角鲜艳大引号 */
 .prose blockquote::before {
-  content: "“";
-  @apply absolute top-1 left-2 text-6xl text-primary-light dark:text-primary-dark 
-         font-serif italic leading-none select-none opacity-100; /* 确保不透明 */
+  content: open-quote;
+  @apply absolute top-1 left-2 text-6xl font-serif italic leading-none select-none;
+  color: var(--prose-accent);
 }
 
-/* 还原：右下角鲜艳大引号 */
 .prose blockquote::after {
-  content: "”";
-  @apply absolute bottom-[-25px] right-4 text-6xl text-primary-light dark:text-primary-dark 
-         font-serif italic leading-none select-none opacity-100; /* 确保不透明 */
+  content: close-quote;
+  @apply absolute bottom-[-25px] right-4 text-6xl font-serif italic leading-none select-none;
+  color: var(--prose-accent);
 }
 
 .prose blockquote p {
-  @apply pl-4 pr-2 text-text-light/80 dark:text-text-dark/80 not-italic leading-7 relative z-10 text-left;
+  @apply pl-4 pr-2 not-italic leading-7 relative z-10 text-left;
+  color: var(--prose-text-dim);
   margin: 0 !important;
 }
 
-/* --- 代码系统：博文核心 --- */
+/* --- 代码系统 --- */
 
-/* 行内代码：保持醒目但修正行高冲突 */
 .prose :not(pre) > code {
   @apply text-[0.9em] font-mono font-medium px-1.5 py-0.5 mx-0.5 rounded-md transition-colors;
-  @apply bg-primary-light dark:bg-primary-dark text-white dark:text-black; 
+  background-color: var(--prose-code-bg);
+  color: var(--prose-code-text);
 }
 
-/* 移除自动添加的引号 */
 .prose code::before, .prose code::after { content: "" !important; }
 
-/* --- 强化版 IDE 样式：兼容浅色/深色模式 --- */
-
 .prose pre code {
-  counter-reset: line; /* 初始化计数器 */
+  counter-reset: line;
 }
 
 .prose pre .line::before {
-  counter-increment: line; /* 每一行自增 */
-  content: counter(line); /* 显示数字 */
-  @apply inline-block w-2 mr-4 text-right text-slate-600 select-none; /* 样式：宽度、间距、不可选 */
+  counter-increment: line;
+  content: counter(line);
+  @apply inline-block w-2 mr-4 text-right text-slate-600 select-none;
 }
 
-.prose pre, 
+.prose pre,
 .prose pre code {
   font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
 }
 
 .prose pre {
   @apply relative mb-8 overflow-x-auto selection:bg-blue-500/30;
-  background-color: #161b22 !important; 
+  background-color: #161b22 !important;
   border: 1px solid #30363d !important;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
-  
   border-radius: 12px !important;
-  padding: 0 !important; 
-}
-
-/* 代码块头部工具栏 */
-.prose pre {
-  position: relative;
-  overflow-x: auto;
+  padding: 0 !important;
 }
 
 .prose pre .code-header {
@@ -145,7 +177,6 @@
   @apply text-green-400 bg-green-900/40;
 }
 
-/* 折叠状态 */
 .prose pre.collapsed .code-header {
   @apply rounded-b-xl border-b-0;
 }
@@ -160,13 +191,15 @@
   min-width: 100%;
 }
 
-/* --- 媒体与表格 --- */
+/* --- 媒体 --- */
 .prose img, .prose video {
-  @apply rounded-2xl shadow-xl my-10 mx-auto border border-black/5 dark:border-white/5 transform transition-transform hover:scale-[1.01];
+  @apply rounded-2xl shadow-xl my-10 mx-auto transform transition-transform hover:scale-[1.01];
+  border: 1px solid var(--prose-media-border);
 }
 
 .prose img + em {
-  @apply block text-center text-sm text-text-light/50 dark:text-text-dark/50 -mt-6 mb-10 not-italic;
+  @apply block text-center text-sm -mt-6 mb-10 not-italic;
+  color: var(--prose-text-faint);
 }
 
 /* 移除 Tailwind Prose 插件为 blockquote 自动添加的引号 */
