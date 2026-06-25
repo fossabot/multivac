@@ -2,6 +2,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import LeftSidebar from '../../components/LeftSidebar.astro';
 import RightSidebar from '../../components/RightSidebar.astro';
+import MomentsTicker from '../../components/MomentsTicker.astro';
 import Twikoo from '../../components/Twikoo.astro';
 import { getEntry } from 'astro:content';
 
@@ -301,6 +302,9 @@ import { Icon } from 'astro-icon/components';
 <MainLayout title={pageTitle} description={pageDescription}>
   <div id="watching-bridge" data-list={Buffer.from(JSON.stringify(watchingList)).toString('base64')} hidden aria-hidden="true"></div>
   <section class="section-container py-16">
+    <div transition:persist="moments-ticker" class="mb-6">
+      <MomentsTicker />
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-[272px_1fr] gap-6">
       <div class="hidden md:block">
         <div class="space-y-6">

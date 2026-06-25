@@ -263,11 +263,16 @@ import { Icon } from 'astro-icon/components';
   }
 
   document.addEventListener('astro:page-load', function() {
+    var container = document.getElementById('moments-ticker');
+    // persist 保留了 DOM 和运行中的 timer，跳过重新初始化
+    if (container && container.__momentsTimer) return;
     cleanupMomentsTicker();
     initMomentsTicker();
   });
 
   document.addEventListener('astro:after-swap', function() {
+    var container = document.getElementById('moments-ticker');
+    if (container && container.__momentsTimer) return;
     cleanupMomentsTicker();
     initMomentsTicker();
   });

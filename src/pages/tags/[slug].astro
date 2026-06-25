@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import LeftSidebar from '../../components/LeftSidebar.astro';
 import RightSidebar from '../../components/RightSidebar.astro';
+import MomentsTicker from '../../components/MomentsTicker.astro';
 import ArchiveItem from '../../components/ArchiveItem.astro';
 import { SITE_DESCRIPTION } from '../../consts';
 
@@ -32,6 +33,9 @@ const posts = allPosts.filter(post => {
 
 <MainLayout title={`标签: ${slug}`} description={SITE_DESCRIPTION}>
 	<section class="section-container py-16">
+			<div transition:persist="moments-ticker" class="mb-6">
+				<MomentsTicker />
+			</div>
 			<!-- 响应式布局：小屏幕单列，中等及大屏幕双栏 -->
 			<div class="grid grid-cols-1 md:grid-cols-[272px_1fr] gap-6">
 				<!-- 左侧边栏：中等及大屏幕显示 -->

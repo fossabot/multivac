@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../../layouts/MainLayout.astro';
 import LeftSidebar from '../../../components/LeftSidebar.astro';
 import RightSidebar from '../../../components/RightSidebar.astro';
+import MomentsTicker from '../../../components/MomentsTicker.astro';
 import ArchiveItem from '../../../components/ArchiveItem.astro';
 import Pagination from '../../../components/Pagination.astro';
 import { SITE_DESCRIPTION } from '../../../consts';
@@ -45,6 +46,9 @@ const sortedYears = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
 
 <MainLayout title={`文稿 - 第 ${currentPage} 页`} description={SITE_DESCRIPTION}>
   <section class="section-container py-16">
+    <div transition:persist="moments-ticker" class="mb-6">
+      <MomentsTicker />
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-[272px_1fr] gap-6">
       <div class="hidden md:block">
         <div class="space-y-6">

@@ -709,75 +709,24 @@ import { Icon } from 'astro-icon/components';
     animTimers = [];
     isAvatarAnimating = false;
 
-    const avatarImage = document.querySelector('.avatar-image') as HTMLImageElement;
-    const greetingText = document.querySelector('.greeting-text') as HTMLElement;
-    const greetingContainer = greetingText?.parentElement as HTMLElement;
-    const easeOut = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-
-    // Emoji 淡出
     document.querySelectorAll('.static-emoji').forEach(el => {
-      const emoji = el as HTMLElement;
-      emoji.style.transition = easeOut;
-      emoji.style.opacity = '0';
-      emoji.style.transform = 'scale(0.8)';
+      el.removeAttribute('data-state');
+      (el as HTMLElement).style.display = 'none';
     });
-
-    // 头像淡入
-    if (avatarImage) {
-      avatarImage.style.transition = easeOut;
-      avatarImage.style.visibility = 'visible';
-      avatarImage.style.opacity = '1';
-      avatarImage.style.transform = 'perspective(1000px) rotateY(0deg) rotateZ(0deg) scale(1)';
-      avatarImage.style.filter = 'blur(0px) brightness(1)';
-    }
-
-    // 问候文字淡入
-    if (greetingText) {
-      greetingText.textContent = '醉后不知天在水';
-      greetingText.style.transition = easeOut;
-      greetingText.style.transform = 'scale(1)';
-      greetingText.style.opacity = '1';
-      greetingText.style.filter = '';
-    }
-
-    if (greetingContainer) {
-      greetingContainer.style.transition = easeOut;
-      greetingContainer.style.transform = 'scale(1)';
-      greetingContainer.style.opacity = '1';
-      greetingContainer.style.filter = '';
-    }
-
-    // 过渡完成后彻底清理 Emoji
-    setTimeout(() => {
-      document.querySelectorAll('.static-emoji').forEach(el => {
-        el.removeAttribute('data-state');
-        (el as HTMLElement).style.display = 'none';
-        (el as HTMLElement).style.opacity = '';
-        (el as HTMLElement).style.transform = '';
-        (el as HTMLElement).style.transition = '';
-      });
-      if (avatarImage) {
-        avatarImage.style.transition = '';
-        avatarImage.style.transform = '';
-        avatarImage.style.filter = '';
-      }
-      if (greetingText) {
-        greetingText.style.transition = '';
-        greetingText.style.transform = '';
-        greetingText.style.filter = '';
-      }
-      if (greetingContainer) {
-        greetingContainer.style.transition = '';
-        greetingContainer.style.transform = '';
-        greetingContainer.style.filter = '';
-      }
-    }, 400);
   }
 
   // 挂载 Astro 标准生命周期
   initEmojiEffects();
-  document.addEventListener('astro:page-load', initEmojiEffects);
-  document.addEventListener('astro:before-preparation', cleanupEmoji);
+  document.addEventListener('astro:page-load', function() {
+    // persist 保留了运行中的动画，跳过重新初始化
+    if (avatarTimeout || animTimers.length > 0) return;
+    initEmojiEffects();
+  });
+  document.addEventListener('astro:before-preparation', function() {
+    // persist 保留 DOM 时，动画继续运行不中断
+    if (avatarTimeout || animTimers.length > 0) return;
+    cleanupEmoji();
+  });
 </script>
 
 <!-- Matrix与鼠标跟随 -->

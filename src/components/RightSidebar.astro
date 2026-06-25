@@ -340,6 +340,8 @@ import { Icon } from 'astro-icon/components';
   // 页面加载时客户端随机渲染
   function initRandomPosts() {
     document.querySelectorAll('.js-posts-list-container').forEach(listContainer => {
+      // persist 保留了已渲染的内容，跳过
+      if (listContainer.children.length > 0) return;
       const card = listContainer.closest('div')?.parentElement;
       const btn = card?.querySelector('.js-refresh-trigger') as HTMLElement | null;
       if (!btn) return;
@@ -395,7 +397,10 @@ import { Icon } from 'astro-icon/components';
       }
 
       if (progress < 1) requestAnimationFrame(update);
-      else element.textContent = target;
+      else {
+        element.textContent = target;
+        element.setAttribute('data-counted', '1');
+      }
     }
     requestAnimationFrame(update);
   }
@@ -424,7 +429,11 @@ import { Icon } from 'astro-icon/components';
 
   function initCountUpElements() {
     const countElements = document.querySelectorAll('.js-count-up');
-    countElements.forEach((element) => countUpObserver.observe(element));
+    countElements.forEach((element) => {
+      // persist 已完成动画的不再重复
+      if (element.getAttribute('data-counted')) return;
+      countUpObserver.observe(element);
+    });
   }
 
   document.addEventListener('astro:page-load', initCountUpElements);
@@ -432,6 +441,8 @@ import { Icon } from 'astro-icon/components';
   function renderRandomTags() {
     const containers = document.querySelectorAll('.js-tags-container');
     containers.forEach(container => {
+      // persist 保留了已渲染的标签，跳过
+      if (container.children.length > 0) return;
       const rawData = container.getAttribute('data-tags');
       if (!rawData) return;
 

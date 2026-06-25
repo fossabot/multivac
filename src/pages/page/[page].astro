@@ -4,6 +4,7 @@ import BlogCard from '../../components/BlogCard.astro';
 import LeftSidebar from '../../components/LeftSidebar.astro';
 import RightSidebar from '../../components/RightSidebar.astro';
 import Pagination from '../../components/Pagination.astro';
+import MomentsTicker from '../../components/MomentsTicker.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
@@ -43,6 +44,9 @@ const posts = allPosts.slice(startIndex, startIndex + postsPerPage);
 
 <MainLayout title={`${SITE_TITLE} - 第 ${currentPage} 页`} description={SITE_DESCRIPTION}>
 	<section class="section-container py-16">
+			<div transition:persist="moments-ticker" class="mb-6">
+				<MomentsTicker />
+			</div>
 			<!-- 响应式布局：小屏幕单列，中等屏幕两栏，大屏幕三栏 -->
 			<div class="grid grid-cols-1 md:grid-cols-[272px_1fr] xl:grid-cols-[272px_1fr_272px] gap-6">
 				<!-- 左侧边栏：中等屏幕和大屏幕显示 -->
