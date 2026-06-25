@@ -55,7 +55,7 @@ const watchingJson = JSON.stringify(watchingItems.map(m => ({
   type: m.type,
   ratings: m.ratings
 })));
-import { Icon } from 'astro-icon/components';
+import Icon from './Icon.astro';
 ---
 
 {recentMoments.length > 0 && (

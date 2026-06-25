@@ -35,7 +35,7 @@ const displayImage = heroImage || defaultCover;
 const content = rawContentForStats || (Astro.slots.has('default') ? await Astro.slots.render('default') : '');
 const wordCount = calculateWordCount(content);
 const readingTime = calculateReadingTime(content);
-import { Icon } from 'astro-icon/components';
+import Icon from '../components/Icon.astro';
 ---
 
 <html lang="zh-CN">
@@ -177,7 +177,7 @@ import { Icon } from 'astro-icon/components';
 									<div class="flex items-center gap-3">
 										<div class="h-px w-12 sm:w-32 bg-linear-to-r from-transparent to-text-light/20 dark:to-text-dark/40"></div>
 										<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/40 dark:bg-badge-dark/60 shrink-0">
-											<Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" is:inline />
+											<Icon name="comment" class="w-5 h-5 text-primary-light dark:text-primary-dark" />
 											<span class="text-sm font-medium text-text-light dark:text-text-dark whitespace-nowrap">评论区</span>
 										</div>
 										<div class="h-px w-12 sm:w-32 bg-linear-to-l from-transparent to-text-light/20 dark:to-text-dark/40"></div>

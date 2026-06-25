@@ -1,0 +1,23 @@
+---
+const icons = import.meta.glob('/src/icons/*.svg', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>;
+
+type AvailableIcons = keyof typeof icons extends `/src/icons/${infer K}.svg` ? K : string;
+
+interface Props {
+  name: AvailableIcons;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const svgRaw = icons[`/src/icons/${name}.svg`];
+
+const output = (svgRaw && className) 
+  ? svgRaw.replace(/^<svg/i, `<svg class="${className}"`) 
+  : svgRaw;
+---
+
+<Fragment set:html={output} />

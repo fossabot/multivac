@@ -50,7 +50,7 @@ const postSummaries: PostSummary[] = posts.map(post => ({
 }));
 
 // 初始显示由客户端 JS 随机选取，构建时不再预选
-import { Icon } from 'astro-icon/components';
+import Icon from './Icon.astro';
 ---
 
 <aside transition:persist="right-sidebar" class="hidden md:block w-[272px] space-y-6">

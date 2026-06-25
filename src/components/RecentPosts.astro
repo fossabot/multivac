@@ -20,7 +20,7 @@ const recentPosts = otherPosts.sort((a, b) => {
 }).slice(0, 2);
 
 const allPostUrls = otherPosts.map(post => `/p/${post.id.toLowerCase()}`);
-import { Icon } from 'astro-icon/components';
+import Icon from './Icon.astro';
 ---
 
 <div class="mt-6 space-y-4">

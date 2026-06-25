@@ -2,7 +2,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
-import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
 import type { AstroUserConfig } from 'astro'; 
 
@@ -13,7 +12,6 @@ const config: AstroUserConfig = {
   trailingSlash: 'never',
   
   integrations: [
-    icon(), 
     mdx(), 
     sitemap()
   ],

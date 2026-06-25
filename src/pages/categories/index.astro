@@ -16,7 +16,7 @@ const postsByCategory = posts.reduce((acc, post) => {
 }, {} as Record<string, CollectionEntry<'post'>[]>);
 
 const categories = Object.keys(postsByCategory).sort((a, b) => postsByCategory[b].length - postsByCategory[a].length);
-import { Icon } from 'astro-icon/components';
+import Icon from '../../components/Icon.astro';
 ---
 
 <MainLayout title="全部分类" description="查看博客的所有分类">

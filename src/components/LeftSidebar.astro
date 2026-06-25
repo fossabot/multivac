@@ -70,7 +70,7 @@ const categories = posts.reduce((acc, post) => {
 }, {} as Record<string, number>);
 
 const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
-import { Icon } from 'astro-icon/components';
+import Icon from './Icon.astro';
 ---
 
 <aside transition:persist="left-sidebar" class="hidden md:block w-[272px] space-y-6">
