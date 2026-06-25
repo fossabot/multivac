@@ -32,17 +32,11 @@ const posts = allPosts.slice(startIndex, startIndex + postsPerPage);
 			<div class="grid grid-cols-1 md:grid-cols-[272px_1fr] xl:grid-cols-[272px_1fr_272px] gap-6">
 				<!-- 左侧边栏：中等屏幕和大屏幕显示 -->
 				<div class="hidden md:block">
-					<div class="space-y-6">
-						<LeftSidebar />
-						<!-- 中等屏幕：右侧边栏显示在左侧边栏下方 -->
-						<div class="md:block xl:hidden">
-							<RightSidebar showMusicPlayer={true} />
-						</div>
-					</div>
+					<LeftSidebar />
 				</div>
 
 				<!-- 中间内容区：所有屏幕显示 -->
-				<div>
+				<div class="md:row-span-2 xl:row-span-1">
 					<div class="space-y-6">
 						{posts.map((post) => (
 							<BlogCard key={post.id} post={post} />
@@ -53,9 +47,9 @@ const posts = allPosts.slice(startIndex, startIndex + postsPerPage);
 					<Pagination currentPage={currentPage} totalPages={totalPages} />
 				</div>
 
-				<!-- 右侧边栏：大屏幕显示 -->
-				<div class="hidden xl:block">
-					<RightSidebar showMusicPlayer={false} />
+				<!-- 右侧边栏：中等屏幕显示在左栏下方，大屏幕独立右栏 -->
+				<div class="hidden md:block md:col-start-1 md:row-start-2 xl:col-start-3 xl:row-start-1">
+					<RightSidebar />
 				</div>
 			</div>
 	</section>

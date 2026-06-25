@@ -60,7 +60,7 @@ const { title, description, image } = Astro.props;
         </script>
     </head>
     <body class="min-h-screen flex flex-col bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark">
-        <div class="bg-glow" aria-hidden="true">
+        <div transition:persist="bg-glow" class="bg-glow" aria-hidden="true">
             <div class="bg-glow__orb bg-glow__orb--1"></div>
             <div class="bg-glow__orb bg-glow__orb--2"></div>
             <div class="bg-glow__orb bg-glow__orb--3"></div>

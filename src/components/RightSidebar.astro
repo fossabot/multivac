@@ -53,7 +53,7 @@ const postSummaries: PostSummary[] = posts.map(post => ({
 import { Icon } from 'astro-icon/components';
 ---
 
-<aside class="hidden md:block w-[272px] space-y-6">
+<aside transition:persist="right-sidebar" class="hidden md:block w-[272px] space-y-6">
   <!-- 公告卡片 -->
   <div class="relative overflow-hidden pt-5 px-6 pb-2 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark rounded-3xl shadow-sm fluid-card border border-transparent hover:border-border-light dark:hover:border-border-dark group/container select-none">
   

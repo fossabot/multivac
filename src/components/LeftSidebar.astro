@@ -73,7 +73,7 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
 import { Icon } from 'astro-icon/components';
 ---
 
-<aside transition:persist="left-sidebar" class="hidden md:block w-[272px] space-y-6">
+<aside class="hidden md:block w-[272px] space-y-6">
   <!-- 个人信息卡片 -->
   <div class="p-4 h-[300px] bg-primary-light dark:bg-primary-dark rounded-3xl shadow-sm fluid-card matrix-card relative overflow-hidden border border-transparent hover:border-border-light dark:hover:border-border-dark">
     <!-- 顶部：醉后不知天在水 文本 -->
@@ -136,7 +136,7 @@ import { Icon } from 'astro-icon/components';
   </div>
 
   <!-- 音乐卡片 -->
-  <div class="p-6 glass-card glass-card-dark">
+  <div transition:persist="left-sidebar-music" class="p-6 glass-card glass-card-dark">
 
     <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary-light/10 dark:bg-primary-dark/10 rounded-full blur-3xl pointer-events-none group-hover/music:bg-primary-light/20 dark:group-hover/music:bg-primary-dark/20 transition-all duration-500"></div>
 
@@ -239,7 +239,7 @@ import { Icon } from 'astro-icon/components';
   </div>
 
   <!-- 分类卡片 -->
-  <div class="pt-5 px-5 pb-4 glass-card glass-card-dark">
+  <div transition:persist="left-sidebar-categories" class="pt-5 px-5 pb-4 glass-card glass-card-dark">
     
 
   <div class="flex items-center justify-between px-1 pt-0.5 pb-4 select-none">
@@ -295,7 +295,7 @@ import { Icon } from 'astro-icon/components';
   </div>
 
   <!-- 一言卡片 -->
-  <div class="p-6 glass-card glass-card-dark">
+  <div transition:persist="left-sidebar-hitokoto" class="p-6 glass-card glass-card-dark">
     
     <div class="flex gap-4 items-start min-h-[100px]">
       
@@ -318,7 +318,7 @@ import { Icon } from 'astro-icon/components';
   </div>
 
   <!-- 最近在看卡片 -->
-  <div class="p-6 glass-card glass-card-dark">
+  <div transition:persist="left-sidebar-watching" class="p-6 glass-card glass-card-dark">
     
     <!-- 顶部标题栏 - 加号方块解构 -->
     <div class="flex items-center justify-between mb-4">
