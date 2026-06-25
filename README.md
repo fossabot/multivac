@@ -155,11 +155,14 @@ site/
 │   ├── icons/                     # 60+ SVG 图标源文件
 │   ├── consts.ts                  # 站点标题 & 描述
 │   └── content.config.ts          # Content Collections Schema 定义
-├── astro.config.mjs               # Astro 配置（集成/压缩/适配器/预取）
+├── scripts/
+│   └── backup.ts                  # 私有内容备份脚本（同步至 GitHub 私有仓库）
+├── astro.config.ts               # Astro 配置（集成/压缩/适配器/预取）
 ├── tailwind.config.js             # 主题色/字体/字号体系/暗色模式
 ├── postcss.config.js              # PostCSS (autoprefixer + nesting)
 ├── tsconfig.json                  # TypeScript 配置
 ├── vercel.json                    # Vercel 缓存策略
+├── .env.example                   # 环境变量示例文件
 └── package.json
 ```
 
@@ -167,7 +170,7 @@ site/
 
 ### 环境要求
 
-- Node.js >= 18
+- Node.js >= 22.18.0
 - npm / pnpm
 
 ### 安装与开发
@@ -304,9 +307,9 @@ export const SITE_DESCRIPTION = '你的博客描述';
 
 ### 站点 URL & 构建选项
 
-`astro.config.mjs`：
+`astro.config.ts`：
 
-```javascript
+```typescript
 export default defineConfig({
   site: 'https://your-domain.com',
   trailingSlash: 'never',
@@ -369,6 +372,20 @@ const envId = 'https://your-twikoo-endpoint.com';
 - `content.config.ts` 中 `isProd` 判断：生产构建排除 `example/**/*`
 - `.gitignore` 忽略 `post/*`（仅保留 `!post/example/`），私有内容不进入版本控制，但本地已有的文章在 dev 和 build 时均可见
 - Content Collections Schema 强制校验 frontmatter 字段类型与约束
+
+## 私有内容备份
+
+复制 `.env.example` 为 `.env` 并填入配置：
+
+```bash
+cp .env.example .env
+```
+
+| 变量名 | 说明 |
+|--------|------|
+| `PRIVATE_POSTS_REPO_URL` | 私有内容备份仓库的 Git 地址（SSH） |
+
+配置后运行 `npm run backup`，脚本会将 `post/` 和 `twikoo_template/` 同步至该私有仓库（交互式选择、增量对比、force push）。需本机已配置 SSH Key 并有推送权限。
 
 ## 部署
 

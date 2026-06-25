@@ -1,4 +1,3 @@
-// scripts/backup.js
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -20,7 +19,7 @@ const PATHS = {
 /**
  * 递归复制文件夹
  */
-function copyFolderSync(from, to) {
+function copyFolderSync(from: string, to: string) {
   if (!fs.existsSync(from)) return;
   fs.mkdirSync(to, { recursive: true });
   fs.readdirSync(from).forEach(element => {
