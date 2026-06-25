@@ -21,10 +21,12 @@ const readingTime = calculateReadingTime(post.body || '');
     
 
     <a href={`/p/${originalFileName}`} class="relative overflow-hidden bg-hero-light dark:bg-hero-dark block h-52 w-full" aria-label={title}>
-      <div
-        class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-        style={`background-image: url('${displayImage}');`}
-      ></div>
+      <img
+        src={displayImage}
+        fetchpriority="high"
+        alt={title}
+        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+      />
     </a>
 
     <div class="relative p-6 flex flex-col items-start">
