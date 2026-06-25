@@ -66,6 +66,11 @@ const { title, description, image } = Astro.props;
             <div class="bg-glow__orb bg-glow__orb--3"></div>
         </div>
         <WelcomeAnimation />
+        <script is:inline>
+          document.addEventListener('astro:after-swap', () => {
+            requestAnimationFrame(() => window.scrollTo(0, 0));
+          });
+        </script>
         <div id="main-content" class="relative z-10 flex flex-col min-h-screen transition-opacity duration-300">
             <Header />
             <main class="flex-1 pt-2 page-transition">
