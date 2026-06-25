@@ -1,34 +1,21 @@
-// @ts-check
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import vercel from '@astrojs/vercel';
-import compress from 'astro-compress';
 import icon from 'astro-icon';
 import { defineConfig } from 'astro/config';
+import type { AstroUserConfig } from 'astro'; 
 
+const isVercel: boolean = process.env.VERCEL === '1' || process.env.DEPLOY_PLATFORM === 'vercel';
 
-// 只有在 Vercel 环境下才加载适配器，本地和 Cloudflare (SSG) 保持 undefined
-const isVercel = process.env.VERCEL === '1' || process.env.DEPLOY_PLATFORM === 'vercel';
-
-
-
-export default defineConfig({
+const config: AstroUserConfig = {
   site: 'https://log.1k.ink',
   trailingSlash: 'never',
   
-  // compress 对生成的静态资源进行压缩
   integrations: [
     icon(), 
     mdx(), 
-    sitemap(), 
-    compress({
-      CSS: false,
-      HTML: true,
-      Image: false,
-      JavaScript: true,
-      SVG: true,
-    })
+    sitemap()
   ],
 
   build: {
@@ -36,10 +23,7 @@ export default defineConfig({
     format: 'file', 
   },
 
-
   adapter: isVercel ? vercel({ webAnalytics: { enabled: true } }) : undefined,
-
-  // 显式声明静态输出
   output: 'static',
 
   vite: {
@@ -57,4 +41,6 @@ export default defineConfig({
     prefetchAll: false,
     defaultStrategy: 'viewport'
   }
-});
+};
+
+export default defineConfig(config);
