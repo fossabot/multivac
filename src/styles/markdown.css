@@ -138,7 +138,7 @@ html.dark {
 
 .prose pre {
   @apply relative mb-8 overflow-x-auto selection:bg-blue-500/30;
-  background-color: #161b22 !important;
+  background-color: #18181B !important;
   border: 1px solid #30363d !important;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
   border-radius: 12px !important;
@@ -146,7 +146,7 @@ html.dark {
 }
 
 .prose pre .code-header {
-  @apply flex items-center justify-between px-4 py-2.5 bg-[#0d1117] border-b border-[#30363d] cursor-pointer select-none;
+  @apply flex items-center justify-between px-4 py-2.5 bg-black cursor-pointer select-none;
   position: sticky;
   left: 0;
   min-width: 100%;
@@ -174,6 +174,10 @@ html.dark {
 }
 
 .prose pre.copied .copy-btn {
+  @apply text-green-400 bg-green-900/40;
+}
+
+.prose pre.copied .copy-btn:hover {
   @apply text-green-400 bg-green-900/40;
 }
 
