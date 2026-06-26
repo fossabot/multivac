@@ -62,7 +62,7 @@ import Icon from '../components/Icon.astro';
 
 	<body class="min-h-screen flex flex-col bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark">
 		{category && (
-			<div class="hidden md:block fixed bottom-1 right-20 text-[150px] font-black italic tracking-tighter text-text-light/2 dark:text-text-dark/2 select-none pointer-events-none font-sans z-0" aria-hidden="true">
+			<div id="category-watermark" class="hidden md:block fixed bottom-1 right-20 text-[150px] font-black italic tracking-tighter text-text-light/2 dark:text-text-dark/2 select-none pointer-events-none font-sans z-0 transition-all duration-500 ease-out opacity-0" aria-hidden="true">
 				{category}
 			</div>
 		)}
@@ -94,7 +94,7 @@ import Icon from '../components/Icon.astro';
 						<div class="text-center -mb-4">
 							<h1 data-article-title class="text-4xl font-bold text-text-light dark:text-text-dark mb-4">{title}</h1>
 							{showDate && (
-								<div class="flex flex-wrap items-center justify-center gap-3 mb-4">
+								<div id="article-badges" class="flex flex-wrap items-center justify-center gap-3 mb-4">
 									<div class="group relative flex items-center gap-2 px-4 py-2 rounded-full bg-badge-light xl:bg-white/50 dark:bg-badge-dark/60 text-sm text-text-light dark:text-text-dark">
 										<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl tooltip [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 origin-bottom">
 											文章字数统计
@@ -283,6 +283,49 @@ import Icon from '../components/Icon.astro';
 						img.classList.add('cursor-pointer', 'hover:scale-105', 'transition-transform', 'duration-300');
 					}
 				});
+
+				// 分类水印：徽章滚出视口时渐入，footer 渐入时渐出上移
+				const watermark = document.getElementById('category-watermark');
+				const badges = document.getElementById('article-badges');
+				const footer = document.querySelector('footer');
+				if (watermark) {
+					let badgeRatio = 1;
+					let footerRatio = 0;
+
+					const update = () => {
+						const badgeFade = 1 - badgeRatio; // 徽章越少 → 值越大
+						const footerFade = 1 - footerRatio; // footer 越少 → 值越大
+						const opacity = Math.min(badgeFade, footerFade);
+						const yOffset = -footerRatio * 20;
+						const yBadge = (1 - badgeFade) * 16;
+						watermark.style.opacity = `${opacity}`;
+						watermark.style.transform = `translateY(${yOffset - yBadge}px)`;
+					};
+
+					if (badges) {
+						new IntersectionObserver(
+							([entry]) => {
+								badgeRatio = entry.intersectionRatio;
+								update();
+							},
+							{ threshold: Array.from({ length: 21 }, (_, i) => i / 20) }
+						).observe(badges);
+					} else {
+						badgeRatio = 0;
+					}
+
+					if (footer) {
+						new IntersectionObserver(
+							([entry]) => {
+								footerRatio = entry.intersectionRatio;
+								update();
+							},
+							{ threshold: Array.from({ length: 11 }, (_, i) => i / 10) }
+						).observe(footer);
+					}
+
+					update();
+				}
 
 				bindFancybox();
 			});
