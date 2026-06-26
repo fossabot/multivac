@@ -26,3 +26,31 @@ const output = (() => {
 ---
 
 <Fragment set:html={output} />
+
+<script>
+  // 客户端图标注册表，供 JS 动态渲染使用
+  declare global {
+    interface Window {
+      renderIcon: (name: string, className?: string) => string;
+    }
+  }
+
+  const icons = import.meta.glob('/src/icons/*.svg', {
+    eager: true,
+    query: '?raw',
+    import: 'default',
+  }) as Record<string, string>;
+
+  const registry: Record<string, string> = {};
+  for (const [path, raw] of Object.entries(icons)) {
+    const name = path.replace('/src/icons/', '').replace('.svg', '');
+    registry[name] = raw;
+  }
+
+  window.renderIcon = (name: string, className: string = '') => {
+    const svg = registry[name];
+    if (!svg) return '';
+    if (className) return svg.replace(/^<svg/, `<svg class="${className}"`);
+    return svg;
+  };
+</script>
