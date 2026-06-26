@@ -1,52 +1,40 @@
 ---
-/**
- * 分页组件
- * 整合了省略号算法与现有样式
- */
 interface Props {
     currentPage: number;
     totalPages: number;
     basePath?: string;
+    mode?: 'moments' | 'watching' | 'blog';
 }
 
-const { currentPage, totalPages, basePath = '' } = Astro.props;
+const { currentPage, totalPages, basePath = '', mode = 'blog' } = Astro.props;
 
-// 1. 规范化路径逻辑
 const getPageLink = (pageNum: number) => {
     const normalizedPath = basePath.replace(/\/$/, '');
     if (pageNum === 1) return normalizedPath || '/';
-    // 确保路径中不会出现双斜杠，且不添加尾部斜杠以匹配 trailingSlash: 'never' 配置
     return `${normalizedPath}/page/${pageNum}`.replace(/\/+/g, '/');
 };
 
-// 2. 分页算法逻辑
 const ELLIPSIS = '···';
 
 const getVisiblePages = () => {
     const total = totalPages;
     const current = currentPage;
 
-    // 如果总页数较少，直接全显
     if (total <= 4) {
         return Array.from({ length: total }, (_, i) => i + 1);
     }
 
     let pages: (number | string)[] = [];
 
-    // 核心数字生成
     if (current <= 3) {
-        // 靠近开头
         pages = [1, 2, 3, 4];
     } else if (current >= total - 2) {
-        // 靠近结尾
         return [1, ELLIPSIS, total - 3, total - 2, total - 1, total];
     } else {
-        // 居中：显示当前页及其前后部分
         const start = current - 1;
         pages = [start, start + 1, start + 2, start + 3];
     }
 
-    // 补全首位和省略号
     let finalPages: (number | string)[] = [];
     
     if (pages[0] !== 1) {
@@ -56,7 +44,6 @@ const getVisiblePages = () => {
     
     finalPages.push(...pages);
 
-    // 处理末尾
     const lastPageInSequence = pages[pages.length - 1] as number;
     if (lastPageInSequence < total - 1) {
         finalPages.push(ELLIPSIS);
@@ -90,7 +77,8 @@ import Icon from './Icon.astro';
             {visiblePages.map((page) => {
                 if (page === ELLIPSIS) {
                     return (
-                        <div class="page-ellipsis-jump" data-total={totalPages} data-base={basePath.replace(/\/$/, '') || ''}>
+
+                        <div class="page-ellipsis-jump" data-total={totalPages} data-mode={mode} data-base={basePath.replace(/\/$/, '') || ''}>
                             <span class="page-ellipsis-jump__dot">···</span>
                             <form class="page-ellipsis-jump__form">
                                 <input type="number" min="1" max={totalPages} placeholder="#" />
@@ -138,42 +126,51 @@ import Icon from './Icon.astro';
 )}
 
 <script>
-  document.addEventListener('submit', (e) => {
-    const form = e.target as HTMLFormElement;
-    if (!form.classList.contains('page-ellipsis-jump__form')) return;
-    e.preventDefault();
-    const container = form.parentElement!;
-    const total = parseInt(container.dataset.total || '1');
-    const mode = container.dataset.mode || '';
-    const input = form.querySelector('input') as HTMLInputElement;
-    let val = input.value.replace(/[^0-9]/g, '');
-    if (!val) return;
-    let p = parseInt(val);
-    if (p > total) p = total;
-    if (p < 1) return;
+  import { navigate } from 'astro:transitions/client';
 
-    if (mode === 'moments' && typeof window.momentsGoToPage === 'function') {
-      window.momentsGoToPage(p);
-    } else if (mode === 'watching' && typeof window.goToPage === 'function') {
-      window.goToPage(p);
-    } else {
-      const base = container.dataset.base || '/';
-      const path = p === 1 ? (base || '/') : `${base}/page/${p}`.replace(/\/+/g, '/');
-      location.href = path;
-    }
-  });
+  function setupPaginationListeners() {
+    document.addEventListener('submit', (e) => {
+        const form = e.target as HTMLFormElement;
+        if (!form.classList.contains('page-ellipsis-jump__form')) return;
+        e.preventDefault();
+        
+        const container = form.parentElement!;
+        const total = parseInt(container.dataset.total || '1');
+        const mode = container.dataset.mode || '';
+        const input = form.querySelector('input') as HTMLInputElement;
+        let val = input.value.replace(/[^0-9]/g, '');
+        if (!val) return;
+        let p = parseInt(val);
+        if (p > total) p = total;
+        if (p < 1) return;
 
-  document.addEventListener('input', (e) => {
-    const input = e.target as HTMLInputElement;
-    if (!input.closest('.page-ellipsis-jump__form')) return;
-    const container = input.closest('.page-ellipsis-jump')!;
-    const total = parseInt((container as HTMLElement).dataset.total || '1');
-    let v = input.value.replace(/[^0-9]/g, '');
-    if (v) {
-      let n = parseInt(v);
-      if (n > total) { n = total; v = String(n); }
-      if (n < 1) v = '';
-    }
-    input.value = v;
-  });
+        if (mode === 'moments' && typeof window.momentsGoToPage === 'function') {
+            window.momentsGoToPage(p);
+        } else if (mode === 'watching' && typeof window.goToPage === 'function') {
+            window.goToPage(p);
+        } else {
+
+            const base = container.dataset.base || '/';
+            const path = p === 1 ? (base || '/') : `${base}/page/${p}`.replace(/\/+/g, '/');
+            navigate(path);
+        }
+    });
+
+    document.addEventListener('input', (e) => {
+        const input = e.target as HTMLInputElement;
+        if (!input.closest('.page-ellipsis-jump__form')) return;
+        const container = input.closest('.page-ellipsis-jump')!;
+        const total = parseInt((container as HTMLElement).dataset.total || '1');
+        let v = input.value.replace(/[^0-9]/g, '');
+        if (v) {
+            let n = parseInt(v);
+            if (n > total) { n = total; v = String(n); }
+            if (n < 1) v = '';
+        }
+        input.value = v;
+    });
+  }
+
+  setupPaginationListeners();
+  document.addEventListener('astro:after-swap', setupPaginationListeners);
 </script>
