@@ -158,18 +158,18 @@ import Icon from './Icon.astro';
                     </div>
                 </a>
 
-<a href="/watching" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-    <Icon name="watching" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0 scale-[0.88] origin-center" />
-    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">漫游</span>
-    
-    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-            <Icon name="watching" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0 scale-[0.88] origin-center" />
-            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">漫游</span>
-        </div>
-    </div>
-</a>
+                <a href="/watching" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
+                    <Icon name="watching" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0 scale-[0.88] origin-center" />
+                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">漫游</span>
+                    
+                    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
+                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
+                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
+                            <Icon name="watching" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0 scale-[0.88] origin-center" />
+                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">漫游</span>
+                        </div>
+                    </div>
+                </a>
 
                 <a href="/about" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
                     <Icon name="about" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
@@ -257,10 +257,13 @@ import Icon from './Icon.astro';
 
         if (!nav) return; // 容错处理
 
+        // 声明 hideMenu 的作用域，以便在离开页面时可以被调用
+        let hideMenuFn: (() => void) | undefined;
+        let isMenuOpen = false;
+
         // 菜单面板逻辑（基于设备交互能力：hover设备用hover触发，触控设备用点击触发）
         if (menuTriggerBtn && menuPanel) {
             let hideTimeout: ReturnType<typeof setTimeout> | undefined;
-            let isMenuOpen = false;
             let touchActiveTimeout: ReturnType<typeof setTimeout> | undefined;
 
             // 检测设备是否支持hover
@@ -303,6 +306,9 @@ import Icon from './Icon.astro';
                     bgDiv.style.removeProperty('transform');
                 }
             };
+
+            // 赋值给外层变量，供 astro:before-preparation 钩子使用
+            hideMenuFn = hideMenu;
 
             // 始终定义 toggleMenuPanel，供 onclick 使用
             (window as any).toggleMenuPanel = () => {
@@ -438,7 +444,7 @@ import Icon from './Icon.astro';
 
         // 监听滚动 - 使用 rAF 节流
         let ticking = false;
-        window.addEventListener('scroll', () => {
+        const handleScroll = () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
                     updateHeader();
@@ -446,7 +452,8 @@ import Icon from './Icon.astro';
                 });
                 ticking = true;
             }
-        }, { passive: true });
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
         
         // 延迟初始化，确保 DOM 完全渲染
         setTimeout(() => {
@@ -454,10 +461,14 @@ import Icon from './Icon.astro';
             setPageTitle();
         }, 100);
 
-        // 【关键】由于 ClientRouter 不会刷新窗口，我们需要在离开页面时手动移除监听器
-        // 否则跳转多次后会有多个监听器在后台跑，导致内存泄漏和卡顿
+        // 在准备切换离开当前页面时做清理
         document.addEventListener('astro:before-preparation', () => {
-            window.removeEventListener('scroll', updateHeader);
+            // 1. 移除滚动监听
+            window.removeEventListener('scroll', handleScroll);
+            // 2. 如果菜单面板是展开的，在切页前将其收回，解决 transition:persist 导致的状态残留
+            if (isMenuOpen && hideMenuFn) {
+                hideMenuFn();
+            }
         }, { once: true });
     }
 
@@ -466,4 +477,4 @@ import Icon from './Icon.astro';
     document.addEventListener('astro:page-load', () => {
         setTimeout(initHeader, 100);
     });
-</script>	
+</script>
