@@ -51,8 +51,8 @@ try {
   if (watchingData && watchingData.data.watching) {
     watchingList = watchingData.data.watching as WatchingItem[];
   }
-} catch (error) {
-  console.log('Using default watching data');
+} catch {
+
 }
 
 const ratingIcons: Record<string, string> = {
@@ -890,8 +890,8 @@ import Icon from './Icon.astro';
           return data;
         }
       }
-    } catch (error) {
-      console.error('Failed to get cached hitokoto:', error);
+    } catch {
+      console.warn('Hitokoto cache read skipped.');
     }
     return null;
   }
@@ -902,8 +902,8 @@ import Icon from './Icon.astro';
         data,
         timestamp: Date.now()
       }));
-    } catch (error) {
-      console.error('Failed to cache hitokoto:', error);
+    } catch {
+      console.warn('Hitokoto cache write failed (Storage full or private browsing).');
     }
   }
 
@@ -921,8 +921,8 @@ import Icon from './Icon.astro';
       const data: HitokotoData = await response.json();
       setCachedHitokoto(data);
       updateHitokotoUI(data);
-    } catch (error) {
-      console.error('Failed to fetch hitokoto:', error);
+    } catch {
+      console.warn('Hitokoto API fetch failed. Network offline or service unavailable.');
     }
   }
 
@@ -1109,18 +1109,15 @@ import Icon from './Icon.astro';
 
           if (Array.isArray(responseData) && responseData.length > 0) {
             data = responseData;
-            console.log(`Successfully fetched playlist from: ${endpoint}`);
             break;
-          } else {
-            console.warn(`API returned invalid data from: ${endpoint}`, responseData);
           }
-        } catch (error) {
-          console.warn(`Failed to fetch from ${endpoint}:`, error);
+        } catch {
+
         }
       }
 
       if (!data || data.length === 0) {
-        console.error('Failed to fetch playlist from all endpoints');
+        console.warn('Playlist Sync: All API endpoints offline.');
         return;
       }
 

@@ -95,6 +95,8 @@ html.dark {
     .tk-input {
       textarea {
         @apply rounded-xl py-4 px-6;
+        min-height: 150px !important;
+        height: auto !important;
       }
     }
   }
