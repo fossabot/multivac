@@ -621,3 +621,103 @@ html.dark ::-webkit-scrollbar-thumb:hover {
   animation: vinyl-spin 8s linear infinite;
   animation-play-state: paused;
 }
+
+/* 分页省略号 → hover/focus 展开为页码跳转输入框 */
+.page-ellipsis-jump {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2.5rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s;
+  cursor: pointer;
+}
+.page-ellipsis-jump__dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  color: var(--color-text-light-70, #999);
+  transition: opacity 0.15s;
+}
+:is(.dark .page-ellipsis-jump__dot) {
+  color: var(--color-text-dark-70, #666);
+}
+.page-ellipsis-jump__form {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.page-ellipsis-jump:hover,
+.page-ellipsis-jump:focus-within {
+  width: 5rem;
+  border: 1px solid var(--color-border-light);
+  background-color: rgb(255 255 255 / 0.7);
+}
+:is(.dark .page-ellipsis-jump:hover),
+:is(.dark .page-ellipsis-jump:focus-within) {
+  border-color: var(--color-border-dark);
+  background-color: var(--color-hover-dark);
+}
+.page-ellipsis-jump:hover .page-ellipsis-jump__dot,
+.page-ellipsis-jump:focus-within .page-ellipsis-jump__dot {
+  opacity: 0;
+}
+.page-ellipsis-jump:hover .page-ellipsis-jump__form,
+.page-ellipsis-jump:focus-within .page-ellipsis-jump__form {
+  opacity: 1;
+  pointer-events: auto;
+}
+.page-ellipsis-jump input[type="number"] {
+  width: 2.5rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-text-light);
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 0;
+  line-height: 2.5rem;
+}
+:is(.dark .page-ellipsis-jump input[type="number"]) {
+  color: var(--color-text-dark);
+}
+.page-ellipsis-jump input[type="number"]::-webkit-inner-spin-button,
+.page-ellipsis-jump input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.page-ellipsis-jump input[type="number"] {
+  -moz-appearance: textfield;
+}
+.page-ellipsis-jump__arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-text-light-70, #999);
+  cursor: pointer;
+  transition: color 0.15s, transform 0.15s;
+}
+:is(.dark .page-ellipsis-jump__arrow) {
+  color: var(--color-text-dark-70, #666);
+}
+.page-ellipsis-jump__arrow:hover {
+  color: var(--color-primary-light);
+  transform: translateX(1px);
+}
+:is(.dark .page-ellipsis-jump__arrow:hover) {
+  color: var(--color-primary-dark);
+}
