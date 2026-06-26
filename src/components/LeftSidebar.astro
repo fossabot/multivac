@@ -136,7 +136,7 @@ import Icon from './Icon.astro';
   </div>
 
   <!-- 音乐卡片 -->
-  <div class="relative p-6 glass-card glass-card-dark" style="position: relative;">
+  <div class="relative p-6 glass-card glass-card-dark select-none" style="position: relative;">
 
     <div class="absolute -right-10 -top-10 w-32 h-32 bg-primary-light/10 dark:bg-primary-dark/10 rounded-full blur-3xl pointer-events-none group-hover/music:bg-primary-light/20 dark:group-hover/music:bg-primary-dark/20 transition-all duration-500"></div>
 
@@ -967,384 +967,60 @@ import Icon from './Icon.astro';
 </script>
 
 <script>
-  // 音乐卡片播放控制
-  interface SongData {
-    name?: string;
-    title?: string;
-    artist?: string;
-    author?: string;
-    url: string;
-    pic?: string;
-    cover?: string;
-    lrc?: string;
-    playlist_name?: string;
-  }
+  import {
+    initPlayerCore,
+    ensureState,
+    startPeriodicUpdate,
+    updateSidebarUI,
+    updateSidebarProgress,
+    initProgressBarClick,
+    restoreSidebarMeta,
+    registerUIUpdater,
+    registerProgressUpdater,
+  } from '../scripts/musicPlayer';
 
-  interface MusicPlayerState {
-    ap: APlayerInstance | null;
-    songsData: SongData[];
-    isInitialized: boolean;
-    updateTimer: ReturnType<typeof setInterval> | null;
-    previousIndex?: number;
-  }
+  // 注册侧边栏 UI 更新
+  registerUIUpdater(updateSidebarUI);
+  registerProgressUpdater(updateSidebarProgress);
 
-  // APlayer 实例的类型声明（仅包含使用到的属性和方法）
-  interface APlayerInstance {
-    audio: HTMLAudioElement & { duration: number };
-    list: {
-      audios: { name: string; artist: string; cover: string; url: string; lrc: string }[];
-      index: number;
-      switch(index: number): void;
-    };
-    play(): void;
-    pause(): void;
-    seek(time: number): void;
-    on(event: string, callback: () => void): void;
-  }
+  async function initMusicPlayer() {
+    const state = ensureState();
+    if (!state.isInitialized) {
+      await initPlayerCore('hidden-aplayer');
 
-  declare class APlayer {
-    constructor(options: {
-      container: HTMLElement | null;
-      autoplay: boolean;
-      theme: string;
-      loop: string;
-      preload: string;
-      volume: number;
-      mutex: boolean;
-      audio: { name: string; artist: string; url: string; cover: string; lrc: string }[];
-    });
-    audio: HTMLAudioElement & { duration: number };
-    list: APlayerInstance['list'];
-    play(): void;
-    pause(): void;
-    seek(time: number): void;
-    on(event: string, callback: () => void): void;
-  }
+      // 初始化成功后更新侧边栏元数据
+      const songsData = state.songsData;
+      if (songsData && songsData.length > 0) {
+        const countEl = document.getElementById('playlist-count');
+        if (countEl) countEl.textContent = `${songsData.length} 首歌曲`;
 
-  // 扩展 Window 接口
-  declare global {
-    interface Window {
-      musicPlayerState: MusicPlayerState;
-      musicPlayerUpdateUI: (() => void) | undefined;
-      musicPlayerUpdateProgress: (() => void) | undefined;
-      togglePlay: (() => void) | undefined;
-      playPrev: (() => void) | undefined;
-      playNext: (() => void) | undefined;
-    }
-  }
+        if (songsData[0]?.playlist_name) {
+          const nameEl = document.getElementById('playlist-name');
+          if (nameEl) nameEl.textContent = songsData[0].playlist_name;
+        }
 
-  // 全局状态管理
-  window.musicPlayerState = window.musicPlayerState || {
-    ap: null,
-    songsData: [],
-    isInitialized: false,
-    updateTimer: null
-  };
-
-  let ap = window.musicPlayerState.ap;
-  let songsData = window.musicPlayerState.songsData;
-  let updateTimer = window.musicPlayerState.updateTimer;
-
-  // 加载 APlayer
-  function loadAPlayer(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (typeof APlayer !== 'undefined') {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = '/libs/aplayer/APlayer.min.js';
-      script.onload = () => resolve();
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
-
-  function initProgressBarClick() {
-    const progressBar = document.getElementById('progress-bar');
-    const progressContainer = progressBar?.parentElement;
-
-    if (progressContainer && !progressContainer.dataset.clickBound) {
-      progressContainer.addEventListener('click', function(e: MouseEvent) {
-        const currentAp = window.musicPlayerState.ap;
-        if (!currentAp || !currentAp.audio.duration) return;
-
-        const rect = progressContainer.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const containerWidth = rect.width;
-
-        let percentage = clickX / containerWidth;
-        percentage = Math.max(0, Math.min(1, percentage));
-
-        const targetTime = percentage * currentAp.audio.duration;
-        currentAp.seek(targetTime);
-      });
-
-      progressContainer.dataset.clickBound = "true";
-    }
-  }
-
-  // 初始化播放器
-  async function initPlayer() {
-    if (window.musicPlayerState.isInitialized && ap) {
-      initProgressBarClick();
-      return;
-    }
-
-    try {
-      await loadAPlayer();
-
-      const apiEndpoints = [
-        'https://api.injahow.cn/meting/?type=playlist&id=2732533345&server=netease&limit=50',
-        'https://meting.jinghuashang.cn/?type=playlist&id=2732533345&server=netease&limit=50',
-        'https://metingapi.mo-app.cn/?type=playlist&id=2732533345&server=netease&limit=50'
-      ];
-
-      let data: SongData[] | null = null;
-
-      for (const endpoint of apiEndpoints) {
-        try {
-          const response = await fetch(endpoint);
-          const responseData: SongData[] = await response.json();
-
-          if (Array.isArray(responseData) && responseData.length > 0) {
-            data = responseData;
-            break;
-          }
-        } catch {
-
+        if (songsData[0]?.pic) {
+          const coverEl = document.getElementById('playlist-cover') as HTMLImageElement | null;
+          if (coverEl) coverEl.src = songsData[0].pic;
         }
       }
-
-      if (!data || data.length === 0) {
-        console.warn('Playlist Sync: All API endpoints offline.');
-        return;
-      }
-
-      songsData = data;
-
-      const countEl = document.getElementById('playlist-count');
-      if (countEl) {
-        countEl.textContent = `${data.length} 首歌曲`;
-      }
-
-      if (data[0] && data[0].playlist_name) {
-        const nameEl = document.getElementById('playlist-name');
-        if (nameEl) nameEl.textContent = data[0].playlist_name;
-      }
-
-      if (data[0] && data[0].pic) {
-        const coverEl = document.getElementById('playlist-cover') as HTMLImageElement | null;
-        if (coverEl) coverEl.src = data[0].pic;
-      }
-
-      const audioList = data.map(item => ({
-        name: item.name || item.title || '未知歌曲',
-        artist: item.artist || item.author || '未知艺术家',
-        url: item.url,
-        cover: item.pic || item.cover || '',
-        lrc: item.lrc || ''
-      }));
-
-      ap = new APlayer({
-        container: document.getElementById('hidden-aplayer'),
-        autoplay: false,
-        theme: '#3b82f6',
-        loop: 'all',
-        preload: 'auto',
-        volume: 0.7,
-        mutex: true,
-        audio: audioList
-      });
-
-      window.musicPlayerState.ap = ap;
-      window.musicPlayerState.songsData = songsData;
-      window.musicPlayerState.isInitialized = true;
-
-      ap.on('play', () => window.musicPlayerUpdateUI?.());
-      ap.on('pause', () => window.musicPlayerUpdateUI?.());
-      ap.on('timeupdate', () => window.musicPlayerUpdateProgress?.());
-
-      initProgressBarClick();
-      startPeriodicUpdate();
-    } catch (error) {
-      console.error('Failed to initialize player:', error);
-      const countEl = document.getElementById('playlist-count');
-      if (countEl) {
-        countEl.textContent = '加载失败';
-      }
-    }
-  }
-
-  // 更新播放状态 UI（全局函数）
-  window.musicPlayerUpdateUI = function() {
-    const currentAp = window.musicPlayerState.ap;
-    if (!currentAp) return;
-
-    const isPlaying = !currentAp.audio.paused;
-    const currentSong = currentAp.list.audios[currentAp.list.index];
-    const currentIndex = currentAp.list.index;
-
-    const controlPlayIcon = document.getElementById('control-play-icon');
-    const controlPauseIcon = document.getElementById('control-pause-icon');
-    const indicator = document.getElementById('playing-indicator');
-    const currentSongEl = document.getElementById('current-song');
-    const coverImg = document.getElementById('playlist-cover') as HTMLImageElement | null;
-    const vinylRecord = document.querySelector('.vinyl-record');
-
-    const previousIndex = window.musicPlayerState.previousIndex ?? -1;
-    const hasChangedSong = previousIndex !== currentIndex;
-
-    if (isPlaying) {
-      vinylRecord?.classList.add('playing');
-      vinylRecord?.classList.remove('paused');
-    } else {
-      vinylRecord?.classList.add('paused');
-    }
-
-    if (currentSong) {
-      if (currentSongEl) {
-        currentSongEl.textContent = `${currentSong.name} - ${currentSong.artist}`;
-      }
-
-      if (hasChangedSong && coverImg && currentSong.cover && coverImg.src !== currentSong.cover) {
-        coverImg.style.opacity = '0';
-        setTimeout(() => {
-          coverImg.src = currentSong.cover;
-          coverImg.style.opacity = '1';
-        }, 250);
-      } else if (!hasChangedSong && coverImg && currentSong.cover && coverImg.src !== currentSong.cover) {
-        coverImg.src = currentSong.cover;
-      }
-    }
-
-    window.musicPlayerState.previousIndex = currentIndex;
-
-    if (isPlaying) {
-      controlPlayIcon?.classList.add('hidden');
-      controlPauseIcon?.classList.remove('hidden');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          indicator?.classList.remove('opacity-0');
-        });
-      });
-    } else {
-      controlPlayIcon?.classList.remove('hidden');
-      controlPauseIcon?.classList.add('hidden');
-      indicator?.classList.add('opacity-0');
-    }
-  };
-
-  // 更新进度条（全局函数）
-  window.musicPlayerUpdateProgress = function() {
-    const currentAp = window.musicPlayerState.ap;
-    if (!currentAp) return;
-
-    const progressBar = document.getElementById('progress-bar');
-    const currentTimeEl = document.getElementById('current-time');
-    const totalTimeEl = document.getElementById('total-time');
-
-    if (progressBar) {
-      const percent = (currentAp.audio.currentTime / currentAp.audio.duration) * 100 || 0;
-      progressBar.style.width = `${percent}%`;
-    }
-
-    if (currentTimeEl) {
-      currentTimeEl.textContent = formatTime(currentAp.audio.currentTime);
-    }
-
-    if (totalTimeEl) {
-      totalTimeEl.textContent = formatTime(currentAp.audio.duration || 0);
-    }
-  };
-
-  function formatTime(seconds: number): string {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
-
-  function startPeriodicUpdate() {
-    if (updateTimer) clearInterval(updateTimer);
-    updateTimer = setInterval(() => {
-      window.musicPlayerUpdateUI?.();
-      window.musicPlayerUpdateProgress?.();
-    }, 100);
-    window.musicPlayerState.updateTimer = updateTimer;
-  }
-
-  // 播放/暂停
-  window.togglePlay = function() {
-    const currentAp = window.musicPlayerState.ap;
-    if (!currentAp || !currentAp.list.audios.length) return;
-    if (currentAp.audio.paused) {
-      currentAp.play();
-    } else {
-      currentAp.pause();
-    }
-  };
-
-  // 上一首
-  window.playPrev = function() {
-    const currentAp = window.musicPlayerState.ap;
-    if (!currentAp || !currentAp.list.audios.length) return;
-    currentAp.list.switch(currentAp.list.index - 1 < 0 ? currentAp.list.audios.length - 1 : currentAp.list.index - 1);
-    currentAp.play();
-  };
-
-  // 下一首
-  window.playNext = function() {
-    const currentAp = window.musicPlayerState.ap;
-    if (!currentAp || !currentAp.list.audios.length) return;
-    currentAp.list.switch(currentAp.list.index + 1 >= currentAp.list.audios.length ? 0 : currentAp.list.index + 1);
-    currentAp.play();
-  };
-
-  // 初始化
-  function initMusicPlayer() {
-    if (!window.musicPlayerState.isInitialized) {
-      initPlayer();
     } else {
       startPeriodicUpdate();
-      window.musicPlayerUpdateUI?.();
-      window.musicPlayerUpdateProgress?.();
-      initProgressBarClick();
+      restoreSidebarMeta();
     }
+
+    updateSidebarUI();
+    updateSidebarProgress();
+    initProgressBarClick();
   }
 
   // 处理 ViewTransitions - 页面切换后恢复 UI
   document.addEventListener('astro:after-swap', () => {
     startPeriodicUpdate();
-    window.musicPlayerUpdateUI?.();
-    window.musicPlayerUpdateProgress?.();
+    updateSidebarUI();
+    updateSidebarProgress();
     initProgressBarClick();
-
-    const currentSongsData = window.musicPlayerState.songsData;
-    if (currentSongsData && currentSongsData.length > 0) {
-      const countEl = document.getElementById('playlist-count');
-      if (countEl) {
-        countEl.textContent = `${currentSongsData.length} 首歌曲`;
-      }
-
-      if (currentSongsData[0] && currentSongsData[0].playlist_name) {
-        const nameEl = document.getElementById('playlist-name');
-        if (nameEl) nameEl.textContent = currentSongsData[0].playlist_name;
-      }
-
-      if (currentSongsData[0] && currentSongsData[0].pic) {
-        const coverEl = document.getElementById('playlist-cover') as HTMLImageElement | null;
-        if (coverEl) coverEl.src = currentSongsData[0].pic;
-      }
-    }
-
-    const currentAp = window.musicPlayerState.ap;
-    if (currentAp && currentAp.list.audios.length > 0) {
-      const currentSong = currentAp.list.audios[currentAp.list.index];
-      const coverEl = document.getElementById('playlist-cover') as HTMLImageElement | null;
-      if (coverEl && currentSong?.cover) {
-        coverEl.src = currentSong.cover;
-      }
-    }
+    restoreSidebarMeta();
   });
 
   document.addEventListener('astro:page-load', initMusicPlayer);

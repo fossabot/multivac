@@ -61,6 +61,11 @@ import Icon from '../components/Icon.astro';
 	</head>
 
 	<body class="min-h-screen flex flex-col bg-background-light text-text-light dark:bg-background-dark dark:text-text-dark">
+		{category && (
+			<div class="hidden md:block fixed bottom-1 right-20 text-[150px] font-black italic tracking-tighter text-text-light/2 dark:text-text-dark/2 select-none pointer-events-none font-sans z-0" aria-hidden="true">
+				{category}
+			</div>
+		)}
 		<div class="bg-glow" aria-hidden="true">
 			<div class="bg-glow__orb bg-glow__orb--1"></div>
 			<div class="bg-glow__orb bg-glow__orb--2"></div>
@@ -76,7 +81,7 @@ import Icon from '../components/Icon.astro';
 				<div data-encrypted-payload style="display:none" aria-hidden="true">{encryptedPayload}</div>
 			)}
 			<div class="max-w-[1340px] mx-auto">
-				<div class="xl:grid xl:grid-cols-[272px_1fr_272px] xl:gap-8">
+				<div class="xl:grid xl:grid-cols-[223px_1fr_223px] xl:gap-8">
 					<div class="hidden xl:block"></div>
 					<article id="article-content" class="article-content max-w-2xl xl:max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 						<div class={heroImageWidth ? "mt-12 mb-6 mx-auto overflow-hidden rounded-full shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-110 cursor-pointer" : "mb-6 overflow-hidden rounded-3xl shadow-lg bg-hero-light dark:bg-hero-dark transition-transform duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105 cursor-pointer"} style={heroImageWidth ? `width: ${heroImageWidth}px; aspect-ratio: 1/1;` : 'aspect-ratio: 2/1;'}>
