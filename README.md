@@ -447,7 +447,7 @@ npm run build
 
 ## 许可
 
-[MIT](LICENSE)
+[GPL-3.0](LICENSE)
 
 此仓库按"现状"提供，欢迎 Fork，不保证回复 Issue。
 
