@@ -1,6 +1,3 @@
-/* --- Twikoo 语义化颜色变量 --- */
-/* 核心思路：颜色全部通过变量切换，零 @variant dark 块，零特异性问题 */
-
 :root {
   --tk-text: var(--color-text-light);
   --tk-accent: var(--color-primary-light);
@@ -39,226 +36,88 @@ html.dark {
   --tk-owo-scroll-hover: #555555;
 }
 
-/* --- 评论容器 --- */
+/* --- 评论总容器 --- */
 .tk-comments {
   color: var(--tk-text);
 }
 
-/* 排序选择器 */
-.tk-comments-sort {
-  @apply inline-flex items-center;
+/* --- 核心输入区域布局 --- */
+.tk-submit .tk-avatar {
+  @apply hidden;
 }
 
-.tk-sort-select {
-  @apply rounded-lg px-3 py-1.5 text-sm cursor-pointer transition-all duration-200;
-  background-color: var(--tk-bg-input);
-  color: var(--tk-text);
-  border: 1px solid var(--tk-border);
+.tk-row .tk-col {
+  @apply flex-col-reverse;
 }
 
-.tk-sort-select:focus {
-  @apply outline-none ring-2;
-  --tw-ring-color: var(--tk-ring);
-}
-
-.tk-sort-select:hover {
-  background-color: var(--tk-bg-input-hover);
-}
-
-.tk-sort-select option {
-  background-color: var(--tk-bg-option);
-  color: var(--tk-text);
-}
-
-/* 图标按钮垂直居中 */
-.tk-icon {
-  @apply inline-flex items-center justify-center;
-  height: 32px;
-  width: 32px;
-}
-
-/* 确保包含排序选择器和图标的容器垂直居中 */
-.tk-comments-title > span {
-  @apply inline-flex items-center;
-}
-
-.tk-submit {
-  .tk-avatar {
-    @apply hidden;
-  }
-}
-
-/* Text Area */
-.tk-row {
-  .tk-col {
-    @apply flex-col-reverse;
-    .tk-input {
-      textarea {
-        @apply rounded-xl py-4 px-6;
-        min-height: 150px !important;
-        height: auto !important;
-      }
-    }
-  }
+.tk-row .tk-col .tk-input textarea {
+  @apply rounded-xl py-4 px-6;
+  min-height: 150px !important;
+  height: auto !important;
+  transition: border-color 0.2s ease;
 }
 
 .tk-row .tk-col .tk-input textarea:focus {
-  border-color: var(--tk-ring);
+  border-color: var(--tk-ring) !important;
 }
 
-/* meta input style */
+/* 个人信息输入栏 */
 .tk-meta-input {
   @apply relative mt-3;
-  div {
-    @apply min-h-10;
-    .el-input-group__prepend {
-      @apply rounded-l-xl;
-      background: inherit !important;
-      min-height: inherit;
-    }
-    input {
-      @apply px-4 rounded-r-xl;
-      min-height: inherit;
-    }
-  }
+}
+
+.tk-meta-input div {
+  @apply min-h-10;
+}
+
+.tk-meta-input div .el-input-group__prepend {
+  @apply rounded-l-xl;
+  background: inherit !important;
+  min-height: inherit;
+}
+
+.tk-meta-input div input {
+  @apply px-4 rounded-r-xl;
+  min-height: inherit;
+  transition: border-color 0.2s ease;
 }
 
 .tk-meta-input div input:focus {
-  border-color: var(--tk-ring);
+  border-color: var(--tk-ring) !important;
 }
 
-/* Button */
+/* 表单提交动作区 */
 .tk-row.actions {
   @apply w-full;
   margin-left: 0 !important;
   margin-top: 0 !important;
-  .__markdown {
-    display: none !important;
-  }
-  .tk-preview,
-  .tk-send,
-  .tk-cancel {
-    @apply border-none rounded-lg px-3 py-0 h-8
-       disabled:opacity-50 disabled:cursor-not-allowed
-       hover:opacity-90 transition-opacity;
-    background-color: var(--tk-accent);
-    color: var(--tk-accent-text);
-  }
 }
 
-/* Comment title */
-.tk-comments-title {
-  @apply flex items-center gap-3;
+.tk-row.actions .__markdown {
+  display: none !important;
 }
 
-.tk-comments-title .__comments svg {
-  fill: var(--tk-accent);
-}
-
-.tk-comment {
-  @apply p-4 rounded-2xl hover:shadow-md fluid-card;
-  border: 1px solid var(--tk-border);
-}
-
-.tk-comment .tk-action-icon svg {
-  fill: var(--tk-accent);
-}
-
-.tk-action .tk-action-count {
-  color: var(--tk-text);
-}
-
-.tk-meta .tk-tag {
-  @apply border-none rounded-lg;
-  color: var(--tk-tag-text);
-}
-
-.tk-meta .tk-tag-green {
+.tk-row.actions .tk-preview,
+.tk-row.actions .tk-send,
+.tk-row.actions .tk-cancel {
+  @apply border-none rounded-lg px-3 py-0 h-8 transition-opacity;
   background-color: var(--tk-accent);
-  color: var(--tk-tag-text);
+  color: var(--tk-accent-text);
 }
 
-.tk-content a,
-.tk-preview-container a {
-  @apply font-medium underline underline-offset-2 transition-all;
-  color: var(--tk-accent);
+.tk-row.actions .tk-preview:disabled,
+.tk-row.actions .tk-send:disabled,
+.tk-row.actions .tk-cancel:disabled {
+  @apply opacity-50 cursor-not-allowed;
 }
 
-.tk-content a:hover,
-.tk-preview-container a:hover {
-  @apply underline-offset-4;
+.tk-row.actions .tk-preview:not(:disabled):hover,
+.tk-row.actions .tk-send:not(:disabled):hover,
+.tk-row.actions .tk-cancel:not(:disabled):hover {
+  @apply opacity-90;
 }
 
-.tk-content .tk-ruser,
-.tk-preview-container .tk-ruser {
-  @apply no-underline;
-}
-
-.tk-content :not(pre) > code,
-.tk-preview-container :not(pre) > code {
-  @apply rounded-md px-1 py-0.5 font-semibold;
-  background-color: var(--tk-bg-code);
-  color: var(--tk-inline-code-text);
-}
-
-.tk-content li,
-.tk-preview-container li {
-  &::before {
-    color: var(--tk-li-bullet);
-  }
-}
-
-/* Replies */
-.tk-replies .tk-comment {
-  background-color: var(--tk-bg-reply);
-}
-
-.tk-replies .tk-comment .tk-content > span:first-of-type {
-  @apply text-xs;
-}
-
-.twikoo .code-block {
-  pre {
-    border-radius: 0.75rem !important;
-  }
-
-  .copy-btn-icon {
-    width: inherit !important;
-    height: inherit !important;
-  }
-}
-
-.tk-expand-wrap .tk-expand,
-.tk-collapse-wrap .tk-expand {
-  @apply rounded-xl mt-1 transition-all;
-}
-
-.tk-expand-wrap .tk-expand:hover,
-.tk-collapse-wrap .tk-expand:hover {
-  background-color: var(--tk-bg-hover);
-}
-
-/* 让表情组件在表情包数量太多的时候正确显示 */
-.card-base {
-  overflow: visible;
-}
-
-/* 让图片类型表情不换行显示 */
-.tk-content img, .tk-preview-container img {
-  display: inline;
-  vertical-align: bottom !important;
-}
-
-.tk-preview-container {
-  margin-left: 0px !important;
-  border-radius: 12px !important;
-}
-
-.OwO-body {
-  border-radius: 12px !important;
-}
-
-/* --- 预览按钮特殊样式 --- */
+/* 预览按钮特异化调色 */
 .tk-row.actions .tk-preview {
   background-color: #bbbbbb4a !important;
   color: #000000 !important;
@@ -279,7 +138,176 @@ html.dark .tk-row.actions .tk-preview:hover {
   background-color: #86868672 !important;
 }
 
-/* --- 头像 --- */
+/* Twikoo 评论顶栏 */
+
+/* 1. 总容器外壳：两端物理分流，横向硬朗对齐 */
+.tk-comments-title {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important; 
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important; 
+  padding-bottom: 14px !important;
+  margin-bottom: 24px !important;
+  gap: 12px;
+}
+.dark .tk-comments-title {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.tk-comments-title > span {
+  @apply inline-flex items-center;
+}
+
+/* 2. 左侧评论数量统计：克制的数字徽章 */
+.tk-comments-count {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important; 
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: rgba(0, 0, 0, 0.6) !important; 
+}
+.dark .tk-comments-count {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.tk-comments-count span:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  padding: 0 6px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  color: #000000 !important; 
+  background: rgba(0, 0, 0, 0.05) !important; 
+  border-radius: 5px !important; 
+  border: 1px solid rgba(0, 0, 0, 0.03) !important;
+}
+.dark .tk-comments-count span:first-child {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+.tk-comments-count span:last-child {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* 3. 右侧满意的原装动作栏（完全保留） */
+.tk-comments-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important; 
+}
+
+.tk-comments-sort {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.tk-sort-item {
+  cursor: pointer !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  border-radius: 6px !important; 
+  color: rgba(0, 0, 0, 0.45) !important;
+  transition: all 0.15s ease !important;
+}
+.dark .tk-sort-item {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.tk-sort-item.__active {
+  font-weight: 500 !important;
+  color: #000000 !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+.dark .tk-sort-item.__active {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.tk-sort-item:not(.__active):hover {
+  color: #000000 !important;
+  background: rgba(0, 0, 0, 0.02) !important;
+}
+.dark .tk-sort-item:not(.__active):hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.tk-icon.__comments {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: rgba(0, 0, 0, 0.4) !important;
+  transition: all 0.15s ease !important;
+}
+.dark .tk-icon.__comments {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.tk-icon.__comments svg {
+  width: 14px !important;
+  height: 14px !important;
+  color: var(--tk-accent) !important;
+}
+
+.tk-icon.__comments:hover {
+  color: #000000 !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+.dark .tk-icon.__comments:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* --- 评论流卡片与正文样式 --- */
+.tk-comment {
+  @apply p-4 rounded-2xl hover:shadow-md fluid-card;
+  border: 1px solid var(--tk-border);
+}
+
+.tk-replies .tk-comment {
+  background-color: var(--tk-bg-reply);
+}
+
+.tk-replies .tk-comment .tk-content > span:first-of-type {
+  @apply text-xs;
+}
+
+.tk-action-icon svg {
+  color: var(--tk-accent);
+}
+
+.tk-action .tk-action-count {
+  color: var(--tk-text);
+}
+
+.tk-meta .tk-tag {
+  @apply border-none rounded-lg;
+  color: var(--tk-tag-text);
+}
+
+.tk-meta .tk-tag-green {
+  background-color: var(--tk-accent);
+  color: var(--tk-tag-text);
+}
+
 .tk-avatar {
   border-radius: 50% !important;
   overflow: hidden !important;
@@ -292,47 +320,81 @@ html.dark .tk-row.actions .tk-preview:hover {
   border-radius: 50% !important;
 }
 
-.tk-expand-wrap .tk-expand {
-  margin-top: 1rem !important;
+/* 文本超链接 */
+.tk-content a,
+.tk-preview-container a {
+  @apply font-medium underline underline-offset-2 transition-all;
+  color: var(--tk-accent);
 }
 
-/* --- 展开按钮动画 --- */
-.twikoo > .tk-comments > .tk-comments-container > .tk-expand-wrap > .tk-expand {
-  width: 100% !important;
-  max-width: 100%;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  margin: 10px auto !important;
-  overflow: hidden !important;
-  white-space: nowrap !important;
+.tk-content a:hover,
+.tk-preview-container a:hover {
+  @apply underline-offset-4;
 }
 
-.twikoo > .tk-comments > .tk-comments-container > .tk-expand-wrap > .tk-expand:hover {
-  width: 25% !important;
-  letter-spacing: 1px;
+.tk-content .tk-ruser,
+.tk-preview-container .tk-ruser {
+  @apply no-underline;
 }
 
-.twikoo > div.tk-comments > div.tk-submit.tk-fade-in > div.tk-row.actions > div.tk-row-actions-start > div:nth-child(2) {
-  display: none !important;
+/* 行内代码块 */
+.tk-content :not(pre) > code,
+.tk-preview-container :not(pre) > code {
+  @apply rounded-md px-1 py-0.5 font-semibold;
+  background-color: var(--tk-bg-code);
+  color: var(--tk-inline-code-text);
 }
 
-/* --- OwO 表情面板暗色模式 --- */
+.tk-content li,
+.tk-preview-container li {
+  &::before {
+    color: var(--tk-li-bullet);
+  }
+}
+
+.twikoo .code-block pre {
+  border-radius: 0.75rem !important;
+}
+
+.twikoo .code-block .copy-btn-icon {
+  width: inherit !important;
+  height: inherit !important;
+}
+
+/* 媒体与图片表情规范 */
+.tk-content img, 
+.tk-preview-container img {
+  display: inline;
+  vertical-align: bottom !important;
+}
+
+.tk-preview-container {
+  margin-left: 0px !important;
+  border-radius: 12px !important;
+}
+
+/* --- OwO 表情面板与组件 --- */
+.card-base {
+  overflow: visible;
+}
+
+.OwO-body {
+  border-radius: 12px !important;
+}
+
 html.dark .OwO-body {
   background-color: #000000 !important;
 }
 
-html.dark .OwO-body li {
-  color: #ffffff !important;
-}
-
+html.dark .OwO-body li,
 html.dark .OwO-body span {
   color: #ffffff !important;
 }
 
-/* --- OwO 滚动条 --- */
-.OwO-body ::-webkit-scrollbar { width: 12px; }
+/* OwO 区域定制滚动条 */
+.OwO-body ::-webkit-scrollbar { 
+  width: 12px; 
+}
 
 .OwO-body ::-webkit-scrollbar-track {
   background-color: transparent;
@@ -352,4 +414,42 @@ html.dark .OwO-body span {
   background-color: var(--tk-owo-scroll-hover);
   border: 3px solid transparent;
   background-clip: padding-box;
+}
+
+/* --- 展开/收起按钮及动画 --- */
+.tk-expand-wrap .tk-expand,
+.tk-collapse-wrap .tk-expand {
+  @apply rounded-xl transition-all;
+}
+
+.tk-expand-wrap .tk-expand {
+  margin-top: 1rem !important;
+}
+
+.tk-expand-wrap .tk-expand:hover,
+.tk-collapse-wrap .tk-expand:hover {
+  background-color: var(--tk-bg-hover);
+}
+
+.twikoo > .tk-comments > .tk-comments-container > .tk-expand-wrap > .tk-expand {
+  width: 100% !important;
+  max-width: 100%;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  margin: 10px auto !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+/* 展开按钮趣味收缩 */
+.twikoo > .tk-comments > .tk-comments-container > .tk-expand-wrap > .tk-expand:hover {
+  width: 25% !important;
+  letter-spacing: 1px;
+}
+
+/* 隐藏无关按钮节点 */
+.twikoo > div.tk-comments > div.tk-submit.tk-fade-in > div.tk-row.actions > div.tk-row-actions-start > div:nth-child(2) {
+  display: none !important;
 }
