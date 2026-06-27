@@ -1,9 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
+import { getSiteConfig } from '../utils/config';
 
-const defaultCover = '/img/df-cover.webp';
+const siteConfig = await getSiteConfig();
 
-const posts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+const defaultCover = siteConfig.assets.defaultCover;
+
+const posts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
 
 // 1. 标签逻辑处理
 const allTags = posts.reduce((acc, post) => {
@@ -18,7 +21,7 @@ const sortedTags = Object.entries(allTags).sort((a, b) => b[1] - a[1]);
 const allTagsJson = JSON.stringify(sortedTags);
 
 // 2. 网站统计
-const siteStartDate = "2021-01-02";
+const siteStartDate = siteConfig.site.startDate;
 
 // 计算总字数（预估）
 const totalWords = posts.reduce((acc, post) => {
@@ -71,9 +74,9 @@ import Icon from './Icon.astro';
 
     <div class="space-y-4">
       <div class="inline-block">
-        <a href="https://www.foreverblog.cn" target="_blank" rel="noopener noreferrer" class="block opacity-80 hover:opacity-100 transition-all transform hover:scale-[1.02] duration-500 ease-out origin-left">
+        <a href={siteConfig.tenYearPledge.url} target="_blank" rel="noopener noreferrer" class="block opacity-80 hover:opacity-100 transition-all transform hover:scale-[1.02] duration-500 ease-out origin-left">
           <img
-            src="/img/logo_en_default.png"
+            src={siteConfig.assets.tenYearPledgeLogo}
             alt="十年之约"
             class="h-6 w-auto object-contain brightness-95 dark:brightness-110"
           />
@@ -84,8 +87,8 @@ import Icon from './Icon.astro';
         本博客已加入十年之约活动。点击下方的虫洞按钮，即可随机跃迁到其他成员的独立博客。
       </p>
 
-      <a 
-        href="https://www.foreverblog.cn/go.html" 
+      <a
+        href={siteConfig.tenYearPledge.wormholeUrl}
         target="_blank" 
         rel="noopener noreferrer" 
         class="group/btn flex items-center justify-between py-1 relative"
@@ -117,7 +120,7 @@ import Icon from './Icon.astro';
     </div>
   </div>
   <!-- 随机推荐卡片 -->
-  <div class="pt-5 px-5 pb-2 glass-card glass-card-dark relative overflow-hidden group/container">
+  <div class="pt-5 px-5 pb-2 glass-card glass-card-dark relative overflow-hidden group/container" data-default-cover={defaultCover} data-site-lang={siteConfig.site.lang}>
     <div class="absolute -right-16 -top-16 w-40 h-40 bg-primary-light/10 dark:bg-primary-dark/10 rounded-full blur-3xl pointer-events-none transition-all duration-700 group-hover/container:scale-150"></div>
 
     <div class="flex items-center justify-between mb-2 relative select-none">
@@ -215,13 +218,13 @@ import Icon from './Icon.astro';
     <div class="mt-5">
       <button
         type="button"
-        data-clipboard-text="https://log.1k.ink/rss.xml"
+        data-rss-url={new URL('/rss.xml', Astro.site).toString()}
         onclick="
           const self = this;
           if (self.classList.contains('is-success')) return;
           self.classList.add('is-success');
 
-          navigator.clipboard.writeText(self.getAttribute('data-clipboard-text')).then(() => {
+          navigator.clipboard.writeText(self.getAttribute('data-rss-url')).then(() => {
             setTimeout(() => {
               self.classList.remove('is-success');
             }, 2200);
@@ -248,7 +251,7 @@ import Icon from './Icon.astro';
         <div class="h-full w-2/3 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800/80 shadow-sm flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] transform group-hover/btn:translate-x-[50%] group-hover/btn:bg-[#f26522] group-hover/btn:border-transparent group-[.is-success]/btn:translate-x-[223%] group-[.is-success]/btn:w-[30%] group-[.is-success]/btn:bg-neutral-200 dark:group-[.is-success]/btn:bg-neutral-800 group-[.is-success]/btn:border-transparent group-[.is-success]/btn:shadow-none z-10">
           <div class="relative w-full h-full flex items-center justify-center">
             <span class="absolute text-xs font-bold text-neutral-600 dark:text-neutral-400 group-hover/btn:text-white tracking-tight transition-all duration-200 group-[.is-success]/btn:opacity-0 group-[.is-success]/btn:scale-75">
-              log.1k.ink/rss.xml
+              {new URL('/rss.xml', Astro.site).hostname}/rss.xml
             </span>
             <div class="absolute opacity-0 scale-75 transition-all duration-300 group-[.is-success]/btn:opacity-100 group-[.is-success]/btn:scale-100 flex items-center justify-center text-neutral-500 dark:text-neutral-400">
               <Icon name="check" class="w-4 h-4" />
@@ -339,14 +342,14 @@ import Icon from './Icon.astro';
       const selected = shuffled.slice(0, 3);
 
       listContainer.innerHTML = selected.map((post, index) => {
-        const date = new Date(post.pubDate).toLocaleDateString('zh-CN', {
+        const date = new Date(post.pubDate).toLocaleDateString(document.querySelector('[data-site-lang]')?.getAttribute('data-site-lang') || 'zh-CN', {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
         });
 
         const serialNumber = String(index + 1).padStart(2, '0');
-        const displayImage = post.heroImage || '/img/df-cover.webp';
+        const displayImage = post.heroImage || document.querySelector('[data-default-cover]')?.getAttribute('data-default-cover') || '';
         const categoryHtml = post.category ? `<span class="text-text-light/35 dark:text-text-dark/25"># ${post.category}</span>` : '';
 
         return `

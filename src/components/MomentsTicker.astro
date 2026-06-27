@@ -1,5 +1,8 @@
 ---
 import { getEntry } from 'astro:content';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
 
 interface Moment {
   content: string;
@@ -19,7 +22,13 @@ interface WatchingItem {
   links?: { source: string; url: string }[];
 }
 
-let recentMoments: Moment[] = [];
+const defaultMoments: Moment[] = [
+  { content: '今天天气真好，适合写代码！☀️', date: new Date().toISOString(), images: [], link: '' },
+  { content: '刚刚完成了一个新功能，感觉很有成就感！', date: new Date(Date.now() - 86400000).toISOString(), images: [], link: '' },
+  { content: '分享一张美图', date: new Date(Date.now() - 172800000).toISOString(), images: [], link: '' },
+];
+
+let recentMoments: Moment[] = defaultMoments;
 let watchingItems: WatchingItem[] = [];
 
 try {
@@ -36,7 +45,7 @@ try {
       }));
   }
 } catch (error) {
-  console.log('Using empty moments data');
+  console.log('Using default moments data');
 }
 
 try {
@@ -58,8 +67,7 @@ const watchingJson = JSON.stringify(watchingItems.map(m => ({
 import Icon from './Icon.astro';
 ---
 
-{recentMoments.length > 0 && (
-  <div id="moments-ticker" data-watching={watchingJson} class="w-full">
+<div id="moments-ticker" data-watching={watchingJson} class="w-full">
     
     {/* 
       【终极 12 列自适应网格】：12 是最完美的响应式数字，能完美整除手机、平板和桌面的所有跨列需求。
@@ -78,7 +86,7 @@ import Icon from './Icon.astro';
         <div class="absolute inset-0 bento-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
         <div class="relative flex items-center w-full justify-between gap-3 h-full">
           <div class="relative shrink-0 w-7 h-7 flex items-center justify-center">
-            <img src="/img/avatar.webp" alt="" class="w-7 h-7 rounded-full object-cover ring-2 ring-zinc-100 dark:ring-zinc-800" loading="lazy" decoding="async" />
+            <img src={siteConfig.author.avatar} alt="" class="w-7 h-7 rounded-full object-cover ring-2 ring-zinc-100 dark:ring-zinc-800" loading="lazy" decoding="async" />
             <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-zinc-900"></span>
           </div>
           <div class="flex-1 min-w-0 relative h-5 overflow-hidden flex justify-center">
@@ -154,7 +162,6 @@ import Icon from './Icon.astro';
 
     </div>
   </div>
-)}
 
 <script is:inline>
   function calcYearProgress() {

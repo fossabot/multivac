@@ -2,7 +2,10 @@
 import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 import { calculateReadingTime } from '../utils/readingTime';
-const defaultCover = '/img/df-cover.webp';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
+const defaultCover = siteConfig.assets.defaultCover;
 
 interface Props {
   post: CollectionEntry<'post'>;

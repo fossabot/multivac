@@ -2,9 +2,11 @@
 import { getCollection } from 'astro:content';
 import { calculateReadingTime } from '../utils/readingTime';
 import FormattedDate from './FormattedDate.astro';
+import { getSiteConfig } from '../utils/config';
 
-const allPosts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
-const defaultCover = '/img/df-cover.webp';
+const siteConfig = await getSiteConfig();
+const allPosts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
+const defaultCover = siteConfig.assets.defaultCover;
 
 interface Props {
   currentPostId: string;

@@ -4,6 +4,9 @@ import LeftSidebar from '../../components/LeftSidebar.astro';
 import RightSidebar from '../../components/RightSidebar.astro';
 import MomentsTicker from '../../components/MomentsTicker.astro';
 import { getEntry } from 'astro:content';
+import { getSiteConfig } from '../../utils/config';
+
+const siteConfig = await getSiteConfig();
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const defaultMoments = [
@@ -49,6 +52,8 @@ try {
 
 import Icon from '../../components/Icon.astro';
 ---
+
+<div id="moments-data" data-site-lang={siteConfig.site.lang} class="hidden"></div>
 
 <script>
   interface MomentItem {
@@ -178,7 +183,7 @@ import Icon from '../../components/Icon.astro';
         }
       }
 
-      const dateStr = new Date(moment.date).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+      const dateStr = new Date(moment.date).toLocaleDateString(document.getElementById('moments-data')?.getAttribute('data-site-lang') || 'zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
 
       return `
         <article class="p-6 glass-card glass-card-dark">

@@ -9,7 +9,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 // 获取所有文章并按时间倒序排序
-const allPosts = (await getCollection('post', (post: CollectionEntry<'post'>) => !post.data.draft && !post.data.friends && !post.data.friendGroups && !post.data.moments))
+const allPosts = (await getCollection('post', (post: CollectionEntry<'post'>) => !post.data.draft && !post.id.startsWith('about/') && !post.data.friends && !post.data.friendGroups && !post.data.moments && !post.data.watching))
   .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
 
 // 分页设置

@@ -2,7 +2,7 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+const posts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
 
 const allTags = posts.reduce((acc, post) => {
   const tags = post.data.tags || [];

@@ -11,7 +11,10 @@ import WelcomeAnimation from '../components/WelcomeAnimation.astro';
 import ArticleMetaCard from '../components/ArticleMetaCard.astro';
 import RecentPosts from '../components/RecentPosts.astro';
 import { calculateReadingTime, calculateWordCount } from '../utils/readingTime';
-const defaultCover = '/img/df-cover.webp';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
+const defaultCover = siteConfig.assets.defaultCover;
 import { ClientRouter } from 'astro:transitions';
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
@@ -38,7 +41,7 @@ const readingTime = calculateReadingTime(content);
 import Icon from '../components/Icon.astro';
 ---
 
-<html lang="zh-CN">
+<html lang={siteConfig.site.lang}>
 	<head>
 		<BaseHead title={title} description={description} image={displayImage} pubDate={pubDate} updatedDate={updatedDate} article={true} />
 		<ClientRouter />

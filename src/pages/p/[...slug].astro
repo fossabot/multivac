@@ -4,7 +4,7 @@ import BlogPost from '../../layouts/BlogPost.astro';
 import PasswordProtect from '../../components/PasswordProtect.astro';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('post', ({ data, body }) => !data.draft && typeof body === 'string');
+	const posts = await getCollection('post', ({ data, body, id }) => !data.draft && typeof body === 'string' && !id.startsWith('about/'));
 
 	return posts.map((post) => {
 		return {

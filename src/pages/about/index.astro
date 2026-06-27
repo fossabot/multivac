@@ -1,71 +1,54 @@
 ---
+import { getCollection, render } from 'astro:content';
+import { getSiteConfig } from '../../utils/config';
 import BlogPost from '../../layouts/BlogPost.astro';
+
+const siteConfig = await getSiteConfig();
+const entries = await getCollection('post');
+const about = entries.find(e => e.id === 'about/about');
+
+let Content: any;
+let title: string;
+let description: string;
+let pubDate: Date;
+let heroImage: string | undefined;
+let heroImageWidth: string | undefined;
+let showDate: boolean;
+
+if (about) {
+	const rendered = await render(about);
+	Content = rendered.Content;
+	title = about.data.title;
+	description = about.data.description;
+	pubDate = about.data.pubDate;
+	heroImage = about.data.heroImage;
+	heroImageWidth = about.data.heroImageWidth;
+	showDate = about.data.showDate;
+} else {
+	title = '关于我';
+	description = siteConfig.author.description;
+	pubDate = new Date();
+	heroImage = siteConfig.author.avatar;
+	heroImageWidth = '160';
+	showDate = false;
+}
 ---
 
 <BlogPost
-	title="关于我"
-	description="Phantom pain 幻痛."
-	pubDate={new Date('2026-01-09')}
-	heroImage={"/img/avatar.webp"}
-	heroImageWidth="160"
-	showDate={false}
+	title={title}
+	description={description}
+	pubDate={pubDate}
+	heroImage={heroImage}
+	heroImageWidth={heroImageWidth}
+	showDate={showDate}
 >
-	<div class="mb-8 mt-8 text-3xl font-bold leading-9 text-text-light dark:text-text-dark flex items-center">
-		你好，很高兴认识你👋
-	</div>
-    <h1>我叫波罗歌</h1>
-    <h2>一知半解，从一而终</h2>
-
-	<p>
-		这两个成语，合成一句话，可以有很多种不同的解读。我这里有很多有趣的答案，我相信你也会有很多不同的理解。<br>
-		但今天，请允许我先给你分享一个契合"脚本小子"这个故事的解读。<br>
-		这句话可以解读为一段长句，"从我十一岁起，我就是一个脚本小子，直到如今，仍旧没有任何改变"。
-	</p>
-	<ul>
-		<li>"一一"，11，从我十一岁起。</li>
-		<li>"一知半解"，我就是一个脚本小子。</li>
-		<li>"从一而终"，直到如今，仍旧没有任何改变。</li>
-	</ul>
-
-	<h2>一知半解</h2>
-	<p>我是什么时候开始觉得代码有趣的？或者说，我是什么时候开始觉得互联网有趣的？</p>
-	<p>
-		也许是在早年某个刷着Q群看群友高谈阔论<strong>远控肉鸡</strong>，然后突然接触到<strong>灰鸽子</strong>的深夜？也许是盯着<strong>明小子</strong>的扫描进度条，第一次弄懂了什么是SQL注入漏洞的那个午后？也许是费尽心思绕过上传限制，只为了把那段几百字节的<strong>一句话木马</strong>送进服务器而绞尽脑汁的时刻？<br>
-		又或许，是盯着<strong>中国菜刀</strong>连接成功后弹出的文件目录，第一次感受到对权限的掌控。是在某个互联网角落的无名站点，留下一个只有水平居中、写着<strong>"HACKED BY XXX"</strong>，只为了证明自己来过的极简HTML黑页，在冷飕飕的空气中却感受到的那份极度满足？
-	</p>
-
-	<p>也许？<br>这些瞬间都不算一个准确的答案。<br>但回过头看，哈哈哈，是不是从十一岁起，那时的我，就是一个最纯粹的脚本小子？🤓</p>
-
-	<h2>从一而终</h2>
-	<p>我是什么语言入门编程的？或者说，我真的"入门"了吗？</p>
-	<p>
-		小时候折腾<strong> HTML </strong>和<strong> .bat </strong>，大多是瞎猫碰上死耗子的拿来主义，瞎改一通，能用就行，毫无掌握语言的渴望。后来在大学学过<strong> Python </strong>和<strong> Java </strong>，但实际上，除了会写基本的猫狗继承，连一个最简单的循环嵌套都写得磕磕绊绊。
-	</p>
-
-	<p>
-		所以如果一定要一个正经的答案，我觉得自己没有一个明确的入门语言。我是在无数次拿来就用和修修补补中，突然有一天就开窍了。<br>
-		脑海里那些年折腾过的皮毛，在那一刻连点成线。我真正入门编程的那一刻，便是我站在自己前所未有的理解高度，将我以往所有对编程的理解全都统一成了一句话：编程的本质是解决问题的方法与逻辑。
-	</p>
-
-	<p>
-		绕回来说，尽管在对代码长期推倒重来的修修补补中，我的潜意识默默替我完成了一套对编程的模式识别，将那些琐碎的知识碎片突然贯通，合而为一，自发地从中抽象出了一种关于编程的"通识逻辑"，但这不意味着我可以不经学习就对语言有深度掌握。<br>
-		正如前面所说的一样，尽管我大学是计算机科班出身，学过一些编程语言，但直到如今，我其实依然没有深入学习那些"单词"和"语法"，更遑论能够擅长使用它们写出一篇逻辑严密、结构清晰的"鸿篇巨著"，我实际上的编码能力依旧有限。<br>
-		你现在看到的这个博客网站，它只是我运用一套有关编程的通识，运用脑海中那些被重构的编程范式和工程化思想，借助 Vibe Coding，让其用具体的代码来为我的想法做填充、实现、落地的一次实践创作。如果真让我自己捣鼓来捣鼓去，很难说我敲出的代码有几行是正经的。<br>
-		可以说，如果没有 Vibe Coding ，我恐怕要耗费更多的时间与精力才能完成这个项目。<br>
-	</p>
-	<p>
-		所以最后，在有了编程思想，却没有太多匹配水平的编码能力的情况下，不妨自嘲地说一句，我或许还是当年那个脚本小子，或许也不是了。<br>
-		或许我可以称呼自己为新时代的脚本小子？但脚本小子这个旧词，如今也鲜少人用了。<br>
-		我是旧时代的残党，新时代没有能承载我的船。（轻笑）<br>
-		那我应该自称什么呢，超级赛亚人，Super Saiyan , Super Script kiddie ？😋
-	</p>
-
-	<div class="mb-8 mt-8 text-2xl font-bold leading-9 text-text-light dark:text-text-dark flex items-center">
-		如果你能读到这里，我想我们可以重新认识一下了。
-	</div>
-
-	<div class="mb-8 mt-8 text-3xl font-bold leading-9 text-text-light dark:text-text-dark flex items-center">
-		你好，很高兴认识你👋
-	</div>
-	<h1>我是波罗歌，一知半解，从一而终。</h1>
+	{about ? (
+		<Content />
+	) : (
+		<div class="prose prose-lg dark:prose-invert max-w-none">
+			<h1>关于 {siteConfig.author.name}</h1>
+			<p>{siteConfig.author.description}</p>
+			<p>在 <code>post/about/about.md</code> 中创建关于页面内容。</p>
+		</div>
+	)}
 </BlogPost>

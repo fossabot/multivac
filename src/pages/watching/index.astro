@@ -5,6 +5,9 @@ import RightSidebar from '../../components/RightSidebar.astro';
 import MomentsTicker from '../../components/MomentsTicker.astro';
 import Twikoo from '../../components/Twikoo.astro';
 import { getEntry } from 'astro:content';
+import { getSiteConfig } from '../../utils/config';
+
+const siteConfig = await getSiteConfig();
 
 interface Rating {
   source: 'douban' | 'bangumi';
@@ -31,7 +34,7 @@ const defaultWatching: WatchingItem[] = [
   {
     title: '虫师',
     year: 2005,
-    cover: '/img/df-cover.webp',
+    cover: siteConfig.assets.defaultCover,
     comment: '远山如雾',
     type: '动漫',
     ratings: [{ source: 'douban', score: 9.4 }],
@@ -40,7 +43,7 @@ const defaultWatching: WatchingItem[] = [
   {
     title: '无头骑士异闻录',
     year: 2010,
-    cover: '/img/df-cover.webp',
+    cover: siteConfig.assets.defaultCover,
     comment: '这里是池袋',
     type: '动漫',
     ratings: [{ source: 'douban', score: 8.8 }],
@@ -66,7 +69,7 @@ try {
 }
 
 function formatDate(date: Date): string {
-  return date.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  return date.toLocaleDateString(siteConfig.site.lang, { year: 'numeric', month: 'long', day: 'numeric' });
 }
 import Icon from '../../components/Icon.astro';
 ---

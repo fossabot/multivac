@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async () => {
   const allPosts = (await getCollection('post', (post) => !post.data.draft && typeof post.body === 'string'))
-    .filter((post) => !post.data.friends && !post.data.friendGroups && !post.data.moments)
+    .filter((post) => !post.id.startsWith('about/') && !post.data.friends && !post.data.friendGroups && !post.data.moments && !post.data.watching)
     .map((post) => ({
       id: post.id,
       originalFileName: post.id.toLowerCase(),

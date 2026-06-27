@@ -1,10 +1,19 @@
 ---
-const dfAbout = '/img/df-about.webp';
 import Icon from './Icon.astro';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
+
+const dfAbout = siteConfig.assets.defaultAbout;
+const rssUrl = new URL('/rss.xml', Astro.site).toString();
+const wechatQr = siteConfig.assets.wechatQr;
+const alipayQr = siteConfig.assets.alipayQr;
+const defaultCover = siteConfig.assets.defaultCover;
+const avatarUrl = siteConfig.author.avatar;
 ---
 
-<!-- 隐藏的数据存储：传递 dfCover 给客户端脚本 -->
-<div id="sidebar-data" data-df-about={dfAbout} class="hidden"></div>
+<!-- 隐藏的数据存储：传递配置值给客户端脚本 -->
+<div id="sidebar-data" data-df-about={dfAbout} data-avatar-url={avatarUrl} data-default-cover={defaultCover} data-rss-url={rssUrl} data-api-endpoints={JSON.stringify(siteConfig.music.apiEndpoints)} data-author-name={siteConfig.author.name} data-author-description={siteConfig.author.description} class="hidden"></div>
 
 <!-- 侧边功能图标组 - 与目录水平对称 -->
 <div
@@ -103,11 +112,11 @@ import Icon from './Icon.astro';
         <div class="group/qr relative w-36 h-36 p-2 rounded-xl bg-neutral-50 dark:bg-neutral-950 border border-neutral-200/40 dark:border-neutral-800/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:hover:shadow-neutral-950/50">
           
           <div id="qr-wechat" class="reward-qr absolute inset-2 transition-all duration-500 opacity-100 scale-100 transform-gpu">
-            <img src="/img/wechatGood.webp" alt="微信赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
+            <img src={wechatQr} alt="微信赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
           </div>
           
           <div id="qr-alipay" class="reward-qr absolute inset-2 transition-all duration-500 opacity-0 scale-95 pointer-events-none transform-gpu">
-            <img src="/img/alipayGood.webp" alt="支付宝赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
+            <img src={alipayQr} alt="支付宝赞赏码" class="w-full h-full object-cover rounded-lg filter contrast-[1.02] dark:opacity-90" />
           </div>
           
         </div>
@@ -149,7 +158,7 @@ import Icon from './Icon.astro';
 
         <button
           id="rss-copy-btn"
-          data-rss-url="https://log.1k.ink/rss.xml"
+          data-rss-url={rssUrl}
           class="w-full relative group/btn flex flex-col gap-2 p-3.5 bg-background-light/20 dark:bg-background-dark/10 hover:bg-background-light/60 dark:hover:bg-background-dark/30 border border-dashed border-border-light dark:border-border-dark/10 hover:border-[#f26522]/50 dark:hover:border-[#f26522]/50 rounded-xl fluid-btn text-left active:scale-[0.98]"
         >
           <div class="flex items-center justify-between w-full">
@@ -164,7 +173,7 @@ import Icon from './Icon.astro';
           </div>
           
           <code class="text-[11px] text-text-light/70 dark:text-text-dark/70 group-hover/btn:text-text-light dark:group-hover/btn:text-text-dark break-all leading-normal selection:bg-transparent transition-colors duration-200">
-            https://log.1k.ink/rss.xml
+            {rssUrl}
           </code>
         </button>
 
@@ -240,7 +249,7 @@ import Icon from './Icon.astro';
           <div class="relative w-16 h-16 rounded-xl overflow-hidden shrink-0 
                       shadow-[0_8px_20px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]
                       border border-border-light dark:border-border-dark">
-            <img id="sidebar-cover" src="/img/df-cover.webp" alt="封面" class="w-full h-full object-cover" />
+            <img id="sidebar-cover" src={defaultCover} alt="封面" class="w-full h-full object-cover" />
             <div class="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/5 pointer-events-none"></div>
           </div>
         </div>
@@ -304,7 +313,7 @@ import Icon from './Icon.astro';
     <!-- 圆形黑胶唱片按钮 -->
     <div id="sidebar-btn-vinyl" class="w-10 h-10 rounded-full bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark flex items-center justify-center group-hover/bar:bg-primary-light/10 dark:group-hover/bar:bg-primary-dark/10 group-hover/bar:border-primary-light/30 dark:group-hover/bar:border-primary-dark/30 fluid-icon shadow-md hover:shadow-lg">
       <div class="w-[30px] h-[30px] rounded-full border border-black/5 bg-linear-to-tr from-neutral-900 via-neutral-800 to-neutral-950 p-[2px]">
-        <img id="sidebar-btn-cover" src="/img/df-cover.webp" alt="音乐" class="w-full h-full object-cover rounded-full mix-blend-screen dark:mix-blend-normal" />
+        <img id="sidebar-btn-cover" src={defaultCover} alt="音乐" class="w-full h-full object-cover rounded-full mix-blend-screen dark:mix-blend-normal" />
       </div>
     </div>
   </div>
@@ -365,7 +374,7 @@ import Icon from './Icon.astro';
     // 获取本地图片路径
     const sidebarData = document.getElementById('sidebar-data');
     const localCoverImage = sidebarData?.getAttribute('data-df-about') || '';
-    const avatarUrl = '/img/avatar.webp';
+    const avatarUrl = sidebarData?.getAttribute('data-avatar-url') || '';
 
     if (!sidebarContainer || !backToTopButton || !jumpToBottomButton || !jumpToCommentsButton) {
       return;
@@ -629,7 +638,8 @@ import Icon from './Icon.astro';
         ctx.stroke();
 
                 // 加载并绘制圆形头像和作者信息
-        const avatarUrl = '/img/avatar.webp';
+        const sidebarData2 = document.getElementById('sidebar-data');
+        const avatarUrl = sidebarData2?.getAttribute('data-avatar-url') || '';
 
         const avatarSize = 110; 
         const avatarX = 40; 
@@ -664,19 +674,21 @@ import Icon from './Icon.astro';
           // 头像加载失败
         }
 
-        // 绘制作者名称 "波罗歌"（无论头像是否加载成功都绘制）
+        // 绘制作者名称（无论头像是否加载成功都绘制）
+        const posterAuthorName = sidebarData2?.getAttribute('data-author-name') || '';
         ctx.fillStyle = '#1a1a1a';
         ctx.font = 'bold 36px sans-serif'; // 进一步增大字体
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText('波罗歌', avatarX + avatarSize + 20, avatarY - 22);
+        ctx.fillText(posterAuthorName, avatarX + avatarSize + 20, avatarY - 22);
 
-        // 绘制签名 "一知半解，从一而终"
+        // 绘制签名
+        const posterAuthorDesc = sidebarData2?.getAttribute('data-author-description') || '';
         ctx.fillStyle = '#666666';
         ctx.font = '24px sans-serif'; // 进一步增大字体
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText('一知半解，从一而终', avatarX + avatarSize + 20, avatarY + 22);
+        ctx.fillText(posterAuthorDesc, avatarX + avatarSize + 20, avatarY + 22);
 
         // 生成二维码（使用本地 qrcode 库）
         const qrSize = 110; // 调整为110px
@@ -842,7 +854,7 @@ import Icon from './Icon.astro';
       const rssTextSpan = document.getElementById('rss-copy-text') as HTMLSpanElement | null;
       if (!rssCopyBtn || !rssTextSpan) return;
 
-      const rssUrl = rssCopyBtn.getAttribute('data-rss-url') || 'https://log.1k.ink/rss.xml';
+      const rssUrl = rssCopyBtn.getAttribute('data-rss-url') || sidebarData?.getAttribute('data-rss-url') || '';
       const originalText = rssTextSpan.textContent;
 
       navigator.clipboard.writeText(rssUrl).then(() => {

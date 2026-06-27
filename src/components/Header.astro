@@ -3,6 +3,9 @@ import HeaderLink from './HeaderLink.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import SearchModal from './SearchModal.astro';
 import Icon from './Icon.astro';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
 ---
 
 <header
@@ -49,10 +52,9 @@ import Icon from './Icon.astro';
 
         <div class="hidden md:flex items-center px-4 relative">
             <div id="nav-links" class="flex items-center space-x-8 transition-all duration-300 translate-y-0">
-                <HeaderLink href="/archives">文稿</HeaderLink>
-                <HeaderLink href="/friends">友链</HeaderLink>
-                <HeaderLink href="/watching">漫游</HeaderLink>
-                <HeaderLink href="/about">关于</HeaderLink>
+                {siteConfig.nav.headerLinks.map((link) => (
+                  <HeaderLink href={link.href}>{link.label}</HeaderLink>
+                ))}
             </div>
             <h1 id="page-title" class="absolute left-1/2 -translate-x-1/2 text-lg font-bold text-text-light dark:text-text-dark opacity-0 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px] translate-y-2 cursor-pointer accent-hover" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"></h1>
         </div>
@@ -95,94 +97,19 @@ import Icon from './Icon.astro';
 
         <div id="menu-panel" class="absolute top-0 w-[320px] p-2 rounded-xl bg-white/80 dark:bg-black/70 backdrop-blur-sm border border-white/20 dark:border-white/10 tooltip origin-top" style="margin-top: 5.5rem;">
             <div class="grid grid-cols-2 gap-2">
-                <a href="http://1k.ink/" target="_blank" rel="noopener noreferrer" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="home" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                        <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">主页</span>
-                        
-                        <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                            <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                            <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                                <Icon name="home" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                                <span class="text-base font-medium text-white dark:text-black transition-all duration-300">主页</span>
-                            </div>
-                        </div>
-                </a>
-
-                <a href="/" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="blog" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">博客</span>
+                {siteConfig.nav.menuLinks.map((link) => (
+                  <a href={link.href} {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})} class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
+                    <Icon name={link.icon as any} class:list={['w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0', link.iconScale && `scale-[${link.iconScale}] origin-center`]} />
+                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">{link.label}</span>
                     <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <Icon name="blog" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">博客</span>
-                        </div>
+                      <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
+                      <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
+                        <Icon name={link.icon as any} class:list={['w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0', link.iconScale && `scale-[${link.iconScale}] origin-center`]} />
+                        <span class="text-base font-medium text-white dark:text-black transition-all duration-300">{link.label}</span>
+                      </div>
                     </div>
-                </a>
-
-                <a href="/archives" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="archive" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                        <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">文稿</span>
-                        
-                        <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                            <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                            <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                                <Icon name="archive" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                                <span class="text-base font-medium text-white dark:text-black transition-all duration-300">文稿</span>
-                            </div>
-                        </div>
-                </a>
-
-                <a href="/friends" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="friends" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">友链</span>
-                    
-                    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <Icon name="friends" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">友链</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/moments" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="moments" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">动态</span>
-                    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <Icon name="moments" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">动态</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/watching" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="watching" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0 scale-[0.88] origin-center" />
-                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">漫游</span>
-                    
-                    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <Icon name="watching" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0 scale-[0.88] origin-center" />
-                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">漫游</span>
-                        </div>
-                    </div>
-                </a>
-
-                <a href="/about" class="relative flex items-center gap-3 px-4 py-3 rounded-lg group/item overflow-hidden">
-                    <Icon name="about" class="w-6 h-6 text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:scale-90 group-hover/item:opacity-0 group-active/item:scale-95 shrink-0" />
-                    <span class="text-base font-medium text-text-light dark:text-text-dark transition-all duration-300 group-hover/item:opacity-0 group-active/item:scale-95">关于</span>
-                    <div class="absolute inset-0 opacity-0 scale-90 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-100 group-active/item:scale-95 pointer-events-none">
-                        <div class="bg-primary-light dark:bg-primary-dark rounded-lg absolute inset-0 shadow-lg shadow-primary-light/20 dark:shadow-primary-dark/20"></div>
-                        <div class="absolute inset-0 flex items-center gap-3 px-4 py-3">
-                            <Icon name="about" class="w-6 h-6 text-white dark:text-black transition-all duration-300 shrink-0" />
-                            <span class="text-base font-medium text-white dark:text-black transition-all duration-300">关于</span>
-                        </div>
-                    </div>
-                </a>
-                
+                  </a>
+                ))}
             </div>
         </div>
     </nav>

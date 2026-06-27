@@ -1,5 +1,8 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
 
 interface Rating {
   source: 'douban' | 'bangumi';
@@ -22,13 +25,13 @@ interface WatchingItem {
   links?: Link[];
 }
 
-const posts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+const posts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
 
 const defaultWatching: WatchingItem[] = [
   {
     title: '虫师',
     year: 2005,
-    cover: '/img/df-cover.webp',
+    cover: siteConfig.assets.defaultCover,
     comment: '远山如雾',
     type: '动画',
     ratings: [{ source: 'douban', score: 9.4 }],
@@ -37,7 +40,7 @@ const defaultWatching: WatchingItem[] = [
   {
     title: '无头骑士异闻录',
     year: 2010,
-    cover: '/img/df-cover.webp',
+    cover: siteConfig.assets.defaultCover,
     comment: '这里是池袋',
     type: '动画',
     ratings: [{ source: 'douban', score: 8.8 }],
@@ -73,13 +76,16 @@ const sortedCategories = Object.entries(categories).sort((a, b) => b[1] - a[1]);
 import Icon from './Icon.astro';
 ---
 
+<!-- 音乐播放器配置数据 -->
+<div id="music-data" data-api-endpoints={JSON.stringify(siteConfig.music.apiEndpoints)} data-author-name={siteConfig.author.name} data-author-sub-slogan={siteConfig.author.subSlogan} class="hidden"></div>
+
 <aside transition:persist="left-sidebar" class="hidden md:block w-[272px] space-y-6">
   <!-- 个人信息卡片 -->
   <div class="p-4 h-[300px] bg-primary-light dark:bg-primary-dark rounded-3xl shadow-sm fluid-card matrix-card relative overflow-hidden border border-transparent hover:border-border-light dark:hover:border-border-dark">
-    <!-- 顶部：醉后不知天在水 文本 -->
+    <!-- 顶部：slogan 文本 -->
     <div class="absolute top-4 left-0 right-0 flex justify-center">
       <div class="px-3 py-1 bg-white/20 dark:bg-black/50 rounded-full greeting-container">
-        <span class="text-sm font-medium text-white greeting-text" style="will-change: transform, opacity; text-rendering: optimizeSpeed;">醉后不知天在水</span>
+        <span class="text-sm font-medium text-white greeting-text" style="will-change: transform, opacity; text-rendering: optimizeSpeed;">{siteConfig.author.slogan}</span>
       </div>
     </div>
     <!-- 中间：头像 -->
@@ -88,18 +94,15 @@ import Icon from './Icon.astro';
         <div class="avatar-mouse-wrapper transform-gpu relative">
           
           <img
-            src="/img/avatar.webp"
+            src={siteConfig.author.avatar}
             alt="博主头像"
             class="w-[115px] h-[115px] rounded-full object-cover ring-4 ring-white/50 dark:ring-black/50 shadow-lg avatar-image transform-gpu cursor-pointer"
           />
 
           <div class="static-emojis-pool absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-9999">
-            <img src="/img/emoji/cool.webp"  class="static-emoji" data-file="cool"  alt="fluent-3d-emoji" />
-            <img src="/img/emoji/cat.webp"   class="static-emoji" data-file="cat"   alt="fluent-3d-emoji" />
-            <img src="/img/emoji/yummy.webp" class="static-emoji" data-file="yummy" alt="fluent-3d-emoji" />
-            <img src="/img/emoji/cry.webp"   class="static-emoji" data-file="cry"   alt="fluent-3d-emoji" />
-            <img src="/img/emoji/nerd.webp"  class="static-emoji" data-file="nerd"  alt="fluent-3d-emoji" />
-            <img src="/img/emoji/laugh.webp" class="static-emoji" data-file="laugh" alt="fluent-3d-emoji" />
+            {siteConfig.assets.emojiFiles.map((file) => (
+              <img src={`/img/emoji/${file}.webp`} class="static-emoji" data-file={file} alt="fluent-3d-emoji" />
+            ))}
           </div>
 
         </div>
@@ -109,28 +112,22 @@ import Icon from './Icon.astro';
     <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center">
       <!-- 左侧：博主信息容器 -->
       <a href="/about" class="text-container block hover:opacity-85 fluid-link">
-        <h2 class="text-xl font-bold text-white dark:text-black mb-1 matrix-text" data-text="波罗歌">波罗歌</h2>
-        <p class="text-xs text-white dark:text-black/90 opacity-60 matrix-text" data-text="万维网中潮汛来">万维网中潮汛来</p>
+        <h2 class="text-xl font-bold text-white dark:text-black mb-1 matrix-text" data-text={siteConfig.author.name}>{siteConfig.author.name}</h2>
+        <p class="text-xs text-white dark:text-black/90 opacity-60 matrix-text" data-text={siteConfig.author.subSlogan}>{siteConfig.author.subSlogan}</p>
       </a>
 
       <!-- 右侧：社交图标容器 -->
       <div class="icons-container flex space-x-2">
-        <a href="https://github.com/LogLInk1K" target="_blank" rel="noopener noreferrer" 
-           class="text-white hover:text-white fluid-btn hover:scale-110 relative group w-10 h-10 rounded-full bg-white/20 dark:bg-black/50 hover:bg-white/30 dark:hover:bg-black/70 flex items-center justify-center">
-          <span class="sr-only">GitHub</span>
-          <Icon name="github" class="w-5 h-5" aria-hidden="true" />
-          <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-white text-black dark:bg-black dark:text-white text-sm rounded-lg shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-nowrap">
-            GitHub
-          </div>
-        </a>
-        <a href="https://space.bilibili.com/12787362" target="_blank" rel="noopener noreferrer" 
-           class="text-white hover:text-white fluid-btn hover:scale-110 relative group w-10 h-10 rounded-full bg-white/20 dark:bg-black/50 hover:bg-white/30 dark:hover:bg-black/70 flex items-center justify-center">
-          <span class="sr-only">Bilibili</span>
-          <Icon name="bilibili" class="w-5 h-5" aria-hidden="true" />
-          <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-white text-black dark:bg-black dark:text-white text-sm rounded-lg shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-nowrap">
-            Bilibili
-          </div>
-        </a>
+        {siteConfig.social.map((item) => (
+          <a href={item.url} target="_blank" rel="noopener noreferrer"
+             class="text-white hover:text-white fluid-btn hover:scale-110 relative group w-10 h-10 rounded-full bg-white/20 dark:bg-black/50 hover:bg-white/30 dark:hover:bg-black/70 flex items-center justify-center">
+            <span class="sr-only">{item.name}</span>
+            <Icon name={item.icon as any} class="w-5 h-5" aria-hidden="true" />
+            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-white text-black dark:bg-black dark:text-white text-sm rounded-lg shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none whitespace-nowrap">
+              {item.name}
+            </div>
+          </a>
+        ))}
       </div>
     </div>  
   </div>
@@ -158,7 +155,7 @@ import Icon from './Icon.astro';
         <div class="relative w-20 h-20 shrink-0">
           <div class="vinyl-record flex items-center justify-center shadow-lg group-hover/music:scale-105 transition-transform duration-500">
             <img
-              src="/img/df-cover.webp"
+              src={siteConfig.assets.defaultCover}
               alt="歌单封面"
               class="object-cover rounded-full relative z-10 transition-opacity duration-500 border border-black/20"
               style="width: 48px; height: 48px;"
@@ -168,7 +165,7 @@ import Icon from './Icon.astro';
         </div>
 
         <div class="flex-1 min-w-0 flex flex-col gap-1 pl-0.5">
-          <a href="https://music.163.com/playlist?id=2732533345" target="_blank" rel="noopener noreferrer" class="block group/title leading-none">
+          <a href={siteConfig.music.playlistUrl} target="_blank" rel="noopener noreferrer" class="block group/title leading-none">
             <h4 id="playlist-name" class="text-base font-black text-neutral-800 dark:text-neutral-100 tracking-tight truncate group-hover/title:text-primary-light dark:group-hover/title:text-primary-dark transition-colors cursor-pointer">
               网易云歌单
             </h4>
@@ -700,9 +697,12 @@ import Icon from './Icon.astro';
     }
 
     // --- 文字矩阵特效独立运行 ---
+    const musicDataEl = document.getElementById('music-data');
+    const authorName = musicDataEl?.getAttribute('data-author-name') || '';
+    const authorSubSlogan = musicDataEl?.getAttribute('data-author-sub-slogan') || '';
     const matrixTextPairs = [
-      { name: '波罗歌', desc: '万维网中潮汛来' },
-      { name: '波罗阁', desc: '今日方知我是我' }
+      { name: authorName, desc: authorSubSlogan },
+      { name: authorName.replace(/.$/, c => String.fromCharCode(c.charCodeAt(0) + 1)), desc: '今日方知我是我' }
     ];
     let currentTextPairIndex = 0;
 

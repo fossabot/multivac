@@ -36,3 +36,6 @@ post/*
 
 # local templates or backups
 twikoo_template/
+
+# config file
+config.multivac.yaml

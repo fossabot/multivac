@@ -7,8 +7,8 @@ const post = defineCollection({
 	loader: glob({
 		base: './post',
 		pattern: isProd
-			? ['**/*.md', '**/*.mdx', '**/*.yml', '**/*.yaml', '!example/**/*']
-			: ['**/*.md', '**/*.mdx', '**/*.yml', '**/*.yaml']
+			? ['**/*.md', '**/*.mdx', '**/*.yaml', '!example/**/*']
+			: ['**/*.md', '**/*.mdx', '**/*.yaml']
 	}),
 	schema: z.object({
 			title: z.string().min(1, { message: '标题不能为空' }),
@@ -17,6 +17,8 @@ const post = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: z.string().optional(),
+			heroImageWidth: z.string().optional(),
+			showDate: z.boolean().default(true),
 			tags: z.array(z.string()).default([]),
 			category: z.string().optional(),
 			draft: z.boolean().default(false),
@@ -75,4 +77,82 @@ const post = defineCollection({
 		}),
 });
 
-export const collections = { post };
+const config = defineCollection({
+	loader: glob({
+		base: '.',
+		pattern: ['config.example.yaml', 'config.multivac.yaml'],
+	}),
+	schema: z.object({
+		site: z.object({
+			title: z.string(),
+			description: z.string(),
+			lang: z.string().default('zh-CN'),
+			startYear: z.number(),
+			startDate: z.string(),
+		}),
+		author: z.object({
+			name: z.string(),
+			avatar: z.string(),
+			slogan: z.string(),
+			subSlogan: z.string(),
+			description: z.string(),
+		}),
+		nav: z.object({
+			headerLinks: z.array(z.object({
+				label: z.string(),
+				href: z.string(),
+			})),
+			menuLinks: z.array(z.object({
+				label: z.string(),
+				href: z.string(),
+				icon: z.string(),
+				external: z.boolean().default(false),
+				iconScale: z.number().optional(),
+			})),
+		}),
+		social: z.array(z.object({
+			name: z.string(),
+			url: z.string(),
+			icon: z.string(),
+		})),
+		music: z.object({
+			playlistUrl: z.url(),
+			apiEndpoints: z.array(z.url()),
+		}),
+		comment: z.object({
+			twikoo: z.object({
+				envId: z.string(),
+				version: z.string(),
+			}),
+		}),
+		assets: z.object({
+			defaultCover: z.string(),
+			defaultFallback: z.string(),
+			defaultAbout: z.string(),
+			wechatQr: z.string(),
+			alipayQr: z.string(),
+			emojiFiles: z.array(z.string()),
+			tenYearPledgeLogo: z.string(),
+		}),
+		footer: z.object({
+			homeUrl: z.url(),
+			license: z.string(),
+			licenseUrl: z.url(),
+			icpNumber: z.string(),
+			icpUrl: z.url(),
+		}),
+		greetings: z.array(z.object({
+			hourStart: z.number().int().min(0).max(28),
+			hourEnd: z.number().int().min(0).max(29),
+			text: z.string(),
+		})),
+		preconnect: z.array(z.string()),
+		tenYearPledge: z.object({
+			url: z.url(),
+			wormholeUrl: z.url(),
+		}),
+		passwordHint: z.string(),
+	}),
+});
+
+export const collections = { post, config };

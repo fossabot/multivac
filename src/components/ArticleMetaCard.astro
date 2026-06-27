@@ -1,5 +1,8 @@
 ---
 import FormattedDate from './FormattedDate.astro';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
 
 interface Props {
   title: string;
@@ -10,7 +13,7 @@ interface Props {
   license?: string;
 }
 
-const { title, url, author = '波罗歌', pubDate, updatedDate, license = 'CC BY-NC-ND 4.0' } = Astro.props;
+const { title, url, author = siteConfig.author.name, pubDate, updatedDate, license = siteConfig.footer.license } = Astro.props;
 
 const displayUpdatedDate = updatedDate || pubDate;
 import Icon from './Icon.astro';
@@ -23,7 +26,7 @@ import Icon from './Icon.astro';
   <div class="flex items-center gap-4 mb-4">
     <div class="shrink-0">
       <img 
-        src="/img/avatar.webp" 
+        src={siteConfig.author.avatar} 
         alt="作者头像"
         class="w-12 h-12 rounded-full object-cover border-2 border-white/20 dark:border-white/10"
       />
@@ -44,7 +47,7 @@ import Icon from './Icon.astro';
 
     <div class="flex items-center gap-2 text-text-light/70 dark:text-text-dark/70">
       <Icon name="shield" class="w-4 h-4 shrink-0" />
-      <span>许可: <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" class="accent-hover transition-colors" target="_blank" rel="noopener noreferrer">{license}</a></span>
+      <span>许可: <a href={siteConfig.footer.licenseUrl} class="accent-hover transition-colors" target="_blank" rel="noopener noreferrer">{license}</a></span>
     </div>
 
     <div class="flex items-center gap-2 text-text-light/70 dark:text-text-dark/70">

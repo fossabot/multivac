@@ -1,11 +1,13 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getSiteConfig } from '../utils/config';
 
-const defaultCover = '/img/df-cover.webp';
+const siteConfig = await getSiteConfig();
+const defaultCover = siteConfig.assets.defaultCover;
 
 export async function GET(context) {
-	const posts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+	const posts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
 	const sortedPosts = posts.sort((a, b) => new Date(b.data.pubDate) - new Date(a.data.pubDate));
 	
 	return rss({
@@ -16,7 +18,7 @@ export async function GET(context) {
 			const coverImage = post.data.heroImage || defaultCover;
 			const coverUrl = new URL(coverImage, context.site).toString();
 			const imageType = coverImage.endsWith('.webp') ? 'image/webp' : coverImage.endsWith('.png') ? 'image/png' : 'image/jpeg';
-			const author = post.data.author || '波罗歌';
+			const author = post.data.author || siteConfig.author.name;
 			const tags = post.data.tags || [];
 			
 			return {
@@ -29,8 +31,8 @@ export async function GET(context) {
 ${tags.map(tag => `<category>${tag}</category>`).join('\n')}`,
 			};
 		}),
-		customData: `<language>zh-CN</language>
+		customData: `<language>${siteConfig.site.lang}</language>
 <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-<generator>波罗歌的博客</generator>`,
+<generator>${siteConfig.author.name}的博客</generator>`,
 	});
 }

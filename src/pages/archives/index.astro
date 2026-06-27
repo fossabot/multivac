@@ -8,7 +8,7 @@ import ArchiveItem from '../../components/ArchiveItem.astro';
 import Pagination from '../../components/Pagination.astro';
 import { SITE_DESCRIPTION} from '../../consts';
 
-const allPosts = (await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments)).sort(
+const allPosts = (await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching)).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 

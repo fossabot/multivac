@@ -1,5 +1,10 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
+// Legacy exports for backward compatibility.
+// Actual config data comes from site.yaml via Astro Content Layer.
+// Use getSiteConfig() from utils/config.ts for the full config object.
 
-export const SITE_TITLE = '波罗歌 - 醉后不知天在水';
-export const SITE_DESCRIPTION = '波罗歌的幻想杂谈';
+import { getSiteConfig } from './utils/config';
+
+const config = await getSiteConfig();
+
+export const SITE_TITLE = config.site.title;
+export const SITE_DESCRIPTION = config.site.description;

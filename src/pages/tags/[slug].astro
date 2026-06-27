@@ -8,7 +8,7 @@ import ArchiveItem from '../../components/ArchiveItem.astro';
 import { SITE_DESCRIPTION } from '../../consts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+  const posts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
   const tags = new Set();
   
   posts.forEach(post => {
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const allPosts = await getCollection('post', ({ data }) => !data.draft && !data.friends && !data.friendGroups && !data.moments);
+const allPosts = await getCollection('post', ({ data, id }) => !data.draft && !id.startsWith('about/') && !data.friends && !data.friendGroups && !data.moments && !data.watching);
 const posts = allPosts.filter(post => {
 	const tags = post.data.tags as string[] | undefined;
 	return tags?.includes(slug as string);

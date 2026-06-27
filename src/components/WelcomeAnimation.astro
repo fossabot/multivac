@@ -1,10 +1,14 @@
 ---
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
+
 interface Props {
   siteName?: string;
   avatarUrl?: string;
 }
 
-const { siteName = '波罗歌', avatarUrl = '/img/avatar.webp' } = Astro.props;
+const { siteName = siteConfig.author.name, avatarUrl = siteConfig.author.avatar } = Astro.props;
 ---
 
 <style is:global>
@@ -176,7 +180,7 @@ const { siteName = '波罗歌', avatarUrl = '/img/avatar.webp' } = Astro.props;
       id="welcome-tagline"
       class="text-text-light/70 dark:text-text-dark/70"
     >
-      醉后不知天在水
+      {siteConfig.author.slogan}
     </div>
     <div id="welcome-greeting">
       <span id="welcome-greeting-inner"></span>

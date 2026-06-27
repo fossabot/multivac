@@ -107,11 +107,17 @@ export async function initPlayerCore(containerId: string): Promise<boolean> {
   try {
     await loadAPlayerScript();
 
-    const apiEndpoints = [
-      'https://api.injahow.cn/meting/?type=playlist&id=2732533345&server=netease&limit=50',
-      'https://meting.jinghuashang.cn/?type=playlist&id=2732533345&server=netease&limit=50',
-      'https://metingapi.mo-app.cn/?type=playlist&id=2732533345&server=netease&limit=50',
-    ];
+    // 从 DOM data 属性读取 API 端点列表
+    const musicDataEl = document.getElementById('music-data') || document.getElementById('sidebar-data');
+    const raw = musicDataEl?.getAttribute('data-api-endpoints') || '';
+    let apiEndpoints: string[] = [];
+    try {
+      apiEndpoints = JSON.parse(raw);
+    } catch {}
+    if (!apiEndpoints.length) {
+      console.warn('Music Player: No API endpoints configured.');
+      return false;
+    }
 
     let data: SongData[] | null = null;
     for (const endpoint of apiEndpoints) {

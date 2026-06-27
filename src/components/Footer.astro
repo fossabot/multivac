@@ -1,6 +1,9 @@
 ---
 const today = new Date();
 import Icon from './Icon.astro';
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
 ---
 
 <footer transition:persist="site-footer" class="border-t border-border-light dark:border-border-dark">
@@ -40,7 +43,7 @@ import Icon from './Icon.astro';
 						href="https://github.com/LogLInk1K/Multivac" 
 						target="_blank" 
 						rel="noopener noreferrer" 
-						class="relative [@media(hover:hover)]:hover:text-primary-light dark:[@media(hover:hover)]:hover:text-primary-dark transition-colors"
+						class="group relative [@media(hover:hover)]:hover:text-primary-light dark:[@media(hover:hover)]:hover:text-primary-dark transition-colors"
 					>
 						<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl tooltip [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 origin-bottom pointer-events-none">
 							前往 Multivac 主题仓库
@@ -48,10 +51,10 @@ import Icon from './Icon.astro';
 						LogLInk1K
 					</a>
 				</span>
-				<a href="https://1k.ink" target="_blank" rel="noopener noreferrer" class="group relative inline-flex items-center px-2 py-1 rounded-full [@media(hover:hover)]:hover:bg-primary-light dark:[@media(hover:hover)]:hover:bg-primary-dark transition-colors duration-300 overflow-hidden">
+				<a href={siteConfig.footer.homeUrl} target="_blank" rel="noopener noreferrer" class="group relative inline-flex items-center px-2 py-1 rounded-full [@media(hover:hover)]:hover:bg-primary-light dark:[@media(hover:hover)]:hover:bg-primary-dark transition-colors duration-300 overflow-hidden">
 					<span class="flex items-center gap-1.5 transition-all duration-300 [@media(hover:hover)]:group-hover:-translate-y-full [@media(hover:hover)]:group-hover:opacity-0">
-						<img src="/img/avatar.webp" alt="波罗歌" class="w-5 h-5 rounded-full" />
-						<span class="text-sm text-gray-500 dark:text-gray-400">波罗歌</span>
+						<img src={siteConfig.author.avatar} alt={siteConfig.author.name} class="w-5 h-5 rounded-full" />
+						<span class="text-sm text-gray-500 dark:text-gray-400">{siteConfig.author.name}</span>
 					</span>
 					<span class="absolute inset-0 flex items-center justify-center gap-1.5 px-2 text-sm text-white dark:text-black translate-y-full opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
 						前往主页
@@ -67,11 +70,11 @@ import Icon from './Icon.astro';
             <div class="flex flex-col items-center md:items-start gap-2">
 				<div class="flex flex-col md:flex-row items-center justify-between w-full gap-2 md:gap-4">
 					<p class="text-sm text-gray-500 dark:text-gray-400">
-						Copyright &copy; 2021 - {today.getFullYear()} 
+						Copyright &copy; {siteConfig.site.startYear} - {today.getFullYear()} 
 					</p>
-					<a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1 group relative" aria-label="知识共享 署名-非商业性使用-禁止演绎 4.0 国际协议">
+					<a href={siteConfig.footer.licenseUrl} target="_blank" rel="noopener noreferrer" class="flex items-center space-x-1 group relative" aria-label={`知识共享 ${siteConfig.footer.license} 协议`}>
 						<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl tooltip [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 origin-bottom">
-							CC BY-NC-ND 4.0 协议
+							{siteConfig.footer.license} 协议
 						</div>
 						<div class="flex space-x-1 text-text-light dark:text-gray-400 [@media(hover:hover)]:group-hover:text-primary-light dark:[@media(hover:hover)]:group-hover:text-primary-dark transition-colors" aria-hidden="true">
 							<Icon name="cc-logo" class="w-5 h-5" />
@@ -84,12 +87,12 @@ import Icon from './Icon.astro';
 			</div>
 
             <div class="mt-2 md:mt-0 flex justify-center md:justify-start">
-                <a href="https://icp.gov.moe/?keyword=20210325" target="_blank" rel="noopener noreferrer" class="group relative transition-opacity" aria-label="萌ICP备20210325号">
+                <a href={siteConfig.footer.icpUrl} target="_blank" rel="noopener noreferrer" class="group relative transition-opacity" aria-label={siteConfig.footer.icpNumber}>
 					<div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-0.3 whitespace-nowrap px-3 py-2 bg-card-light dark:bg-card-dark tooltip-solid text-text-light dark:text-text-dark text-sm rounded-xl tooltip [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-hover:visible [@media(hover:hover)]:group-hover:scale-100 origin-bottom">
 						萌国ICP备案
 					</div>
                     <span class="text-[11px] font-medium text-gray-500 dark:text-gray-400">
-                        萌ICP备20210325号
+                        {siteConfig.footer.icpNumber}
                     </span>
                 </a>
             </div>

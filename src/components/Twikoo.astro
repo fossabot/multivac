@@ -1,12 +1,16 @@
 ---
+import { getSiteConfig } from '../utils/config';
+
+const siteConfig = await getSiteConfig();
+
 interface Props {
   elId?: string;
 }
 
 const { elId: customElId } = Astro.props;
 
-const envId = 'https://twikoo.1k.ink';
-const TWIKOO_VERSION = '1.7.13';
+const envId = siteConfig.comment.twikoo.envId;
+const TWIKOO_VERSION = siteConfig.comment.twikoo.version;
 
 const pageKey = (() => {
   try {
