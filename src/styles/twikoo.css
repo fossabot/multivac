@@ -453,3 +453,8 @@ html.dark .OwO-body span {
 .twikoo > div.tk-comments > div.tk-submit.tk-fade-in > div.tk-row.actions > div.tk-row-actions-start > div:nth-child(2) {
   display: none !important;
 }
+
+/* --- 用户名链接悬停颜色 --- */
+.tk-nick-link:hover {
+  color: var(--tk-accent)!important;
+}
