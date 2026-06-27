@@ -11,6 +11,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-v6-3178C6?logo=typescript&logoColor=white)
 ![node version](https://img.shields.io/badge/node-22.18.0+-white?logo=node.js&logoColor=white)
 ![License](https://img.shields.io/badge/License-GPL--3.0-green)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLogLInk1K%2Fmultivac.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLogLInk1K%2Fmultivac?ref=badge_shield)
 
 </div>
 
@@ -258,3 +259,6 @@ npm run build
 本项目基于 [GPL-3.0](LICENSE) 协议开源
 
 此仓库按 "现状" 提供，暂不保证回复 Issue。
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLogLInk1K%2Fmultivac.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLogLInk1K%2Fmultivac?ref=badge_large)
